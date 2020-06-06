@@ -22,13 +22,13 @@ public class UserProfileController {
     private final UserProfileMapper  mapper;
     private final ResponseService responseService;
 
-    @ApiOperation(value = "회원 조회", notes = "특정 회원을 조회한다")
+    @ApiOperation(value = "회원 한명 조회", notes = "특정 회원을 조회한다")
     @GetMapping("/user/{id}")
-    public SingleResult<UserProfile> getUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable ("id") String id) {
+    public SingleResult<UserProfile> getUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable ("id") String id) throws Exception {
         return responseService.getSingleResult(mapper.getUserProfile(id));
     }
 
-    @ApiOperation(value = "회원 조회", notes = "모든 회원을 조회한다")
+    @ApiOperation(value = "회원 모두 조회", notes = "모든 회원을 조회한다")
     @GetMapping("/user/all")
     public ListResult<UserProfile> getUserProfileList() {
         return  responseService.getListResult(mapper.getUserProfileList());
