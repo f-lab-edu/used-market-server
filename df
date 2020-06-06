@@ -1,0 +1,41 @@
+[33mcommit 129af4a9f6fd435b5591aef96d7be22e6cfee282[m[33m ([m[1;36mHEAD -> [m[1;32mfeature/2/Login[m[33m)[m
+Author: junshock5 <61732452+junshock5@users.noreply.github.com>
+Date:   Sun Jun 7 04:24:15 2020 +0900
+
+    ControllerAdvice를 이용한 Exception 처리
+
+[33mcommit ee05e465dd599d932aa52729e63c7dd19613ee54[m
+Author: junshock5 <61732452+junshock5@users.noreply.github.com>
+Date:   Sun Jun 7 04:02:43 2020 +0900
+
+    표준화된 결과 모델로 데이터가 출력을위한 ResposeService 구현
+
+[33mcommit 532b2a28744c4c0efab90fc211507681c288ef41[m
+Author: junshock5 <61732452+junshock5@users.noreply.github.com>
+Date:   Sun Jun 7 02:52:47 2020 +0900
+
+    swagger library 추가 및 userProfile Controller에 연동
+
+[33mcommit 71bdee583c6e2a2ce12473c183bcc941ab9ad6aa[m
+Author: junshock5 <61732452+junshock5@users.noreply.github.com>
+Date:   Sun Jun 7 02:28:35 2020 +0900
+
+    User정보 crud rest api 추가
+
+[33mcommit 2740e1b9c41904b660fa23fb06ec66472cde5426[m[33m ([m[1;31morigin/feature/1[m[33m, [m[1;32mfeature/1[m[33m)[m
+Author: junshock5 <61732452+junshock5@users.noreply.github.com>
+Date:   Sat Jun 6 16:12:51 2020 +0900
+
+    프로젝트 생성
+
+[33mcommit fd79ed23769e50aa3370515aac00bca2bbd47c25[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/develop[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mdevelop[m[33m)[m
+Author: junshock5 <61732452+junshock5@users.noreply.github.com>
+Date:   Sat Jun 6 15:55:12 2020 +0900
+
+    Update README.md
+
+[33mcommit 8984bed46db1fdeaaf9c63c825f7e84af386e0c8[m
+Author: junshock5 <61732452+junshock5@users.noreply.github.com>
+Date:   Sat Jun 6 15:48:37 2020 +0900
+
+    Initial commit
