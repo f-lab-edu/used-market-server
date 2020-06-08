@@ -1,5 +1,6 @@
 package com.market.Server.controller;
 
+import com.market.Server.advice.exception.CUserNotFoundException;
 import com.market.Server.mapper.UserProfileMapper;
 import com.market.Server.model.response.CommonResult;
 import com.market.Server.model.response.ListResult;
@@ -12,9 +13,10 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
-@Api(tags = {"1. user"})
+
+@Api(tags = {"1. users"})
 @RequiredArgsConstructor
 @RestController
 public class UserProfileController {
@@ -25,7 +27,14 @@ public class UserProfileController {
     @ApiOperation(value = "회원 한명 조회", notes = "특정 회원을 조회한다")
     @GetMapping("/user/{id}")
     public SingleResult<UserProfile> getUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable ("id") String id) throws Exception {
-        return responseService.getSingleResult(mapper.getUserProfile(id));
+        return responseService.getSingleResult(Optional.ofNullable(mapper.getUserProfile(id)).orElseThrow(CUserNotFoundException::new));
+    }
+
+    @ApiOperation(value = "회원 단건 조회", notes = "userId로 회원을 조회한다")
+    @GetMapping(value = "/usermsg/{msrl}")
+    public SingleResult<UserProfile> findUserById(@ApiParam(value = "회원ID", required = true) @PathVariable ("msrl") String msrl, @ApiParam(value = "언어", defaultValue = "ko") @RequestParam String lang) {
+        // 결과데이터가 단일건인경우 getBasicResult를 이용해서 결과를 출력한다.
+        return responseService.getSingleResult(Optional.ofNullable(mapper.getUserProfile(msrl)).orElseThrow(CUserNotFoundException::new));
     }
 
     @ApiOperation(value = "회원 모두 조회", notes = "모든 회원을 조회한다")

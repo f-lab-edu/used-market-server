@@ -66,6 +66,26 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.6.1</version>
 		</dependency>
+		<dependency>
+			<groupId>net.rakugakibox.util</groupId>
+			<artifactId>yaml-resource-bundle</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.nuiton.i18n</groupId>
+			<artifactId>nuiton-i18n</artifactId>
+			<version>3.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<version>2.3.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -75,6 +95,11 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
 	</build>
 
 </project>
