@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service // 해당 Class가 Service임을 명시합니다.
+// 해당 Class가 서비스(서버에서 클라이언트에게 응답할때 response 패킷을 정의) 레이어 클래스라는 것을 spring framework에게 알린다.
+// response를 class로 분리한 이유는 해당 클래스를 사용하는 곳에서 중복 코드를 방지하고 respose의 관점으로 세분화하여 부가적인 관점으로 모듈화 하기 위해.
+@Service
 public class ResponseService {
     // enum으로 api 요청 결과에 대한 code, message를 정의합니다.
     public enum CommonResponse {
         SUCCESS(0, "성공하였습니디."),
-        FAIL(-1, "실패하였습니다.");
+                FAIL(-1, "실패하였습니다.");
         int code;
         String msg;
         CommonResponse(int code, String msg) {
