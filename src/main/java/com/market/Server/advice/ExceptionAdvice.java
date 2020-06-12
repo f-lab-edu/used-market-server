@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 // ControllerAdvice의 annotation은 @ControllerAdvice @RestControllerAdvice 두가지가 있습니다. 예외 발생 시 json형태로 결과를 반환하려면
 // @RestControllerAdvice를 클래스에 선언하면 됩니다. annotation에 추가로 패키지를 적용하면 위에서 설명한 것처럼 특정 패키지 하위의 Controller에만 로직이 적용되게도 할 수 있습니다.
 // ex) @RestControllerAdvice(basePackages = “com.rest.api”)
-// 실습에서는 아무것도 적용하지 않아 프로젝트의 모든 Controller에 로직이 적용됩니다.
+// 아무것도 적용하지 않으면 프로젝트의 모든 Controller에 로직이 적용됩니다.
 @RestControllerAdvice
 
 public class ExceptionAdvice {
