@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class ExceptionAdvice {
     // final 의 장점은 누군가가 Controller 내부에서 service 객체를 바꿔치기 할 수 없다는 점이다.
+    // 기능이 바뀌지 않을 것임을 의미합니다. 복잡한 기능을 갖춘 소프트웨어를 디자인할 때 이러한 설계가 중요합니다.
     private final ResponseService responseService;
     private final MessageSource messageSource;
 
