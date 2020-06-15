@@ -3,9 +3,8 @@ package com.market.Server.controller;
 import com.market.Server.advice.exception.CUserNotFoundException;
 import com.market.Server.mapper.UserProfileMapper;
 import com.market.Server.model.response.CommonResult;
-import com.market.Server.model.response.ListResult;
 import com.market.Server.model.response.SingleResult;
-import com.market.Server.repository.UserProfile;
+import com.market.Server.dto.UserDTO;
 import com.market.Server.service.ResponseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,38 +25,35 @@ public class UserProfileController {
 
     @ApiOperation(value = "회원 한명 조회", notes = "특정 회원을 조회한다")
     @GetMapping("/user/{id}")
-    public SingleResult<UserProfile> getUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable ("id") String id) throws Exception {
+    public SingleResult<UserDTO> getUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable ("id") String id) throws Exception {
         return responseService.getSingleResult(Optional.ofNullable(mapper.getUserProfile(id)).orElseThrow(CUserNotFoundException::new));
     }
 
     @ApiOperation(value = "회원 단건 조회", notes = "userId로 회원을 조회한다")
     @GetMapping(value = "/usermsg/{msrl}")
-    public SingleResult<UserProfile> findUserById(@ApiParam(value = "회원ID", required = true) @PathVariable ("msrl") String msrl, @ApiParam(value = "언어", defaultValue = "ko") @RequestParam String lang) {
+    public SingleResult<UserDTO> findUserById(@ApiParam(value = "회원ID", required = true) @PathVariable ("msrl") String msrl, @ApiParam(value = "언어", defaultValue = "ko") @RequestParam String lang) {
         // 결과데이터가 단일건인경우 getBasicResult를 이용해서 결과를 출력한다.
         return responseService.getSingleResult(Optional.ofNullable(mapper.getUserProfile(msrl)).orElseThrow(CUserNotFoundException::new));
     }
 
-    @ApiOperation(value = "회원 모두 조회", notes = "모든 회원을 조회한다")
-    @GetMapping("/user/all")
-    public ListResult<UserProfile> getUserProfileList() {
-        return  responseService.getListResult(mapper.getUserProfileList());
-    }
-
-    @ApiOperation(value = "회원 입력", notes = "회원을 입력한다.")
+    @ApiOperation(value = "회원 수정", notes = "회원을 수정한다..")
     @PutMapping("/user/{id}")
     public SingleResult<Integer> putUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable("id") String id,
+                                                @ApiParam(value = "회원비번", required = true) @RequestParam("pw") String pw,
                                                 @ApiParam(value = "회원이름", required = true) @RequestParam("name") String name,
                                                 @ApiParam(value = "회원폰번호", required = true) @RequestParam("phone") String phone,
                                                 @ApiParam(value = "회원주소", required = true) @RequestParam("address") String address) {
-       return responseService.getSingleResult(mapper.updateUserProfile(id,name,phone,address));
+       return responseService.getSingleResult(mapper.updateUserProfile(id,pw,name,phone,address));
     }
 
+    @ApiOperation(value = "회원 입력", notes = "회원을 입력한다..")
     @PostMapping("/user/{id}")
     public SingleResult<Integer> postUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable("id") String id,
+                                                 @ApiParam(value = "회원비번", required = true) @RequestParam("pw") String pw,
                                                  @ApiParam(value = "회원이름", required = true) @RequestParam("name") String name,
                                                  @ApiParam(value = "회원폰번호", required = true) @RequestParam("phone") String phone,
                                                  @ApiParam(value = "회원주소", required = true) @RequestParam("address") String address)  {
-        return responseService.getSingleResult(mapper.insertUserProfile(id,name,phone,address));
+        return responseService.getSingleResult(mapper.insertUserProfile(id,pw,name,phone,address));
     }
 
     @DeleteMapping("/user/{id}")
