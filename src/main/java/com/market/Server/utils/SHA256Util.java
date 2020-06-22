@@ -1,9 +1,9 @@
-package com.delfood.utils;
+package com.market.Server.utils;
+
+import lombok.extern.log4j.Log4j2;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import org.apache.logging.log4j.Level;
-import lombok.extern.log4j.Log4j2;
 
 // 암호화 방식 - SHA-256
 /*

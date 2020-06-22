@@ -31,6 +31,5 @@ build/
 .vscode/
 
 
-/src/main/resources/application.properties
 /.idea/
 /et HEAD CONTRIBUTING.md

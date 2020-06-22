@@ -1,4 +1,4 @@
-package com.delfood.error.exception;
+package com.market.Server.advice.exception;
 
 public class DuplicateIdException extends RuntimeException {
   
