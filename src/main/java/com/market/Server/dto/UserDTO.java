@@ -11,19 +11,22 @@ public class UserDTO {
     public enum Status {
         DEFAULT, DELETED
     }
+
     private String id;
     private String pw;
     private String name;
     private String phone;
     private String address;
+    private Status status;
 
 
-    public UserDTO(String id, String pw, String name, String phone, String address) {
+    public UserDTO(String id, String pw, String name, String phone, String address, Status status) {
         this.id = id;
         this.pw =pw;
         this.name = name;
         this.phone = phone;
         this.address = address;
+        this.status = status;
     }
 
     /**
