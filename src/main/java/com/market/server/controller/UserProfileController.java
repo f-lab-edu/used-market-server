@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 
-@Api(tags = {"1. usersp"})
+@Api(tags = {"1. usersProfile"})
 @RequiredArgsConstructor
 @RestController
 public class UserProfileController {

@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 /* 어노테이션기반 환경구성을 돕는다. 이 어노테이션을 구현함으로써 클래스가 하나 이상의
  @Bean 메소드를 제공하고 스프링 컨테이가 Bean정의를 생성하고 런타임시 그 Bean들이
  요청들을 처리할 것을 선언하게 된다. 아래는 자바 클래서에서 어노테이션을 포함하는 방법을 보여준다.*/
-public class MessageConfiguration implements WebMvcConfigurer {
+public class MessageConfig implements WebMvcConfigurer {
     @Bean // 세션에 지역설정. default는 KOREAN = 'ko'
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();

@@ -3,10 +3,12 @@ package com.market.server.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.redis.core.RedisHash;
 
 @Getter
 @Setter
 @ToString
+@RedisHash("accounts")
 public class UserDTO {
     public enum Status {
         DEFAULT, DELETED
