@@ -16,7 +16,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<start-class>com.market.Server.ServerApplication</start-class>
+		<start-class>com.market.server.ServerApplication</start-class>
 	</properties>
 
 	<dependencies>
@@ -71,6 +71,19 @@
 			<artifactId>nuiton-i18n</artifactId>
 			<version>3.8</version>
 		</dependency>
+
+		<!-- Redis -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<!-- Session -->
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
