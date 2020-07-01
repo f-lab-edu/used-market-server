@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface UserProfileMapper {
 
-    @Select("SELECT id,pw,name,phone,address,status FROM UserProfile WHERE id=#{id}")
+    @Select("SELECT id, pw, name, phone, address, status FROM UserProfile WHERE id=#{id}")
     public UserDTO getUserProfile(@Param("id") String id);
 
     @Insert("INSERT INTO UserProfile VALUES(#{id}, #{pw}, #{name}, #{phone}, #{address})")

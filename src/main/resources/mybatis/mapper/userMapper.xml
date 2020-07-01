@@ -7,18 +7,18 @@
 
     <insert id="register" parameterType="com.market.server.dto.UserDTO">
         INSERT INTO userprofile (
-        id
-        , pw
-        , name
-        , phone
-        , address
+        id,
+        pw,
+        name,
+        phone,
+        address
 
         ) VALUES (
-        #{id}
-        , #{pw}
-        , #{name}
-        , #{phone}
-        , #{address}
+        #{id},
+        #{pw},
+        #{name},
+        #{phone},
+        #{address}
         )
     </insert>
 

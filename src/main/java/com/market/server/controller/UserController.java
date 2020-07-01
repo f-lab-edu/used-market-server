@@ -73,8 +73,7 @@ public class UserController {
 
         if (userInfo == null) {
             // ID, Password에 맞는 정보가 없을 때
-            loginResponse = LoginResponse.FAIL;
-            return new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.BAD_REQUEST);
+            return null;
         } else if (UserDTO.Status.DEFAULT == userInfo.getStatus()) {
             // 성공시 세션에 ID를 저장
             loginResponse = LoginResponse.success(userInfo);
@@ -109,10 +108,10 @@ public class UserController {
     // -------------- response 객체 --------------
 
     @Getter
-    @AllArgsConstructor
     // 필드값을 모두 포함한 생성자를 자동 생성해준다.
-    @RequiredArgsConstructor
+    @AllArgsConstructor
     // 생성자를 자동 생성하지만, 필드명 위에 @NonNull로 표기된 경우만 생성자의 매개변수로 받는다.
+    @RequiredArgsConstructor
     private static class LoginResponse {
         enum LoginStatus {
             SUCCESS, FAIL, DELETED
