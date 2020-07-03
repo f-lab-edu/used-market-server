@@ -23,6 +23,8 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     private final UserServiceImpl userService;
+    private static LoginResponse loginResponse = null;
+    private static final ResponseEntity<LoginResponse> LOGIN_FAIL_RESPONSE = new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.BAD_REQUEST);
 
     @Autowired
     public UserController(UserServiceImpl userService, ResponseService responseService) {
@@ -65,6 +67,7 @@ public class UserController {
     @PostMapping("login")
     public ResponseEntity<LoginResponse> login(@RequestBody @NotNull UserLoginRequest loginRequest,
                                                HttpSession session) {
+
         ResponseEntity<LoginResponse> responseEntity = null;
         String id = loginRequest.getId();
         String password = loginRequest.getPassword();
@@ -73,7 +76,7 @@ public class UserController {
 
         if (userInfo == null) {
             // ID, Password에 맞는 정보가 없을 때
-            return null;
+            return LOGIN_FAIL_RESPONSE;
         } else if (UserDTO.Status.DEFAULT == userInfo.getStatus()) {
             // 성공시 세션에 ID를 저장
             loginResponse = LoginResponse.success(userInfo);
