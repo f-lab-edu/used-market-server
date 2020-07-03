@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateIdException("중복된 아이디입니다.");
         }
 
-        userDTO.setPw(SHA256Util.encryptSHA256(userDTO.getPw()));
+        userDTO.setPassword(SHA256Util.encryptSHA256(userDTO.getPassword()));
         int insertCount = userProfileMapper.register(userDTO);
 
         if (insertCount != 1) {
