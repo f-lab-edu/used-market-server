@@ -7,15 +7,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 // 해당 Class가 서비스(서버에서 클라이언트에게 응답할때 response 패킷을 정의) 레이어 클래스라는 것을 spring framework에 정의한다.
+// spring은 데이터 엑세스, 프리젠테이션, 서비스, 비즈니스 등과 같은 고유 계층 클래스 경로를 스캐닝합니다. 
+// 그중 Component는 모든 Spring 관리 구성 요소로 분류합니다. Service는 서비스 계층에서 클래스에 주석을 답니다.
 // response를 class로 분리한 이유는 해당 클래스를 사용하는 곳에서 ExceptionHandler의 형태를 직접 정의한다.
 @Service
 public class ResponseService {
     // enum으로 api 요청 결과에 대한 code, message를 정의합니다.
     public enum CommonResponse {
         SUCCESS(0, "성공하였습니디."),
-        FAIL(-1, "실패하였습니다.");
+                FAIL(-1, "실패하였습니다.");
         int code;
         String msg;
 
