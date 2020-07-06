@@ -24,7 +24,6 @@ public class SwaggerConfig {
 
     private ApiInfo swaggerInfo() {
         return new ApiInfoBuilder().title("Spring API Documentation")
-                .description("앱 개발시 사용되는 서버 API에 대한 연동 문서입니다")
-                .license("junshock5").licenseUrl("https://github.com/f-lab-edu/used-market-server/tree/feature/2/Login").version("1").build();
+                .description("앱 개발시 사용되는 서버 API에 대한 연동 문서입니다").build();
     }
 }
