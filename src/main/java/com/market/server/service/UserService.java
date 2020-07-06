@@ -12,4 +12,10 @@ public interface UserService {
     boolean isDuplicatedId(String id);
 
     UserDTO getUserInfo(String userId);
+
+    void updatePassword(String id, String beforePassword, String afterPassword);
+
+    void updateAddress(String id, String newAddress);
+
+    void deleteId(String id, String passWord);
 }

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 
 @Api(tags = {"2. users"})
@@ -23,8 +24,8 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     private final UserServiceImpl userService;
-    private static LoginResponse loginResponse = null;
-    private static final ResponseEntity<LoginResponse> LOGIN_FAIL_RESPONSE = new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.BAD_REQUEST);
+    private static final ResponseEntity<LoginResponse> FAIL_RESPONSE = new ResponseEntity<LoginResponse>(HttpStatus.BAD_REQUEST);
+    private LoginResponse loginResponse;
 
     @Autowired
     public UserController(UserServiceImpl userService, ResponseService responseService) {
@@ -70,12 +71,11 @@ public class UserController {
         ResponseEntity<LoginResponse> responseEntity = null;
         String id = loginRequest.getId();
         String password = loginRequest.getPassword();
-        LoginResponse loginResponse;
         UserDTO userInfo = userService.login(id, password);
 
         if (userInfo == null) {
             // ID, Password에 맞는 정보가 없을 때
-            return LOGIN_FAIL_RESPONSE;
+            return FAIL_RESPONSE;
         } else if (UserDTO.Status.DEFAULT == userInfo.getStatus()) {
             // 성공시 세션에 ID를 저장
             loginResponse = LoginResponse.success(userInfo);
@@ -101,13 +101,74 @@ public class UserController {
         SessionUtil.logoutMember(session);
     }
 
+    /**
+     * 회원 비밀번호 수정 메서드.
+     */
+    @PatchMapping("updatePassword")
+    public ResponseEntity<LoginResponse> updateUserPassword(@RequestBody @NotNull UserUpdatePasswordRequest userUpdatePasswordRequest,
+                                                            HttpSession session) {
+        ResponseEntity<LoginResponse> responseEntity = null;
+        String Id = SessionUtil.getLoginMemberId(session);
+        String beforePassword = userUpdatePasswordRequest.getBeforePassword();
+        String afterPassword = userUpdatePasswordRequest.getAfterPassword();
+
+        try {
+            userService.updatePassword(Id, beforePassword, afterPassword);
+            responseEntity = new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            log.info("updatePassword 실패");
+            responseEntity = FAIL_RESPONSE;
+        }
+        return responseEntity;
+    }
+
+    /**
+     * 회원 주소수정 메서드.
+     */
+    @PatchMapping("updateAddress")
+    public ResponseEntity<LoginResponse> updateAddress(@RequestBody @NotNull UserUpdateAddressRequest userUpdateAddressRequestu,
+                                                            HttpSession session) {
+        ResponseEntity<LoginResponse> responseEntity = null;
+        String Id = SessionUtil.getLoginMemberId(session);
+        String newAddress = userUpdateAddressRequestu.getNewAddress();
+
+        try {
+            userService.updateAddress(Id, newAddress);
+            responseEntity = new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            log.info("updateAddress 실패");
+            responseEntity = FAIL_RESPONSE;
+        }
+        return responseEntity;
+    }
+
+    /**
+     * 회원 ID 삭제 메서드.
+     */
+    @DeleteMapping("deleteID")
+    public ResponseEntity<LoginResponse> updateAddress(@RequestBody @NotNull UserDeleteId userDeleteId,
+                                                       HttpSession session) {
+        ResponseEntity<LoginResponse> responseEntity = null;
+        String Id = SessionUtil.getLoginMemberId(session);
+
+        try {
+            userService.deleteId(Id, userDeleteId.getPassword());
+            responseEntity = new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            log.info("deleteID 실패");
+            responseEntity = FAIL_RESPONSE;
+        }
+        return responseEntity;
+    }
+
+
+    // -------------- response 객체 --------------
+
     @Getter
     @AllArgsConstructor
     private static class UserInfoResponse {
         private UserDTO userDTO;
     }
-
-    // -------------- response 객체 --------------
 
     @Getter
     // 필드값을 모두 포함한 생성자를 자동 생성해준다.
@@ -137,6 +198,31 @@ public class UserController {
     @Setter
     @Getter
     private static class UserLoginRequest {
+        @NonNull
+        private String id;
+        @NonNull
+        private String password;
+    }
+
+    @Setter
+    @Getter
+    private static class UserUpdatePasswordRequest {
+        @NonNull
+        private String beforePassword;
+        @NonNull
+        private String afterPassword;
+    }
+
+    @Setter
+    @Getter
+    private static class UserUpdateAddressRequest {
+        @NonNull
+        private String newAddress;
+    }
+
+    @Setter
+    @Getter
+    private static class UserDeleteId {
         @NonNull
         private String id;
         @NonNull

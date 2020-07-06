@@ -8,14 +8,14 @@
     <insert id="register" parameterType="com.market.server.dto.UserDTO">
         INSERT INTO userprofile (
         id,
-        pw,
+        password,
         name,
         phone,
         address
 
         ) VALUES (
         #{id},
-        #{pw},
+        #{password},
         #{name},
         #{phone},
         #{address}
@@ -23,10 +23,16 @@
     </insert>
 
     <select id="findByIdAndPassword" resultType="com.market.server.dto.UserDTO">
-        SELECT *
+        SELECT
+        id,
+        password,
+        name,
+        phone,
+        address,
+        status
         FROM userprofile
         WHERE id = #{id}
-        AND pw = #{pw}
+        AND password = #{password}
         AND status != 'DELETE'
     </select>
 
@@ -36,13 +42,17 @@
         WHERE id = #{id}
     </select>
 
-<!--    <select id="getUserProfile" parameterType="com.market.server.dto.UserDTO">-->
-<!--        SELECT id,pw,name,phone,address,status-->
-<!--        FROM UserProfile-->
-<!--        WHERE id= #{id}-->
-<!--    </select>-->
+    <update id="updatePassword" parameterType="com.market.server.dto.UserDTO">
+        UPDATE userprofile
+        SET password = #{password}
+        WHERE id= #{id}
+    </update>
 
-
+    <update id="updateAddress" parameterType="com.market.server.dto.UserDTO">
+        UPDATE userprofile
+        SET address = #{address}
+        WHERE id= #{id}
+    </update>
 
 
 </mapper>

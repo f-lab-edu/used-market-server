@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     /**
      * 회원 가입 메서드.
      *
-     * @param UserDTO 저장할 회원의 정보
+     * @param userDTO 저장할 회원의 정보
      * @return - 고객 회원가입 메서드 비밀번호를 암호화하여 세팅한다. MyBatis에서 insert return값은 성공시 1이 리턴된다. return값은 검사하여 null값이면
      * true, null이 아닐시 insert에 실패한 것이니 false를 반환한다
      */
@@ -78,5 +78,51 @@ public class UserServiceImpl implements UserService {
         return userProfileMapper.idCheck(id) == 1;
     }
 
+
+    /**
+     * 유저 비밀번호 변경 메서드.
+     */
+    @Override
+    public void updatePassword(String id, String beforePassword, String afterPassword) {
+        String cryptoPassword = SHA256Util.encryptSHA256(beforePassword);
+        UserDTO memberInfo = userProfileMapper.findByIdAndPassword(id, cryptoPassword);
+
+        if (memberInfo != null) {
+            memberInfo.setPassword(SHA256Util.encryptSHA256(afterPassword));
+            int insertCount = userProfileMapper.updatePassword(memberInfo);
+        } else {
+            log.error("updatePasswrod ERROR! {}", memberInfo);
+            throw new RuntimeException("updatePasswrod ERROR! 비밀번호 변경 메서드를 확인해주세요\n" + "Params : " + memberInfo);
+        }
+    }
+
+    /**
+     * 유저 비밀번호 변경 메서드.
+     */
+    @Override
+    public void updateAddress(String id, String newAddress) {
+        UserDTO memberInfo = userProfileMapper.getUserProfile(id);
+        memberInfo.setAddress(newAddress);
+
+        if (memberInfo != null) {
+            userProfileMapper.updateAddress(memberInfo);
+        } else {
+            log.error("updateAddress ERROR! {}", memberInfo);
+            throw new RuntimeException("updateAddress ERROR! 주소 변경 메서드를 확인해주세요\n" + "Params : " + memberInfo);
+        }
+    }
+
+    @Override
+    public void deleteId(String id, String passWord) {
+        String cryptoPassword = SHA256Util.encryptSHA256(passWord);
+        UserDTO memberInfo = userProfileMapper.findByIdAndPassword(id, cryptoPassword);
+
+        if (memberInfo != null) {
+            userProfileMapper.deleteUserProfile(memberInfo.getId());
+        } else {
+            log.error("deleteId ERROR! {}", memberInfo);
+            throw new RuntimeException("deleteId ERROR! id 삭제 메서드를 확인해주세요\n" + "Params : " + memberInfo);
+        }
+    }
 
 }

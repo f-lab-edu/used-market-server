@@ -3,25 +3,33 @@ package com.market.server.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.market.server.dto.UserDTO;
+import com.market.server.service.UserServiceImpl;
 import com.market.server.utils.SessionUtil;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import javax.servlet.http.HttpSession;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -49,6 +57,11 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper mapper;
 
+    @Autowired
+    private UserServiceImpl userService;
+
+    private String token;
+
     @Test
     @Transactional // 테스트 종료 후 롤백한다.
     void signUpTest()  throws Exception {
@@ -72,13 +85,42 @@ class UserControllerTest {
     void signInTest() throws Exception {
         UserDTO memberInfo = new UserDTO();
         memberInfo.setId("topojs8");
-        memberInfo.setPassword("wnstjr1026");
+        memberInfo.setPassword("111");
 
-        mockMvc
+        MvcResult result = mockMvc
                 .perform(post("/users/signIn")
                         .session(mockSession)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(memberInfo)))
-                .andDo(print()).andExpect(status().isOk());
+                .andDo(print()).andExpect(status().isOk())
+                .andReturn();
     }
+
+    @Test
+    @Transactional
+    void updateUserPassword() throws Exception {
+//        Map<String, Object> sessionAttr = new HashMap<>();
+//        sessionAttr.put("LOGIN_MEMBER_ID", "topojs8");
+//        mockMvc
+//                .perform(
+//                        put("/users/updatePassword")
+//                                .param("password", "updatePassword")
+//                                .param("id", "topojs8")
+//                                .sessionAttrs(sessionAttr)
+//                                .contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print()).andExpect(status().isOk());
+
+        MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
+
+        info.add("password", "111");
+        info.add("id", "topojs8");
+
+        mockMvc.perform(put("/users/updatePassword")       // 1, 2
+                .session(mockSession)
+                .params(info))            // 3
+                .andExpect(status().isOk())     // 4
+                .andDo(print());
+    }
+
+
 }
