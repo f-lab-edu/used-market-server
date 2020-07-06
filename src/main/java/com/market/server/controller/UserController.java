@@ -68,7 +68,6 @@ public class UserController {
     @PostMapping("signIn")
     public ResponseEntity<LoginResponse> login(@RequestBody @NotNull UserLoginRequest loginRequest,
                                                HttpSession session) {
-
         ResponseEntity<LoginResponse> responseEntity = null;
         String id = loginRequest.getId();
         String password = loginRequest.getPassword();

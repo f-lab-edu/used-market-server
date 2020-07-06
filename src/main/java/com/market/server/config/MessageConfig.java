@@ -33,7 +33,8 @@ public class MessageConfig implements WebMvcConfigurer {
         lci.setParamName("lang");
         return lci;
     }
-    @Override // 지역정보가 있는 request가 왔을시 지역정보를 처리하기 위한 인터셉터를 인터셉터 등록 객체에 추가.
+
+    @Override // 인터셉터를 시스템 레지스트리에 등록
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
     }

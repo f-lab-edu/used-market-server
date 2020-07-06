@@ -24,8 +24,8 @@ public class UserProfileController {
     private final ResponseService responseService;
 
     @ApiOperation(value = "회원 한명 조회", notes = "특정 회원을 조회한다")
-    @GetMapping("/users/{id}")
-    public SingleResult<UserProfile> getUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable ("id") String id) throws Exception {
+    @GetMapping("/user/{id}")
+    public SingleResult<UserDTO> getUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable("id") String id) throws Exception {
         return responseService.getSingleResult(Optional.ofNullable(mapper.getUserProfile(id)).orElseThrow(CUserNotFoundException::new));
     }
 
@@ -56,7 +56,7 @@ public class UserProfileController {
         return responseService.getSingleResult(mapper.insertUserProfile(id, pw, name, phone, address));
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/user/{id}")
     public CommonResult deleteUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable("id") String id) {
         mapper.deleteUserProfile(id);
         // 성공 결과 정보만 필요한경우 getSuccessResult()를 이용하여 결과를 출력한다.
