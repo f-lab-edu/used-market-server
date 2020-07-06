@@ -1,4 +1,4 @@
-package com.market.Server.model.response;
+package com.market.server.model.response;
 
 import lombok.Getter;
 import lombok.Setter;

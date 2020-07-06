@@ -1,4 +1,4 @@
-package com.market.Server.advice.exception;
+package com.market.server.advice.exception;
 
 public class CUserNotFoundException extends RuntimeException {
     public CUserNotFoundException(String msg, Throwable t) {

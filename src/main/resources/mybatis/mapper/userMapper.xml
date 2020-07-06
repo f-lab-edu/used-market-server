@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.market.server.mapper.UserProfileMapper">
+
+    <insert id="register" parameterType="com.market.server.dto.UserDTO">
+        INSERT INTO userprofile (
+        id,
+        pw,
+        name,
+        phone,
+        address
+
+        ) VALUES (
+        #{id},
+        #{pw},
+        #{name},
+        #{phone},
+        #{address}
+        )
+    </insert>
+
+    <select id="findByIdAndPassword" resultType="com.market.server.dto.UserDTO">
+        SELECT *
+        FROM userprofile
+        WHERE id = #{id}
+        AND pw = #{pw}
+        AND status != 'DELETE'
+    </select>
+
+    <select id="idCheck" resultType="int">
+        SELECT COUNT(id)
+        FROM userprofile
+        WHERE id = #{id}
+    </select>
+
+<!--    <select id="getUserProfile" parameterType="com.market.server.dto.UserDTO">-->
+<!--        SELECT id,pw,name,phone,address,status-->
+<!--        FROM UserProfile-->
+<!--        WHERE id= #{id}-->
+<!--    </select>-->
+
+
+
+
+</mapper>
