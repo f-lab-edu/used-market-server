@@ -23,8 +23,7 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     private final UserServiceImpl userService;
-    private static LoginResponse loginResponse = null;
-    private static final ResponseEntity<LoginResponse> LOGIN_FAIL_RESPONSE = new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.BAD_REQUEST);
+    private static final ResponseEntity<LoginResponse> LOGIN_FAIL_RESPONSE = new ResponseEntity<LoginResponse>(HttpStatus.BAD_REQUEST);
 
     @Autowired
     public UserController(UserServiceImpl userService, ResponseService responseService) {
