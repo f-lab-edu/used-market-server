@@ -2,7 +2,7 @@ package com.market.server.controller;
 
 import com.market.server.dto.UserDTO;
 import com.market.server.service.ResponseService;
-import com.market.server.service.UserServiceImpl;
+import com.market.server.service.Impl.UserServiceImpl;
 import com.market.server.utils.SessionUtil;
 import io.swagger.annotations.Api;
 import lombok.*;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 
 @Api(tags = {"2. users"})

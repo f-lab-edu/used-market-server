@@ -1,12 +1,16 @@
-package com.market.server.service;
+package com.market.server.service.Impl;
 
 import com.market.server.advice.exception.DuplicateIdException;
 import com.market.server.mapper.UserProfileMapper;
 import com.market.server.dto.UserDTO;
+import com.market.server.service.UserService;
 import com.market.server.utils.SHA256Util;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 /*logback : log4j2 전에 개발된 로깅프로그램으로 log4j에서 향상된 성능과 필터링 옵션을 제공합니다. slf4j도 지원합니다. 그리고 자동 리로드도 가능합니다.
@@ -42,7 +46,7 @@ public class UserServiceImpl implements UserService {
         if (duplIdResult) {
             throw new DuplicateIdException("중복된 아이디입니다.");
         }
-
+        userDTO.setCreatetime(new Date());
         userDTO.setPassword(SHA256Util.encryptSHA256(userDTO.getPassword()));
         int insertCount = userProfileMapper.register(userDTO);
 
@@ -97,7 +101,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 유저 비밀번호 변경 메서드.
+     * 유저 주소 변경 메서드.
      */
     @Override
     public void updateAddress(String id, String newAddress) {

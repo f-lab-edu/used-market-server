@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.redis.core.RedisHash;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -14,23 +15,30 @@ public class UserDTO {
         DEFAULT, DELETED
     }
 
+    private int accountId;
     private String id;
     private String password;
     private String name;
     private String phone;
     private String address;
     private Status status;
+    private Date createtime;
+    private Date updatetime;
+    private boolean isAddmin;
 
     public UserDTO(){
     }
 
-    public UserDTO(String id, String password, String name, String phone, String address, Status status) {
+    public UserDTO(String id, String password, String name, String phone, String address, Status status, Date createtime, Date updatetime, boolean isAddmin) {
         this.id = id;
         this.password = password;
         this.name = name;
         this.phone = phone;
         this.address = address;
         this.status = status;
+        this.createtime = createtime;
+        this.updatetime = updatetime;
+        this.isAddmin = isAddmin;
     }
 
     /**

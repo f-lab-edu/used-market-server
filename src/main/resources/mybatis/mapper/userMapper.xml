@@ -12,14 +12,16 @@
         name,
         phone,
         address,
-        status
+        status,
+        createtime
         ) VALUES (
         #{id},
         #{password},
         #{name},
         #{phone},
         #{address},
-        #{status}
+        #{status},
+        #{createtime}
         )
     </insert>
 
