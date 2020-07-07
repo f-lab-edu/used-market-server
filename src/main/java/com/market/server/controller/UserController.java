@@ -4,7 +4,6 @@ import com.market.server.dto.UserDTO;
 import com.market.server.service.ResponseService;
 import com.market.server.service.UserServiceImpl;
 import com.market.server.utils.SessionUtil;
-import com.sun.istack.internal.NotNull;
 import io.swagger.annotations.Api;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
@@ -55,7 +54,7 @@ public class UserController {
      */
     @PostMapping("signUp")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody @NotNull UserDTO userDTO) {
+    public void signUp(@RequestBody UserDTO userDTO) {
         if (UserDTO.hasNullDataBeforeSignup(userDTO)) {
             throw new NullPointerException("회원가입시 필수 데이터를 모두 입력해야 합니다.");
         }
@@ -66,7 +65,7 @@ public class UserController {
      * 회원 로그인을 진행한다. Login 요청시 id, password가 NULL일 경우 NullPointerException을 throw한다.
      */
     @PostMapping("signIn")
-    public ResponseEntity<LoginResponse> login(@RequestBody @NotNull UserLoginRequest loginRequest,
+    public ResponseEntity<LoginResponse> login(@RequestBody UserLoginRequest loginRequest,
                                                HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String id = loginRequest.getId();
@@ -105,7 +104,7 @@ public class UserController {
      * 회원 비밀번호 수정 메서드.
      */
     @PatchMapping("updatePassword")
-    public ResponseEntity<LoginResponse> updateUserPassword(@RequestBody @NotNull UserUpdatePasswordRequest userUpdatePasswordRequest,
+    public ResponseEntity<LoginResponse> updateUserPassword(@RequestBody UserUpdatePasswordRequest userUpdatePasswordRequest,
                                                             HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String Id = SessionUtil.getLoginMemberId(session);
@@ -126,7 +125,7 @@ public class UserController {
      * 회원 주소수정 메서드.
      */
     @PatchMapping("updateAddress")
-    public ResponseEntity<LoginResponse> updateAddress(@RequestBody @NotNull UserUpdateAddressRequest userUpdateAddressRequestu,
+    public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserUpdateAddressRequest userUpdateAddressRequestu,
                                                             HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String Id = SessionUtil.getLoginMemberId(session);
@@ -146,7 +145,7 @@ public class UserController {
      * 회원 ID 삭제 메서드.
      */
     @DeleteMapping("deleteID")
-    public ResponseEntity<LoginResponse> updateAddress(@RequestBody @NotNull UserDeleteId userDeleteId,
+    public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserDeleteId userDeleteId,
                                                        HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String Id = SessionUtil.getLoginMemberId(session);
