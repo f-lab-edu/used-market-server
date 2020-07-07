@@ -31,4 +31,20 @@
         )
     </insert>
 
+    <select id="selectMyProducts" resultType="com.market.server.dto.ProductDTO">
+        SELECT `id`,
+        `price`,
+        `writerId`,
+        `title`,
+        `contents`,
+        `status`,
+        `istrade`,
+        `createtime`,
+        `updatetime`,
+        `deliveryprice`,
+        `dibcount`
+        FROM `product`
+        WHERE writerId = #{accountiD}
+    </select>
+
 </mapper>

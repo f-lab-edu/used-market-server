@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Log4j2
@@ -22,9 +23,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private UserProfileMapper userProfileMapper;
-
-    @Autowired
-    private UserServiceImpl userService;
 
     @Override
     public void register(String id, ProductDTO productDTO) {
@@ -38,5 +36,11 @@ public class ProductServiceImpl implements ProductService {
             log.error("register ERROR! {}", productDTO);
             throw new RuntimeException("register ERROR! 상품 등록 메서드를 확인해주세요\n" + "Params : " + productDTO);
         }
+    }
+
+    @Override
+    public List<ProductDTO> selectMyProducts(int accountId) {
+        List<ProductDTO> productDTOList = productMapper.selectMyProducts(accountId);
+        return productDTOList;
     }
 }
