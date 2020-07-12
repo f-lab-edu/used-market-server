@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-/*logback : log4j2 전에 개발된 로깅프로그램으로 log4j에서 향상된 성능과 필터링 옵션을 제공합니다. slf4j도 지원합니다. 그리고 자동 리로드도 가능합니다.
+/*
+logback : log4j2 전에 개발된 로깅프로그램으로 log4j에서 향상된 성능과 필터링 옵션을 제공합니다. slf4j도 지원합니다. 그리고 자동 리로드도 가능합니다.
 log4j2 : logback과 동일하게 자동 리로드 기능과 필터리 기능을 제공합니다. logback과 차이점은 Apache에 따르면 멀티 쓰레드 환경에서 비동기 로거(Async Logger) 의 경우
-logback보다 몇 배나 되는 처리량을 갖고 있다고 합니다. 그리고 람다 표현식과 사용자 정의 로그 레벨도 지원합니다.*/
+logback보다 몇 배나 되는 처리량을 갖고 있다고 합니다. 그리고 람다 표현식과 사용자 정의 로그 레벨도 지원합니다.
+*/
 @Log4j2
 // https://logging.apache.org/log4j/2.x/
 public class UserServiceImpl implements UserService {
@@ -92,7 +94,7 @@ public class UserServiceImpl implements UserService {
             int insertCount = userProfileMapper.updatePassword(memberInfo);
         } else {
             log.error("updatePasswrod ERROR! {}", memberInfo);
-            throw new RuntimeException("updatePasswrod ERROR! 비밀번호 변경 메서드를 확인해주세요\n" + "Params : " + memberInfo);
+            throw new IllegalArgumentException("updatePasswrod ERROR! 비밀번호 변경 메서드를 확인해주세요\n" + "Params : " + memberInfo);
         }
     }
 

@@ -66,7 +66,7 @@ public class UserController {
      * 회원 로그인을 진행한다. Login 요청시 id, password가 NULL일 경우 NullPointerException을 throw한다.
      */
     @PostMapping("signIn")
-    public ResponseEntity<LoginResponse> login(@RequestBody @NotNull UserLoginRequest loginRequest,
+    public HttpStatus login(@RequestBody @NotNull UserLoginRequest loginRequest,
                                                HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String id = loginRequest.getId();
@@ -75,7 +75,7 @@ public class UserController {
 
         if (userInfo == null) {
             // ID, Password에 맞는 정보가 없을 때
-            return FAIL_RESPONSE;
+            return HttpStatus.NOT_FOUND;
         } else if (UserDTO.Status.DEFAULT == userInfo.getStatus()) {
             // 성공시 세션에 ID를 저장
             loginResponse = LoginResponse.success(userInfo);
@@ -86,7 +86,7 @@ public class UserController {
             throw new RuntimeException("Login Error! 유저 정보가 없거나 지워진 유저 정보입니다.");
         }
 
-        return responseEntity;
+        return HttpStatus.FOUND;
     }
 
     /**
@@ -104,7 +104,7 @@ public class UserController {
     /**
      * 회원 비밀번호 수정 메서드.
      */
-    @PatchMapping("updatePassword")
+    @PatchMapping("Password")
     public ResponseEntity<LoginResponse> updateUserPassword(@RequestBody @NotNull UserUpdatePasswordRequest userUpdatePasswordRequest,
                                                             HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
@@ -114,9 +114,9 @@ public class UserController {
 
         try {
             userService.updatePassword(Id, beforePassword, afterPassword);
-            responseEntity = new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
+            ResponseEntity.ok(new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK));
         } catch (RuntimeException e) {
-            log.info("updatePassword 실패");
+            log.error("updatePassword 실패");
             responseEntity = FAIL_RESPONSE;
         }
         return responseEntity;
