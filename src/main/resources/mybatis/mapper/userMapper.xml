@@ -6,33 +6,17 @@
 <mapper namespace="com.market.server.mapper.UserProfileMapper">
 
     <insert id="register" parameterType="com.market.server.dto.UserDTO">
-        INSERT INTO account (
-        id,
-        password,
-        name,
-        phone,
-        address,
-        status,
-        createtime
-        ) VALUES (
-        #{id},
-        #{password},
-        #{name},
-        #{phone},
-        #{address},
-        #{status},
-        #{createtime}
-        )
+        INSERT INTO account (id, password, name, phone, address, status, createtime)
+        VALUES (#{id}, #{password}, #{name}, #{phone}, #{address}, #{status}, #{createtime})
     </insert>
 
     <select id="findByIdAndPassword" resultType="com.market.server.dto.UserDTO">
-        SELECT
-        id,
-        password,
-        name,
-        phone,
-        address,
-        status
+        SELECT id,
+               password,
+               name,
+               phone,
+               address,
+               status
         FROM account
         WHERE id = #{id}
         AND password = #{password}
@@ -56,6 +40,5 @@
         SET address = #{address}
         WHERE id= #{id}
     </update>
-
 
 </mapper>
