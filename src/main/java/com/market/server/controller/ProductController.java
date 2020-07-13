@@ -1,5 +1,6 @@
 package com.market.server.controller;
 
+import com.market.server.aop.LoginCheck;
 import com.market.server.dto.ProductDTO;
 import com.market.server.dto.UserDTO;
 import com.market.server.service.Impl.ProductServiceImpl;
@@ -47,6 +48,7 @@ public class ProductController {
      * 본인 중고물품 검색 메서드.
      */
     @GetMapping("MyProducts")
+    @LoginCheck(type = LoginCheck.UserType.user)
     public ProductResponse myProductInfo(HttpSession session) {
         String id = SessionUtil.getLoginMemberId(session);
         UserDTO memberInfo = userService.getUserInfo(id);
@@ -88,7 +90,7 @@ public class ProductController {
                                HttpSession session) {
         String id = SessionUtil.getLoginMemberId(session);
         UserDTO memberInfo = userService.getUserInfo(id);
-        productService.deleteProduct(memberInfo.getAccountId(),productId);
+        productService.deleteProduct(memberInfo.getAccountId(), productId);
     }
 
     // -------------- response 객체 --------------
