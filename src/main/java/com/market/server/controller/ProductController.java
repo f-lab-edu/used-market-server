@@ -49,7 +49,7 @@ public class ProductController {
     public ProductResponse myProductInfo(HttpSession session) {
         String id = SessionUtil.getLoginMemberId(session);
         UserDTO memberInfo = userService.getUserInfo(id);
-        List<ProductDTO> productDTOList = productService.selectMyProducts(memberInfo.getAccountId());
+        List<ProductDTO> productDTOList = productService.getMyProducts(memberInfo.getAccountId());
         return new ProductResponse(productDTOList);
     }
 
