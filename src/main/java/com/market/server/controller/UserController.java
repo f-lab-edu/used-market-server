@@ -67,7 +67,7 @@ public class UserController {
      */
     @PostMapping("signIn")
     public HttpStatus login(@RequestBody @NotNull UserLoginRequest loginRequest,
-                                               HttpSession session) {
+                            HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String id = loginRequest.getId();
         String password = loginRequest.getPassword();
@@ -86,7 +86,7 @@ public class UserController {
             throw new RuntimeException("Login Error! 유저 정보가 없거나 지워진 유저 정보입니다.");
         }
 
-        return HttpStatus.FOUND;
+        return HttpStatus.OK;
     }
 
     /**
@@ -115,8 +115,8 @@ public class UserController {
         try {
             userService.updatePassword(Id, beforePassword, afterPassword);
             ResponseEntity.ok(new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK));
-        } catch (RuntimeException e) {
-            log.error("updatePassword 실패");
+        } catch (IllegalArgumentException e) {
+            log.error("updatePassword 실패" + e);
             responseEntity = FAIL_RESPONSE;
         }
         return responseEntity;
@@ -127,7 +127,7 @@ public class UserController {
      */
     @PatchMapping("updateAddress")
     public ResponseEntity<LoginResponse> updateAddress(@RequestBody @NotNull UserUpdateAddressRequest userUpdateAddressRequestu,
-                                                            HttpSession session) {
+                                                       HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String Id = SessionUtil.getLoginMemberId(session);
         String newAddress = userUpdateAddressRequestu.getNewAddress();
