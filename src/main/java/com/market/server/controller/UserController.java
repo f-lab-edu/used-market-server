@@ -116,7 +116,7 @@ public class UserController {
             userService.updatePassword(Id, beforePassword, afterPassword);
             ResponseEntity.ok(new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK));
         } catch (IllegalArgumentException e) {
-            log.error("updatePassword 실패" + e);
+            log.error("updatePassword 실패" , e);
             responseEntity = FAIL_RESPONSE;
         }
         return responseEntity;
