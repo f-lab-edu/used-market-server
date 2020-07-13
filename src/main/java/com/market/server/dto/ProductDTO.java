@@ -14,7 +14,7 @@ public class ProductDTO {
     }
     private int id;
     private long price;
-    private int writerId;
+    private int accountId;
     private String title;
     private String contents;
     private Status status;
@@ -27,10 +27,10 @@ public class ProductDTO {
     public ProductDTO() {
     }
 
-    public ProductDTO(int id, long price, int writerId, String title, String contents, Status status, boolean istrade, Date createtime, Date updatetime, long deliveryprice, int dibcount) {
+    public ProductDTO(int id, long price, int accountId, String title, String contents, Status status, boolean istrade, Date createtime, Date updatetime, long deliveryprice, int dibcount) {
         this.id = id;
         this.price = price;
-        this.writerId = writerId;
+        this.accountId = accountId;
         this.title = title;
         this.contents = contents;
         this.status = status;

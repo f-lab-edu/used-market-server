@@ -8,12 +8,13 @@ import com.market.server.utils.SessionUtil;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 @Api(tags = {"3. products"})
@@ -53,7 +54,42 @@ public class ProductController {
         return new ProductResponse(productDTOList);
     }
 
+    /**
+     * 본인 중고물품 수정 메서드.
+     */
+    @PatchMapping("{productId}/update")
+    public void updateProducts(@PathVariable(name = "productId") int productId,
+                               @RequestBody ProductRequest productRequest,
+                               HttpSession session) {
+        String id = SessionUtil.getLoginMemberId(session);
 
+        UserDTO memberInfo = userService.getUserInfo(id);
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setAccountId(memberInfo.getAccountId());
+        productDTO.setId(productId);
+        productDTO.setPrice(productRequest.getPrice());
+        productDTO.setTitle(productRequest.getTitle());
+        productDTO.setContents(productRequest.getContents());
+        productDTO.setStatus(productRequest.getStatus());
+        productDTO.setIstrade(productRequest.isTrade());
+        productDTO.setUpdatetime(new Date());
+        productDTO.setDeliveryprice(productRequest.getDeliveryprice());
+        productDTO.setDibcount(productRequest.getDibcount());
+        productService.updateProducts(productDTO);
+    }
+
+    /**
+     * 본인 중고물품 삭제 메서드.
+     */
+    @DeleteMapping("{productId}/delete")
+    public void updateProducts(@PathVariable(name = "productId") int productId,
+                               @RequestBody ProductDeleteRequest productDeleteRequest,
+                               HttpSession session) {
+        String id = SessionUtil.getLoginMemberId(session);
+        UserDTO memberInfo = userService.getUserInfo(id);
+        productService.deleteProduct(memberInfo.getAccountId(),productId);
+    }
 
     // -------------- response 객체 --------------
 
@@ -61,5 +97,27 @@ public class ProductController {
     @AllArgsConstructor
     private static class ProductResponse {
         private List<ProductDTO> productDTO;
+    }
+
+    // -------------- request 객체 --------------
+
+    @Setter
+    @Getter
+    private static class ProductRequest {
+        private long price;
+        private String title;
+        private String contents;
+        private ProductDTO.Status status;
+        private boolean trade;
+        private Date updatetime;
+        private long deliveryprice;
+        private int dibcount;
+    }
+
+    @Setter
+    @Getter
+    private static class ProductDeleteRequest {
+        private int id;
+        private int accountId;
     }
 }

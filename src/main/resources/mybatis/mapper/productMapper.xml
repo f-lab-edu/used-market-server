@@ -8,7 +8,7 @@
     <insert id="register" parameterType="com.market.server.dto.ProductDTO">
         INSERT INTO product (
         price,
-        writerId,
+        accountId,
         title,
         contents,
         status,
@@ -19,7 +19,7 @@
         dibcount
         ) VALUES (
         #{price},
-        #{writerId},
+        #{accountId},
         #{title},
         #{contents},
         #{status},
@@ -34,7 +34,7 @@
     <select id="selectMyProducts" resultType="com.market.server.dto.ProductDTO">
         SELECT `id`,
         `price`,
-        `writerId`,
+        `accountId`,
         `title`,
         `contents`,
         `status`,
@@ -44,7 +44,27 @@
         `deliveryprice`,
         `dibcount`
         FROM `product`
-        WHERE writerId = #{accountiD}
+        WHERE accountiD = #{accountiD}
     </select>
+
+    <update id="updateProducts" parameterType="com.market.server.dto.ProductDTO">
+        UPDATE product
+        SET price = #{price},
+            title = #{title},
+            contents = #{contents},
+            status = #{status},
+            istrade = #{istrade},
+            updatetime = #{updatetime},
+            deliveryprice = #{deliveryprice},
+            dibcount = #{dibcount}
+        WHERE accountId = #{accountId}
+        AND id = #{id}
+    </update>
+
+    <delete id="deleteProduct">
+        DELETE FROM product
+        WHERE accountId = #{accountId}
+        AND id = #{productId}
+    </delete>
 
 </mapper>

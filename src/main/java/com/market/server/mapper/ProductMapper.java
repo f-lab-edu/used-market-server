@@ -9,5 +9,9 @@ import java.util.List;
 public interface ProductMapper {
     public int register(ProductDTO productDTO);
 
-    public List<ProductDTO> selectMyProducts(int accountiD);
+    public List<ProductDTO> selectMyProducts(int accountId);
+
+    public void updateProducts(ProductDTO productDTO);
+
+    public void deleteProduct(int accountId, int productId);
 }
