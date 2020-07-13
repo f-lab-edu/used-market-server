@@ -22,9 +22,7 @@ import java.util.List;
 @Log4j2
 public class ProductController {
 
-    @Autowired
     private final ProductServiceImpl productService;
-    @Autowired
     private final UserServiceImpl userService;
     private ProductResponse productResponse;
 
@@ -47,7 +45,7 @@ public class ProductController {
     /**
      * 본인 중고물품 검색 메서드.
      */
-    @GetMapping("selectMyProducts")
+    @GetMapping("MyProducts")
     public ProductResponse myProductInfo(HttpSession session) {
         String id = SessionUtil.getLoginMemberId(session);
         UserDTO memberInfo = userService.getUserInfo(id);

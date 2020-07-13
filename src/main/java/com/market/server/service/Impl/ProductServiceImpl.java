@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> selectMyProducts(int accountId) {
+    public List<ProductDTO> getMyProducts(int accountId) {
         List<ProductDTO> productDTOList = productMapper.selectMyProducts(accountId);
         return productDTOList;
     }

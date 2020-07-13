@@ -9,6 +9,6 @@ public interface ProductService {
     // 중고 물품 등록
     void register(String id, ProductDTO productDTO);
 
-    List<ProductDTO> selectMyProducts(int accountId);
+    List<ProductDTO> getMyProducts(int accountId);
 
 }
