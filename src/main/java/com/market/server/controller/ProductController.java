@@ -38,6 +38,7 @@ public class ProductController {
      */
     @PostMapping("insertProduct")
     @ResponseStatus(HttpStatus.CREATED)
+    @LoginCheck(type = LoginCheck.UserType.user)
     public void registerProduct(@RequestBody ProductDTO productDTO,
                                 HttpSession session) {
         String Id = SessionUtil.getLoginMemberId(session);
@@ -60,6 +61,7 @@ public class ProductController {
      * 본인 중고물품 수정 메서드.
      */
     @PatchMapping("{productId}/update")
+    @LoginCheck(type = LoginCheck.UserType.user)
     public void updateProducts(@PathVariable(name = "productId") int productId,
                                @RequestBody ProductRequest productRequest,
                                HttpSession session) {
@@ -85,6 +87,7 @@ public class ProductController {
      * 본인 중고물품 삭제 메서드.
      */
     @DeleteMapping("{productId}/delete")
+    @LoginCheck(type = LoginCheck.UserType.user)
     public void updateProducts(@PathVariable(name = "productId") int productId,
                                @RequestBody ProductDeleteRequest productDeleteRequest,
                                HttpSession session) {

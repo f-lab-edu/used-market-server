@@ -60,13 +60,12 @@ public class AspectCheck {
     //@Before("execution(* com.market.server.controller.*.*(..))")
     // 프로그래머가 직접 만든 Anootation에 기반해 Aspect를 적용하는 방법
     @Before("@annotation(com.market.server.aop.LoginCheck)")
-    public String loginCheck() throws Throwable {
+    public void loginCheck() throws Throwable {
         HttpSession session = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
         String Id = SessionUtil.getLoginMemberId(session);
         if (Id == null) {
             throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "LOGIN_FAIL") {
             };
         }
-        return Id;
     }
 }
