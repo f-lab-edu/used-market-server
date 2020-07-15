@@ -1,7 +1,8 @@
 package com.market.server.aop;
 
 import com.market.server.utils.SessionUtil;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -10,6 +11,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.aspectj.lang.annotation.Aspect;
 
 import javax.servlet.http.HttpSession;
+
 
 /*
 자동으로 탐지하기 위해서는 별도의 @Component 어노테이션을 추가해야 한다.
@@ -58,14 +60,25 @@ public class AspectCheck {
      * bean(*dataSource) || bean(*DataSource) 이름이 “dataSource” 나 “DataSource” 으로 끝나는 모든 빈
      */
     //@Before("execution(* com.market.server.controller.*.*(..))")
-    // 프로그래머가 직접 만든 Anootation에 기반해 Aspect를 적용하는 방법
-    @Before("@annotation(com.market.server.aop.LoginCheck)")
-    public void loginCheck() throws Throwable {
+    //1. 파라미터에서 어떤 파라미터에 우리가 만든 어노테이션이 붙어있는지 알기
+    //2. 파라미터의 값을 우리가 조회한 유저의 아이디로 변경
+    @Around("@annotation(com.market.server.aop.LoginCheck)")
+    public Object loginCheck(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         HttpSession session = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
         String Id = SessionUtil.getLoginMemberId(session);
         if (Id == null) {
             throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "LOGIN_FAIL") {
             };
         }
+        int index = 0;
+        Object[] modifiedArgs = proceedingJoinPoint.getArgs();
+
+        for (Object arg : proceedingJoinPoint.getArgs()) {
+            if (arg instanceof String) {    // Check on what basis argument have to be modified.
+                modifiedArgs[index]=Id;
+            }
+            index++;
+        }
+        return proceedingJoinPoint.proceed(modifiedArgs);  //Continue with the method with modified arguments.
     }
 }

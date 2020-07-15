@@ -38,7 +38,6 @@ public class ProductController {
      */
     @PostMapping("insertProduct")
     @ResponseStatus(HttpStatus.CREATED)
-    @LoginCheck(type = LoginCheck.UserType.user)
     public void registerProduct(@RequestBody ProductDTO productDTO,
                                 HttpSession session) {
         String Id = SessionUtil.getLoginMemberId(session);
@@ -50,9 +49,8 @@ public class ProductController {
      */
     @GetMapping("MyProducts")
     @LoginCheck(type = LoginCheck.UserType.user)
-    public ProductResponse myProductInfo(HttpSession session) {
-        String id = SessionUtil.getLoginMemberId(session);
-        UserDTO memberInfo = userService.getUserInfo(id);
+    public ProductResponse myProductInfo(String accountId) {
+        UserDTO memberInfo = userService.getUserInfo(accountId);
         List<ProductDTO> productDTOList = productService.getMyProducts(memberInfo.getAccountId());
         return new ProductResponse(productDTOList);
     }
@@ -61,7 +59,6 @@ public class ProductController {
      * 본인 중고물품 수정 메서드.
      */
     @PatchMapping("{productId}/update")
-    @LoginCheck(type = LoginCheck.UserType.user)
     public void updateProducts(@PathVariable(name = "productId") int productId,
                                @RequestBody ProductRequest productRequest,
                                HttpSession session) {
@@ -87,7 +84,6 @@ public class ProductController {
      * 본인 중고물품 삭제 메서드.
      */
     @DeleteMapping("{productId}/delete")
-    @LoginCheck(type = LoginCheck.UserType.user)
     public void updateProducts(@PathVariable(name = "productId") int productId,
                                @RequestBody ProductDeleteRequest productDeleteRequest,
                                HttpSession session) {

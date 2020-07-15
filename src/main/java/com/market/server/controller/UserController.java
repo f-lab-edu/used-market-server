@@ -38,7 +38,6 @@ public class UserController {
      * @return UserDTO
      */
     @GetMapping("myInfo")
-    @LoginCheck(type = LoginCheck.UserType.user)
     public UserInfoResponse memberInfo(HttpSession session) {
         String id = SessionUtil.getLoginMemberId(session);
         UserDTO memberInfo = userService.getUserInfo(id);
@@ -105,7 +104,6 @@ public class UserController {
      * 회원 비밀번호 수정 메서드.
      */
     @PatchMapping("updatePassword")
-    @LoginCheck(type = LoginCheck.UserType.user)
     public ResponseEntity<LoginResponse> updateUserPassword(@RequestBody UserUpdatePasswordRequest userUpdatePasswordRequest,
                                                             HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
@@ -127,7 +125,6 @@ public class UserController {
      * 회원 주소수정 메서드.
      */
     @PatchMapping("updateAddress")
-    @LoginCheck(type = LoginCheck.UserType.user)
     public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserUpdateAddressRequest userUpdateAddressRequestu,
                                                             HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
@@ -148,7 +145,6 @@ public class UserController {
      * 회원 ID 삭제 메서드.
      */
     @DeleteMapping("deleteID")
-    @LoginCheck(type = LoginCheck.UserType.user)
     public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserDeleteId userDeleteId,
                                                        HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;

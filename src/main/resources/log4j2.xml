@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" monitorInterval="30">
+    <Properties>
+        <Property name="LOG_FORMAT">%d{yyyy-MM-dd HH:mm:ss} %p %m%n</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_FORMAT}"/>
+        </Console>
+        <File name="file" fileName="./logs/file/test.log">
+            <PatternLayout pattern="%d %5p [%c] %m%n" />
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File" />
+        </Root>
+        <logger name="com.market.server" level="trace" additivity="false" >
+            <AppenderRef ref="file" />
+        </logger>
+    </Loggers>
+</Configuration>
