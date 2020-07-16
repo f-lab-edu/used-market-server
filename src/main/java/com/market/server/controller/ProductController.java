@@ -38,7 +38,7 @@ public class ProductController {
      */
     @PostMapping("insertProduct")
     @ResponseStatus(HttpStatus.CREATED)
-    @LoginCheck(type = LoginCheck.UserType.user)
+    @LoginCheck(type = LoginCheck.UserType.USER)
     public void registerProduct(@RequestBody ProductDTO productDTO, String accountId) {
         productService.register(accountId, productDTO);
     }
@@ -47,7 +47,7 @@ public class ProductController {
      * 본인 중고물품 검색 메서드.
      */
     @GetMapping("MyProducts")
-    @LoginCheck(type = LoginCheck.UserType.user)
+    @LoginCheck(type = LoginCheck.UserType.USER)
     public ProductResponse myProductInfo(String accountId) {
         UserDTO memberInfo = userService.getUserInfo(accountId);
         List<ProductDTO> productDTOList = productService.getMyProducts(memberInfo.getAccountId());
@@ -58,7 +58,7 @@ public class ProductController {
      * 본인 중고물품 수정 메서드.
      */
     @PatchMapping("{productId}/update")
-    @LoginCheck(type = LoginCheck.UserType.user)
+    @LoginCheck(type = LoginCheck.UserType.USER)
     public void updateProducts(@PathVariable(name = "productId") int productId,
                                @RequestBody ProductRequest productRequest,
                                String accountId) {
@@ -82,7 +82,7 @@ public class ProductController {
      * 본인 중고물품 삭제 메서드.
      */
     @DeleteMapping("{productId}/delete")
-    @LoginCheck(type = LoginCheck.UserType.user)
+    @LoginCheck(type = LoginCheck.UserType.USER)
     public void updateProducts(@PathVariable(name = "productId") int productId,
                                @RequestBody ProductDeleteRequest productDeleteRequest,
                                String accountId) {

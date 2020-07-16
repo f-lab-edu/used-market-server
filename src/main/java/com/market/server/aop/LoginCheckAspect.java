@@ -1,8 +1,12 @@
 package com.market.server.aop;
 
 import com.market.server.utils.SessionUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -30,45 +34,21 @@ import javax.servlet.http.HttpSession;
 int 타입의 정수로 순서를 정할 수 있는데 값이 낮을수록 우선순위가 높다.
 기본값은 가장 낮은 우선순위를 가지는 Ordered.LOWEST_PRECEDENCE이다.
 */
-//@Order(Ordered.HIGHEST_PRECEDENCE)
-public class AspectCheck {
+@Order(Ordered.LOWEST_PRECEDENCE)
+/*
+Login Check할때 aop의 Aspect 애노테이션을 이용하여
+로그인 체크 중복되는 코드를 제거하기 위해 어드바이스(Advice)를 정의하는 class 입니다.
+*/
+public class LoginCheckAspect {
+    private static Logger logger = LogManager.getLogger(LoginCheckAspect.class);
 
-    /**
-     * 로그인 체크 AOP 적용
-     * Pointcut JoinPoints
-     * <p>
-     * execution(public * *(..)) public 메소드 실행
-     * <p>
-     * execution(* set*(..)) 이름이 set으로 시작하는 모든 메소드명 실행
-     * <p>
-     * execution(* get*(..)) 이름이 get으로 시작하는 모든 메소드명 실행
-     * <p>
-     * execution(* com.xyz.service.AccountService.*(..)) AccountService 인터페이스의 모든 메소드 실행
-     * <p>
-     * execution(* com.xyz.service.*.*(..)) service 패키지의 모든 메소드 실행
-     * <p>
-     * execution(* com.xyz.service..*.*(..)) service 패키지와 하위 패키지의 모든 메소드 실행
-     * <p>
-     * within(com.xyz.service.*) service 패키지 내의 모든 결합점 (클래스 포함)
-     * <p>
-     * within(com.xyz.service..*) service 패키지 및 하위 패키지의 모든 결합점 (클래스 포함)
-     * <p>
-     * bean(*Repository) 이름이 “Repository”로 끝나는 모든 빈
-     * <p>
-     * bean(*) 모든 빈 bean(account*) 이름이 'account'로 시작되는 모든 빈
-     * <p>
-     * bean(*dataSource) || bean(*DataSource) 이름이 “dataSource” 나 “DataSource” 으로 끝나는 모든 빈
-     */
-    //@Before("execution(* com.market.server.controller.*.*(..))")
-    //1. 파라미터에서 어떤 파라미터에 우리가 만든 어노테이션이 붙어있는지 알기
-    //2. 파라미터의 값을 우리가 조회한 유저의 아이디로 변경
     @Around("@annotation(com.market.server.aop.LoginCheck)")
     public Object loginCheck(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         HttpSession session = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
         String Id = SessionUtil.getLoginMemberId(session);
         if (Id == null) {
-            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "LOGIN_FAIL") {
-            };
+            logger.debug(proceedingJoinPoint.toString()+ "accountName :" + Id);
+            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요.") {};
         }
         int index = 0;
         Object[] modifiedArgs = proceedingJoinPoint.getArgs();

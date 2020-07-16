@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD) //어디에 어노테이션을 적용할 지 타겟을 정한다.
 public @interface LoginCheck {
     public static enum UserType {
-        user, admin
+        USER, ADMIN
     }
 
     UserType type();
