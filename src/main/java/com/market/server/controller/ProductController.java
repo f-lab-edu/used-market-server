@@ -59,23 +59,24 @@ public class ProductController {
      */
     @PatchMapping("{productId}")
     public void updateProducts(@PathVariable(name = "productId") int productId,
-                               @RequestBody ProductRequest productRequest,
+                               @RequestBody ProductRequest PR,
                                HttpSession session) {
         String id = SessionUtil.getLoginMemberId(session);
 
         UserDTO memberInfo = userService.getUserInfo(id);
 
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setAccountId(memberInfo.getAccountId());
-        productDTO.setId(productId);
-        productDTO.setPrice(productRequest.getPrice());
-        productDTO.setTitle(productRequest.getTitle());
-        productDTO.setContents(productRequest.getContents());
-        productDTO.setStatus(productRequest.getStatus());
-        productDTO.setIstrade(productRequest.isTrade());
-        productDTO.setUpdatetime(new Date());
-        productDTO.setDeliveryprice(productRequest.getDeliveryprice());
-        productDTO.setDibcount(productRequest.getDibcount());
+        ProductDTO productDTO = new ProductDTO(productId,
+                PR.getPrice(),
+                memberInfo.getAccountId(),
+                PR.getTitle(),
+                PR.getContents(),
+                PR.getStatus(),
+                PR.isTrade(),
+                new Date(),
+                new Date(),
+                PR.getDeliveryprice(),
+                PR.getDibcount());
+
         productService.updateProducts(productDTO);
     }
 
@@ -88,7 +89,7 @@ public class ProductController {
                                HttpSession session) {
         String id = SessionUtil.getLoginMemberId(session);
         UserDTO memberInfo = userService.getUserInfo(id);
-        productService.deleteProduct(memberInfo.getAccountId(),productId);
+        productService.deleteProduct(memberInfo.getAccountId(), productId);
     }
 
     // -------------- response 객체 --------------

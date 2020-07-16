@@ -1,13 +1,13 @@
 package com.market.server.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
 import java.util.Date;
 
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 public class ProductDTO {
     public enum Status {
         NEW, OLD, ECT
@@ -23,21 +23,4 @@ public class ProductDTO {
     private Date updatetime;
     private long deliveryprice;
     private int dibcount;
-
-    public ProductDTO() {
-    }
-
-    public ProductDTO(int id, long price, int accountId, String title, String contents, Status status, boolean istrade, Date createtime, Date updatetime, long deliveryprice, int dibcount) {
-        this.id = id;
-        this.price = price;
-        this.accountId = accountId;
-        this.title = title;
-        this.contents = contents;
-        this.status = status;
-        this.istrade = istrade;
-        this.createtime = createtime;
-        this.updatetime = updatetime;
-        this.deliveryprice = deliveryprice;
-        this.dibcount = dibcount;
-    }
 }
