@@ -15,16 +15,18 @@ public class UserDTO {
     }
 
     private String id;
-    private String pw;
+    private String password;
     private String name;
     private String phone;
     private String address;
     private Status status;
 
+    public UserDTO(){
+    }
 
-    public UserDTO(String id, String pw, String name, String phone, String address, Status status) {
+    public UserDTO(String id, String password, String name, String phone, String address, Status status) {
         this.id = id;
-        this.pw = pw;
+        this.password = password;
         this.name = name;
         this.phone = phone;
         this.address = address;
@@ -40,7 +42,7 @@ public class UserDTO {
      * @return
      */
     public static boolean hasNullDataBeforeSignup(UserDTO userDTO) {
-        return userDTO.getId() == null || userDTO.getPw() == null
+        return userDTO.getId() == null || userDTO.getPassword() == null
                 || userDTO.getName() == null || userDTO.getPhone() == null
                 || userDTO.getAddress() == null;
     }

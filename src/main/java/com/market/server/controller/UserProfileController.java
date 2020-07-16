@@ -25,7 +25,7 @@ public class UserProfileController {
 
     @ApiOperation(value = "회원 한명 조회", notes = "특정 회원을 조회한다")
     @GetMapping("/users/{id}")
-    public SingleResult<UserProfile> getUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable ("id") String id) throws Exception {
+    public SingleResult<UserDTO> getUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable("id") String id) throws Exception {
         return responseService.getSingleResult(Optional.ofNullable(mapper.getUserProfile(id)).orElseThrow(CUserNotFoundException::new));
     }
 
@@ -37,7 +37,7 @@ public class UserProfileController {
     }
 
     @ApiOperation(value = "회원 수정", notes = "회원을 수정한다..")
-    @PutMapping("/user/{id}")
+    @PutMapping("/users/{id}")
     public SingleResult<Integer> putUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable("id") String id,
                                                 @ApiParam(value = "회원비번", required = true) @RequestParam("pw") String pw,
                                                 @ApiParam(value = "회원이름", required = true) @RequestParam("name") String name,
@@ -47,7 +47,7 @@ public class UserProfileController {
     }
 
     @ApiOperation(value = "회원 입력", notes = "회원을 입력한다..")
-    @PostMapping("/user/{id}")
+    @PostMapping("/users/{id}")
     public SingleResult<Integer> postUserProfile(@ApiParam(value = "회원아이디", required = true) @PathVariable("id") String id,
                                                  @ApiParam(value = "회원비번", required = true) @RequestParam("pw") String pw,
                                                  @ApiParam(value = "회원이름", required = true) @RequestParam("name") String name,
