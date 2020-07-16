@@ -57,7 +57,7 @@ public class ProductController {
     /**
      * 본인 중고물품 수정 메서드.
      */
-    @PatchMapping("{productId}/update")
+    @PatchMapping("{productId}")
     public void updateProducts(@PathVariable(name = "productId") int productId,
                                @RequestBody ProductRequest productRequest,
                                HttpSession session) {
@@ -82,7 +82,7 @@ public class ProductController {
     /**
      * 본인 중고물품 삭제 메서드.
      */
-    @DeleteMapping("{productId}/delete")
+    @DeleteMapping("{productId}")
     public void updateProducts(@PathVariable(name = "productId") int productId,
                                @RequestBody ProductDeleteRequest productDeleteRequest,
                                HttpSession session) {
