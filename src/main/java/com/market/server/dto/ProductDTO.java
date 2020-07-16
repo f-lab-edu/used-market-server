@@ -1,9 +1,7 @@
 package com.market.server.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
 import java.util.Date;
 
 @Getter
@@ -16,7 +14,7 @@ public class ProductDTO {
     }
     private int id;
     private long price;
-    private int writerId;
+    private int accountId;
     private String title;
     private String contents;
     private Status status;
