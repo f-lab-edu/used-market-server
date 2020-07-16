@@ -6,29 +6,8 @@
 <mapper namespace="com.market.server.mapper.ProductMapper">
 
     <insert id="register" parameterType="com.market.server.dto.ProductDTO">
-        INSERT INTO product (
-        price,
-        accountId,
-        title,
-        contents,
-        status,
-        istrade,
-        createtime,
-        updatetime,
-        deliveryprice,
-        dibcount
-        ) VALUES (
-        #{price},
-        #{accountId},
-        #{title},
-        #{contents},
-        #{status},
-        #{istrade},
-        #{createtime},
-        #{updatetime},
-        #{deliveryprice},
-        #{dibcount}
-        )
+        INSERT INTO product (price, writerId, title, contents, status, istrade, createtime, updatetime, deliveryprice, dibcount )
+        VALUES (#{price}, #{writerId}, #{title}, #{contents}, #{status}, #{istrade}, #{createtime}, #{updatetime}, #{deliveryprice}, #{dibcount})
     </insert>
 
     <select id="selectMyProducts" resultType="com.market.server.dto.ProductDTO">

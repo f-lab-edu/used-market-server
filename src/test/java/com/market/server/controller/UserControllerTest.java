@@ -88,26 +88,15 @@ class UserControllerTest {
     @Test
     @Transactional
     void updateUserPassword() throws Exception {
-//        Map<String, Object> sessionAttr = new HashMap<>();
-//        sessionAttr.put("LOGIN_MEMBER_ID", "topojs8");
-//        mockMvc
-//                .perform(
-//                        put("/users/updatePassword")
-//                                .param("password", "updatePassword")
-//                                .param("id", "topojs8")
-//                                .sessionAttrs(sessionAttr)
-//                                .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print()).andExpect(status().isOk());
-
         MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
 
         info.add("password", "111");
         info.add("id", "topojs8");
 
-        mockMvc.perform(put("/users/updatePassword")       // 1, 2
+        mockMvc.perform(put("/users/updatePassword")
                 .session(mockSession)
-                .params(info))            // 3
-                .andExpect(status().isOk())     // 4
+                .params(info))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 

@@ -73,7 +73,7 @@ public class UserController {
 
         if (userInfo == null) {
             // ID, Password에 맞는 정보가 없을 때
-            return FAIL_RESPONSE;
+            return HttpStatus.NOT_FOUND;
         } else if (UserDTO.Status.DEFAULT == userInfo.getStatus()) {
             // 성공시 세션에 ID를 저장
             loginResponse = LoginResponse.success(userInfo);
@@ -84,7 +84,7 @@ public class UserController {
             throw new RuntimeException("Login Error! 유저 정보가 없거나 지워진 유저 정보입니다.");
         }
 
-        return responseEntity;
+        return HttpStatus.OK;
     }
 
     /**
@@ -112,9 +112,9 @@ public class UserController {
 
         try {
             userService.updatePassword(Id, beforePassword, afterPassword);
-            responseEntity = new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            log.info("updatePassword 실패");
+            ResponseEntity.ok(new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK));
+        } catch (IllegalArgumentException e) {
+            log.error("updatePassword 실패" , e);
             responseEntity = FAIL_RESPONSE;
         }
         return responseEntity;
