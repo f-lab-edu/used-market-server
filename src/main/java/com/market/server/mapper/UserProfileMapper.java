@@ -15,7 +15,8 @@ public interface UserProfileMapper {
 
     public int register(UserDTO userDTO);
 
-    public UserDTO findByIdAndPassword(@Param("id") String id, @Param("password") String password);
+    public UserDTO findByIdAndPassword(@Param("id") String id,
+                                       @Param("password") String password);
 
     int idCheck(String id);
 
