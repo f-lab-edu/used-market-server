@@ -5,32 +5,44 @@
 
 <mapper namespace="com.market.server.mapper.UserProfileMapper">
 
-    <insert id="register" parameterType="com.market.server.dto.UserDTO">
-        INSERT INTO userprofile (
-        id,
-        password,
-        name,
-        phone,
-        address
+    <select id="getUserProfile" resultType="com.market.server.dto.UserDTO">
+        SELECT accountId, id, password, name, phone, address, status
+        FROM account
+        WHERE id=#{id}
+    </select>
 
-        ) VALUES (
-        #{id},
-        #{password},
-        #{name},
-        #{phone},
-        #{address}
-        )
+    <insert id="insertUserProfile" parameterType="com.market.server.dto.UserDTO">
+        INSERT INTO account (id, password, name, phone, address)
+        VALUES(#{id}, #{password}, #{name}, #{phone}, #{address})
+    </insert>
+
+    <update id="updateUserProfile" parameterType="com.market.server.dto.UserDTO">
+        UPDATE account
+        SET password=#{password},
+            name=#{name},
+            phone=#{phone},
+            address=#{address}
+        WHERE id=#{id}
+    </update>
+    
+    <delete id="deleteUserProfile">
+        DELETE FROM account
+        WHERE id=#{id}
+    </delete>
+
+    <insert id="register" parameterType="com.market.server.dto.UserDTO">
+        INSERT INTO account (id, password, name, phone, address, status, createtime)
+        VALUES (#{id}, #{password}, #{name}, #{phone}, #{address}, #{status}, #{createtime})
     </insert>
 
     <select id="findByIdAndPassword" resultType="com.market.server.dto.UserDTO">
-        SELECT
-        id,
-        password,
-        name,
-        phone,
-        address,
-        status
-        FROM userprofile
+        SELECT id,
+               password,
+               name,
+               phone,
+               address,
+               status
+        FROM account
         WHERE id = #{id}
         AND password = #{password}
         AND status != 'DELETE'
@@ -38,21 +50,20 @@
 
     <select id="idCheck" resultType="int">
         SELECT COUNT(id)
-        FROM userprofile
+        FROM account
         WHERE id = #{id}
     </select>
 
     <update id="updatePassword" parameterType="com.market.server.dto.UserDTO">
-        UPDATE userprofile
+        UPDATE account
         SET password = #{password}
         WHERE id= #{id}
     </update>
 
     <update id="updateAddress" parameterType="com.market.server.dto.UserDTO">
-        UPDATE userprofile
+        UPDATE account
         SET address = #{address}
         WHERE id= #{id}
     </update>
-
 
 </mapper>

@@ -2,9 +2,8 @@ package com.market.server.controller;
 
 import com.market.server.dto.UserDTO;
 import com.market.server.service.ResponseService;
-import com.market.server.service.UserServiceImpl;
+import com.market.server.service.Impl.UserServiceImpl;
 import com.market.server.utils.SessionUtil;
-import com.sun.istack.internal.NotNull;
 import io.swagger.annotations.Api;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 
 @Api(tags = {"2. users"})
@@ -55,7 +53,7 @@ public class UserController {
      */
     @PostMapping("signUp")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody @NotNull UserDTO userDTO) {
+    public void signUp(@RequestBody UserDTO userDTO) {
         if (UserDTO.hasNullDataBeforeSignup(userDTO)) {
             throw new NullPointerException("회원가입시 필수 데이터를 모두 입력해야 합니다.");
         }
@@ -66,8 +64,8 @@ public class UserController {
      * 회원 로그인을 진행한다. Login 요청시 id, password가 NULL일 경우 NullPointerException을 throw한다.
      */
     @PostMapping("signIn")
-    public HttpStatus login(@RequestBody @NotNull UserLoginRequest loginRequest,
-                            HttpSession session) {
+    public ResponseEntity<LoginResponse> login(@RequestBody UserLoginRequest loginRequest,
+                                               HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String id = loginRequest.getId();
         String password = loginRequest.getPassword();
@@ -104,8 +102,8 @@ public class UserController {
     /**
      * 회원 비밀번호 수정 메서드.
      */
-    @PatchMapping("Password")
-    public ResponseEntity<LoginResponse> updateUserPassword(@RequestBody @NotNull UserUpdatePasswordRequest userUpdatePasswordRequest,
+    @PatchMapping("updatePassword")
+    public ResponseEntity<LoginResponse> updateUserPassword(@RequestBody UserUpdatePasswordRequest userUpdatePasswordRequest,
                                                             HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String Id = SessionUtil.getLoginMemberId(session);
@@ -126,8 +124,8 @@ public class UserController {
      * 회원 주소수정 메서드.
      */
     @PatchMapping("updateAddress")
-    public ResponseEntity<LoginResponse> updateAddress(@RequestBody @NotNull UserUpdateAddressRequest userUpdateAddressRequestu,
-                                                       HttpSession session) {
+    public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserUpdateAddressRequest userUpdateAddressRequestu,
+                                                            HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String Id = SessionUtil.getLoginMemberId(session);
         String newAddress = userUpdateAddressRequestu.getNewAddress();
@@ -146,7 +144,7 @@ public class UserController {
      * 회원 ID 삭제 메서드.
      */
     @DeleteMapping("deleteID")
-    public ResponseEntity<LoginResponse> updateAddress(@RequestBody @NotNull UserDeleteId userDeleteId,
+    public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserDeleteId userDeleteId,
                                                        HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String Id = SessionUtil.getLoginMemberId(session);
