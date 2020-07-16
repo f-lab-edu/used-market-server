@@ -38,10 +38,9 @@ public class ProductController {
      */
     @PostMapping("insertProduct")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerProduct(@RequestBody ProductDTO productDTO,
-                                HttpSession session) {
-        String Id = SessionUtil.getLoginMemberId(session);
-        productService.register(Id, productDTO);
+    @LoginCheck(type = LoginCheck.UserType.user)
+    public void registerProduct(@RequestBody ProductDTO productDTO, String accountId) {
+        productService.register(accountId, productDTO);
     }
 
     /**
@@ -59,12 +58,11 @@ public class ProductController {
      * 본인 중고물품 수정 메서드.
      */
     @PatchMapping("{productId}/update")
+    @LoginCheck(type = LoginCheck.UserType.user)
     public void updateProducts(@PathVariable(name = "productId") int productId,
                                @RequestBody ProductRequest productRequest,
-                               HttpSession session) {
-        String id = SessionUtil.getLoginMemberId(session);
-
-        UserDTO memberInfo = userService.getUserInfo(id);
+                               String accountId) {
+        UserDTO memberInfo = userService.getUserInfo(accountId);
 
         ProductDTO productDTO = new ProductDTO();
         productDTO.setAccountId(memberInfo.getAccountId());
@@ -84,11 +82,11 @@ public class ProductController {
      * 본인 중고물품 삭제 메서드.
      */
     @DeleteMapping("{productId}/delete")
+    @LoginCheck(type = LoginCheck.UserType.user)
     public void updateProducts(@PathVariable(name = "productId") int productId,
                                @RequestBody ProductDeleteRequest productDeleteRequest,
-                               HttpSession session) {
-        String id = SessionUtil.getLoginMemberId(session);
-        UserDTO memberInfo = userService.getUserInfo(id);
+                               String accountId) {
+        UserDTO memberInfo = userService.getUserInfo(accountId);
         productService.deleteProduct(memberInfo.getAccountId(), productId);
     }
 

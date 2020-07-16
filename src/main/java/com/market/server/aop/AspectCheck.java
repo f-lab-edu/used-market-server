@@ -72,13 +72,15 @@ public class AspectCheck {
         }
         int index = 0;
         Object[] modifiedArgs = proceedingJoinPoint.getArgs();
-
+        
         for (Object arg : proceedingJoinPoint.getArgs()) {
-            if (arg instanceof String) {    // Check on what basis argument have to be modified.
+            if(arg == null) // Parameter 값에 값이 없어도 Id값 맵핑
+                modifiedArgs[index] = Id; 
+            if (arg instanceof String) {    // accountId String타입 체크 , 추가로 파라미터에 String타입이 올시 변경 필요
                 modifiedArgs[index]=Id;
             }
             index++;
         }
-        return proceedingJoinPoint.proceed(modifiedArgs);  //Continue with the method with modified arguments.
+        return proceedingJoinPoint.proceed(modifiedArgs);
     }
 }
