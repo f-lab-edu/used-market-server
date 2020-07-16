@@ -57,8 +57,7 @@
             updatetime = #{updatetime},
             deliveryprice = #{deliveryprice},
             dibcount = #{dibcount}
-        WHERE accountId = #{accountId}
-        AND id = #{id}
+        WHERE id = #{id}
     </update>
 
     <delete id="deleteProduct">
