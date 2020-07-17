@@ -54,13 +54,37 @@ public class LoginCheckAspect {
         Object[] modifiedArgs = proceedingJoinPoint.getArgs();
         
         for (Object arg : proceedingJoinPoint.getArgs()) {
-            if(arg == null) // Parameter 값에 값이 없어도 Id값 맵핑
+            if(arg == null)
                 modifiedArgs[index] = Id; 
-            if (arg instanceof String) {    // accountId String타입 체크 , 추가로 파라미터에 String타입이 올시 변경 필요
+            if (arg instanceof String) {
                 modifiedArgs[index]=Id;
             }
             index++;
         }
         return proceedingJoinPoint.proceed(modifiedArgs);
     }
+
+    @Around("@annotation(com.market.server.aop.LoginCheck) && @ annotation(loginCheck)")
+    public Object adminLoginCheck(ProceedingJoinPoint proceedingJoinPoint, LoginCheck loginCheck) throws Throwable {
+        if (!LoginCheck.UserType.ADMIN.equals(loginCheck.type())) return null;
+        HttpSession session = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
+        String Id = SessionUtil.getLoginAdminId(session);
+        if (Id == null) {
+            logger.debug(proceedingJoinPoint.toString()+ "accountName :" + Id);
+            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요.") {};
+        }
+        int index = 0;
+        Object[] modifiedArgs = proceedingJoinPoint.getArgs();
+
+        for (Object arg : proceedingJoinPoint.getArgs()) {
+            if(arg == null)
+                modifiedArgs[index] = Id;
+            if (arg instanceof String) {
+                modifiedArgs[index]=Id;
+            }
+            index++;
+        }
+        return proceedingJoinPoint.proceed(modifiedArgs);
+    }
+
 }

@@ -73,15 +73,16 @@ public class UserController {
         UserDTO userInfo = userService.login(id, password);
 
         if (userInfo == null) {
-            // ID, Password에 맞는 정보가 없을 때
             return FAIL_RESPONSE;
-        } else if (UserDTO.Status.DEFAULT == userInfo.getStatus()) {
-            // 성공시 세션에 ID를 저장
+        } else if (userInfo != null) {
             loginResponse = LoginResponse.success(userInfo);
-            SessionUtil.setLoginMemberId(session, id);
+            if (userInfo.getStatus().toString() == "ADMINE")
+                SessionUtil.setLoginAdminId(session, id);
+            else
+                SessionUtil.setLoginMemberId(session, id);
+
             responseEntity = new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
         } else {
-            // 예상하지 못한 오류일 경우
             throw new RuntimeException("Login Error! 유저 정보가 없거나 지워진 유저 정보입니다.");
         }
 
@@ -126,7 +127,7 @@ public class UserController {
      */
     @PatchMapping("updateAddress")
     public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserUpdateAddressRequest userUpdateAddressRequestu,
-                                                            HttpSession session) {
+                                                       HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String Id = SessionUtil.getLoginMemberId(session);
         String newAddress = userUpdateAddressRequestu.getNewAddress();

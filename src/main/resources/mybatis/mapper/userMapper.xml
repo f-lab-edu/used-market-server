@@ -6,7 +6,7 @@
 <mapper namespace="com.market.server.mapper.UserProfileMapper">
 
     <insert id="register" parameterType="com.market.server.dto.UserDTO">
-        INSERT INTO account (
+        INSERT INTO user (
         id,
         password,
         name,
@@ -33,7 +33,7 @@
         phone,
         address,
         status
-        FROM account
+        FROM user
         WHERE id = #{id}
         AND password = #{password}
         AND status != 'DELETE'
@@ -41,18 +41,18 @@
 
     <select id="idCheck" resultType="int">
         SELECT COUNT(id)
-        FROM account
+        FROM user
         WHERE id = #{id}
     </select>
 
     <update id="updatePassword" parameterType="com.market.server.dto.UserDTO">
-        UPDATE account
+        UPDATE user
         SET password = #{password}
         WHERE id= #{id}
     </update>
 
     <update id="updateAddress" parameterType="com.market.server.dto.UserDTO">
-        UPDATE account
+        UPDATE user
         SET address = #{address}
         WHERE id= #{id}
     </update>
