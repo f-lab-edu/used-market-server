@@ -10,39 +10,4 @@
         VALUES (#{price}, #{writerId}, #{title}, #{contents}, #{status}, #{istrade}, #{createtime}, #{updatetime}, #{deliveryprice}, #{dibcount})
     </insert>
 
-    <select id="selectMyProducts" resultType="com.market.server.dto.ProductDTO">
-        SELECT `id`,
-        `price`,
-        `accountId`,
-        `title`,
-        `contents`,
-        `status`,
-        `istrade`,
-        `createtime`,
-        `updatetime`,
-        `deliveryprice`,
-        `dibcount`
-        FROM `product`
-        WHERE accountiD = #{accountiD}
-    </select>
-
-    <update id="updateProducts" parameterType="com.market.server.dto.ProductDTO">
-        UPDATE product
-        SET price = #{price},
-            title = #{title},
-            contents = #{contents},
-            status = #{status},
-            istrade = #{istrade},
-            updatetime = #{updatetime},
-            deliveryprice = #{deliveryprice},
-            dibcount = #{dibcount}
-        WHERE id = #{id}
-    </update>
-
-    <delete id="deleteProduct">
-        DELETE FROM product
-        WHERE accountId = #{accountId}
-        AND id = #{productId}
-    </delete>
-
 </mapper>
