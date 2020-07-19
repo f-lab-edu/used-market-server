@@ -64,7 +64,7 @@ public class UserController {
      * 회원 로그인을 진행한다. Login 요청시 id, password가 NULL일 경우 NullPointerException을 throw한다.
      */
     @PostMapping("signIn")
-    public ResponseEntity<LoginResponse> login(@RequestBody UserLoginRequest loginRequest,
+    public HttpStatus login(@RequestBody UserLoginRequest loginRequest,
                                                HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String id = loginRequest.getId();
