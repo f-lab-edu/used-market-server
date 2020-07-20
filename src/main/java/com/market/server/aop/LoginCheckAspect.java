@@ -1,8 +1,7 @@
 package com.market.server.aop;
 
 import com.market.server.utils.SessionUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.springframework.core.Ordered;
@@ -39,51 +38,30 @@ int 타입의 정수로 순서를 정할 수 있는데 값이 낮을수록 우�
 Login Check할때 aop의 Aspect 애노테이션을 이용하여
 로그인 체크 중복되는 코드를 제거하기 위해 어드바이스(Advice)를 정의하는 class 입니다.
 */
+@Log4j2
 public class LoginCheckAspect {
-    private static Logger logger = LogManager.getLogger(LoginCheckAspect.class);
-
-    @Around("@annotation(com.market.server.aop.LoginCheck)")
-    public Object loginCheck(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        HttpSession session = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
-        String Id = SessionUtil.getLoginMemberId(session);
-        if (Id == null) {
-            logger.debug(proceedingJoinPoint.toString()+ "accountName :" + Id);
-            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요.") {};
-        }
-        int index = 0;
-        Object[] modifiedArgs = proceedingJoinPoint.getArgs();
-        
-        for (Object arg : proceedingJoinPoint.getArgs()) {
-            if(arg == null)
-                modifiedArgs[index] = Id; 
-            if (arg instanceof String) {
-                modifiedArgs[index]=Id;
-            }
-            index++;
-        }
-        return proceedingJoinPoint.proceed(modifiedArgs);
-    }
+    private static int idIndex = 0;
 
     @Around("@annotation(com.market.server.aop.LoginCheck) && @ annotation(loginCheck)")
     public Object adminLoginCheck(ProceedingJoinPoint proceedingJoinPoint, LoginCheck loginCheck) throws Throwable {
-        if (!LoginCheck.UserType.ADMIN.equals(loginCheck.type())) return null;
         HttpSession session = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
-        String Id = SessionUtil.getLoginAdminId(session);
-        if (Id == null) {
-            logger.debug(proceedingJoinPoint.toString()+ "accountName :" + Id);
+        String id = null;
+        if (LoginCheck.UserType.ADMIN.equals(loginCheck.type()))
+            id = SessionUtil.getLoginAdminId(session);
+
+        if (LoginCheck.UserType.USER.equals(loginCheck.type()))
+            id = SessionUtil.getLoginMemberId(session);
+
+        if (id == null) {
+            log.debug(proceedingJoinPoint.toString()+ "accountName :" + id);
             throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요.") {};
         }
-        int index = 0;
+
         Object[] modifiedArgs = proceedingJoinPoint.getArgs();
 
-        for (Object arg : proceedingJoinPoint.getArgs()) {
-            if(arg == null)
-                modifiedArgs[index] = Id;
-            if (arg instanceof String) {
-                modifiedArgs[index]=Id;
-            }
-            index++;
-        }
+        if(proceedingJoinPoint.getArgs()!=null)
+            modifiedArgs[idIndex] = id;
+
         return proceedingJoinPoint.proceed(modifiedArgs);
     }
 

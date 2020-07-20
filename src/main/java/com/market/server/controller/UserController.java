@@ -76,7 +76,7 @@ public class UserController {
             return FAIL_RESPONSE;
         } else if (userInfo != null) {
             loginResponse = LoginResponse.success(userInfo);
-            if (userInfo.getStatus().toString() == "ADMINE")
+            if (userInfo.getStatus().equals(UserDTO.Status.ADMIN.toString()))
                 SessionUtil.setLoginAdminId(session, id);
             else
                 SessionUtil.setLoginMemberId(session, id);
@@ -104,7 +104,7 @@ public class UserController {
     /**
      * 회원 비밀번호 수정 메서드.
      */
-    @PatchMapping("updatePassword")
+    @PatchMapping("password")
     public ResponseEntity<LoginResponse> updateUserPassword(@RequestBody UserUpdatePasswordRequest userUpdatePasswordRequest,
                                                             HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
@@ -125,7 +125,7 @@ public class UserController {
     /**
      * 회원 주소수정 메서드.
      */
-    @PatchMapping("updateAddress")
+    @PatchMapping("address")
     public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserUpdateAddressRequest userUpdateAddressRequestu,
                                                        HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;

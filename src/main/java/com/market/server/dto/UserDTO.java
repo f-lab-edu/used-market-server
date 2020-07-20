@@ -12,7 +12,7 @@ import java.util.Date;
 @RedisHash("accounts")
 public class UserDTO {
     public enum Status {
-        DEFAULT, ADMINE, DELETED
+        DEFAULT, ADMIN, DELETED
     }
 
     private int accountId;
@@ -21,7 +21,7 @@ public class UserDTO {
     private String name;
     private String phone;
     private String address;
-    private Status status;
+    private String status;
     private Date createtime;
     private Date updatetime;
     private boolean isAddmin;
@@ -29,7 +29,7 @@ public class UserDTO {
     public UserDTO(){
     }
 
-    public UserDTO(String id, String password, String name, String phone, String address, Status status, Date createtime, Date updatetime, boolean isAddmin) {
+    public UserDTO(String id, String password, String name, String phone, String address, String status, Date createtime, Date updatetime, boolean isAddmin) {
         this.id = id;
         this.password = password;
         this.name = name;

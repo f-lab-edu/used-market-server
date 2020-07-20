@@ -9,9 +9,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = {"4. categorys"})
+@Api(tags = {"4. categories"})
 @RestController
-@RequestMapping("/categorys")
+@RequestMapping("/categories")
 @Log4j2
 public class CategoryController {
 
@@ -24,10 +24,10 @@ public class CategoryController {
     /**
      * 중고물품 카테고리 등록 메서드.
      */
-    @PostMapping("insertCategory")
+    @PostMapping("categories")
     @ResponseStatus(HttpStatus.CREATED)
     @LoginCheck(type = LoginCheck.UserType.ADMIN)
-    public void registerCategory(@RequestBody CategoryDTO categoryDTO, String accountId) {
+    public void registerCategory(String accountId, @RequestBody CategoryDTO categoryDTO) {
         categoryService.register(accountId, categoryDTO);
     }
 
