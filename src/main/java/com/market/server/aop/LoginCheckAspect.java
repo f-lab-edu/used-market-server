@@ -35,10 +35,7 @@ int 타입의 정수로 순서를 정할 수 있는데 값이 낮을수록 우�
 기본값은 가장 낮은 우선순위를 가지는 Ordered.LOWEST_PRECEDENCE이다.
 */
 @Order(Ordered.LOWEST_PRECEDENCE)
-/*
-Login Check할때 aop의 Aspect 애노테이션을 이용하여
-로그인 체크 중복되는 코드를 제거하기 위해 어드바이스(Advice)를 정의하는 class 입니다.
-*/
+// 어노테이션으로 로그인 여부를 검사하기 위한 클래스
 public class LoginCheckAspect {
     private static Logger logger = LogManager.getLogger(LoginCheckAspect.class);
 
@@ -52,12 +49,12 @@ public class LoginCheckAspect {
         }
         int index = 0;
         Object[] modifiedArgs = proceedingJoinPoint.getArgs();
-        
+
         for (Object arg : proceedingJoinPoint.getArgs()) {
-            if(arg == null) // Parameter 값에 값이 없어도 Id값 맵핑
-                modifiedArgs[index] = Id; 
+            if (arg == null) // Parameter 값에 값이 없어도 Id값 맵핑
+                modifiedArgs[index] = Id;
             if (arg instanceof String) {    // accountId String타입 체크 , 추가로 파라미터에 String타입이 올시 변경 필요
-                modifiedArgs[index]=Id;
+                modifiedArgs[index] = Id;
             }
             index++;
         }
