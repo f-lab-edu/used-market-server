@@ -47,8 +47,8 @@ public class LoginCheckAspect {
         HttpSession session = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
         String Id = SessionUtil.getLoginMemberId(session);
         if (Id == null) {
-            logger.debug(proceedingJoinPoint.toString()+ "accountName :" + Id);
-            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요.") {};
+            logger.debug("api method name : {} accountName : {}", proceedingJoinPoint.toString(), Id);
+            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요." + Id) {};
         }
         int index = 0;
         Object[] modifiedArgs = proceedingJoinPoint.getArgs();
