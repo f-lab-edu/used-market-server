@@ -5,7 +5,6 @@ import com.market.server.dto.ProductDTO;
 import com.market.server.dto.UserDTO;
 import com.market.server.service.Impl.ProductServiceImpl;
 import com.market.server.service.Impl.UserServiceImpl;
-import com.market.server.utils.SessionUtil;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +12,6 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 

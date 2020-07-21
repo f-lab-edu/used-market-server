@@ -1,17 +1,13 @@
 package com.market.server.service.Impl;
 
-import com.market.server.advice.exception.DuplicateIdException;
 import com.market.server.dto.ProductDTO;
 import com.market.server.dto.UserDTO;
 import com.market.server.mapper.ProductMapper;
 import com.market.server.mapper.UserProfileMapper;
 import com.market.server.service.ProductService;
-import com.market.server.utils.SHA256Util;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
