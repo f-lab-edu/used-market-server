@@ -145,7 +145,7 @@ public class UserController {
     /**
      * 회원 ID 삭제 메서드.
      */
-    @DeleteMapping("deleteID")
+    @DeleteMapping("")
     public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserDeleteId userDeleteId,
                                                        HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
