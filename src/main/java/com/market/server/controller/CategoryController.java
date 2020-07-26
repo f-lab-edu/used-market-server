@@ -25,7 +25,7 @@ public class CategoryController {
     /**
      * 중고물품 카테고리 등록 메서드.
      */
-    @PostMapping("categories")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     @LoginCheck(type = LoginCheck.UserType.ADMIN)
     public void registerCategory(String accountId, @RequestBody CategoryDTO categoryDTO) {
@@ -35,7 +35,7 @@ public class CategoryController {
     /**
      * 중고물품 카테고리 수정 메서드.
      */
-    @PatchMapping("{categoryId}/update")
+    @PatchMapping("{categoryId}")
     @LoginCheck(type = LoginCheck.UserType.ADMIN)
     public void updateCategories(String accountId,
                                @PathVariable(name = "categoryId") int categoryId,
@@ -47,7 +47,7 @@ public class CategoryController {
     /**
      * 본인 중고물품 카테고리 삭제 메서드.
      */
-    @DeleteMapping("{categoryId}/delete")
+    @DeleteMapping("{categoryId}")
     @LoginCheck(type = LoginCheck.UserType.ADMIN)
     public void updateCategories(String accountId,
                                @PathVariable(name = "categoryId") int categoryId) {
