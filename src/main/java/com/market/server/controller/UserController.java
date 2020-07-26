@@ -76,7 +76,7 @@ public class UserController {
             return FAIL_RESPONSE;
         } else if (userInfo != null) {
             loginResponse = LoginResponse.success(userInfo);
-            if (userInfo.getStatus().equals(UserDTO.Status.ADMIN.toString()))
+            if (userInfo.getStatus() == (UserDTO.Status.ADMIN.toString()))
                 SessionUtil.setLoginAdminId(session, id);
             else
                 SessionUtil.setLoginMemberId(session, id);
