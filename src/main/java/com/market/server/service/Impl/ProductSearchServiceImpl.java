@@ -17,6 +17,7 @@ public class ProductSearchServiceImpl implements ProductSearchService {
 
     @Override
     public List<ProductDTO> getProducts(ProductDTO productDTO) {
+        productDTO.setCategoryId(productDTO.getStatus().ordinal());
         List<ProductDTO> productDTOList = productSearchMapper.selectProducts(productDTO);
         return productDTOList;
     }

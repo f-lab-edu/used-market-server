@@ -16,7 +16,8 @@
         createtime,
         updatetime,
         deliveryprice,
-        dibcount
+        dibcount,
+        categoryId
         ) VALUES (
         #{price},
         #{accountId},
@@ -27,7 +28,8 @@
         #{createtime},
         #{updatetime},
         #{deliveryprice},
-        #{dibcount}
+        #{dibcount},
+        #{categoryId}
         )
     </insert>
 

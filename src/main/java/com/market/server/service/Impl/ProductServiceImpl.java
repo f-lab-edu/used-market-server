@@ -25,6 +25,7 @@ public class ProductServiceImpl implements ProductService {
         UserDTO memberInfo = userProfileMapper.getUserProfile(id);
         productDTO.setAccountId(memberInfo.getAccountId());
         productDTO.setCreatetime(new Date());
+        productDTO.setCategoryId(productDTO.getStatus().ordinal());
 
         if (memberInfo != null) {
             productMapper.register(productDTO);
