@@ -1,5 +1,6 @@
 package com.market.server.service.Impl;
 
+import com.market.server.dto.CategoryDTO;
 import com.market.server.dto.ProductDTO;
 import com.market.server.mapper.ProductSearchMapper;
 import com.market.server.service.ProductSearchService;
@@ -16,9 +17,9 @@ public class ProductSearchServiceImpl implements ProductSearchService {
     private ProductSearchMapper productSearchMapper;
 
     @Override
-    public List<ProductDTO> getProducts(ProductDTO productDTO) {
+    public List<ProductDTO> getProducts(ProductDTO productDTO, CategoryDTO categoryDTO) {
         productDTO.setCategoryId(productDTO.getStatus().ordinal());
-        List<ProductDTO> productDTOList = productSearchMapper.selectProducts(productDTO);
+        List<ProductDTO> productDTOList = productSearchMapper.selectProducts(productDTO,categoryDTO);
         return productDTOList;
     }
 }

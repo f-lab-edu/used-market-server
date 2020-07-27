@@ -40,7 +40,7 @@ public class CategoryController {
     public void updateCategories(String accountId,
                                @PathVariable(name = "categoryId") int categoryId,
                                @RequestBody CategoryRequest categoryRequest) {
-        CategoryDTO categoryDTO = new CategoryDTO(categoryId,categoryRequest.getName());
+        CategoryDTO categoryDTO = new CategoryDTO(categoryId,categoryRequest.getName(),null);
         categoryService.update(categoryDTO);
     }
 

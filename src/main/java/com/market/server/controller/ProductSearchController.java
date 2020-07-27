@@ -1,5 +1,6 @@
 package com.market.server.controller;
 
+import com.market.server.dto.CategoryDTO;
 import com.market.server.dto.ProductDTO;
 import com.market.server.service.Impl.ProductSearchServiceImpl;
 import io.swagger.annotations.Api;
@@ -32,14 +33,19 @@ public class ProductSearchController {
      *         title 물품 제목,
      *         status 상품 상태,
      *         categoryId 물품 카테고리 번호
-     *
+     * ORDER BY 카테고리별
+     *          판매순
+     *          최신순
+     *          낮은가격순
+     *          높은 가격순
+     *          평점순
      * @return ProductSearchResponse
      *
      * @author topojs8
      */
     @GetMapping("")
-    public ProductSearchResponse search(ProductDTO productDTO) {
-        List<ProductDTO> productDTOList = productSearchService.getProducts(productDTO);
+    public ProductSearchResponse search(ProductDTO productDTO,CategoryDTO categoryDTO) {
+        List<ProductDTO> productDTOList = productSearchService.getProducts(productDTO,categoryDTO);
         return new ProductSearchResponse(productDTOList);
     }
 

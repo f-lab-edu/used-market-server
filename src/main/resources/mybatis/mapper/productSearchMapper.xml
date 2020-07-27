@@ -20,7 +20,28 @@
         `categoryId`,
         `fileId`
         FROM `product`
-        WHERE categoryId = #{categoryId}
+        WHERE categoryId = #{productDTO.categoryId}
+        <choose>
+            <when test="categoryDTO.sortStatus.toString() == 'CATEGORIES'">
+                ORDER BY #{productDTO.categoryId}
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'NEWEST'">
+                ORDER BY #{productDTO.createtime} DESC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'OLDEST'">
+                ORDER BY #{productDTO.createtime} ASC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'HIGHPRICE'">
+                ORDER BY #{productDTO.price} DESC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'LOWPRICE'">
+                ORDER BY #{productDTO.price} ASC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'SALESCOUNTS'">
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'GRADE'">
+            </when>
+        </choose>
     </select>
 
 </mapper>
