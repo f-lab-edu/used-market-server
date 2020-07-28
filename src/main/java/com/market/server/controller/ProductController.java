@@ -57,36 +57,37 @@ public class ProductController {
     /**
      * 본인 중고물품 수정 메서드.
      */
-    @PatchMapping("{productId}/update")
-    @LoginCheck(type = LoginCheck.UserType.USER)
+    @PatchMapping("{productId}")
     public void updateProducts(@PathVariable(name = "productId") int productId,
-                               @RequestBody ProductRequest productRequest,
-                               String accountId) {
-        UserDTO memberInfo = userService.getUserInfo(accountId);
+                               @RequestBody ProductRequest PR,
+                               HttpSession session) {
+        String id = SessionUtil.getLoginMemberId(session);
 
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setAccountId(memberInfo.getAccountId());
-        productDTO.setId(productId);
-        productDTO.setPrice(productRequest.getPrice());
-        productDTO.setTitle(productRequest.getTitle());
-        productDTO.setContents(productRequest.getContents());
-        productDTO.setStatus(productRequest.getStatus());
-        productDTO.setIstrade(productRequest.isTrade());
-        productDTO.setUpdatetime(new Date());
-        productDTO.setDeliveryprice(productRequest.getDeliveryprice());
-        productDTO.setDibcount(productRequest.getDibcount());
+        UserDTO memberInfo = userService.getUserInfo(id);
+        ProductDTO productDTO = new ProductDTO(productId,
+                PR.getPrice(),
+                memberInfo.getAccountId(),
+                PR.getTitle(),
+                PR.getContents(),
+                PR.getStatus(),
+                PR.isTrade(),
+                new Date(),
+                new Date(),
+                PR.getDeliveryprice(),
+                PR.getDibcount());
+
         productService.updateProducts(productDTO);
     }
 
     /**
      * 본인 중고물품 삭제 메서드.
      */
-    @DeleteMapping("{productId}/delete")
-    @LoginCheck(type = LoginCheck.UserType.USER)
+    @DeleteMapping("{productId}")
     public void updateProducts(@PathVariable(name = "productId") int productId,
                                @RequestBody ProductDeleteRequest productDeleteRequest,
-                               String accountId) {
-        UserDTO memberInfo = userService.getUserInfo(accountId);
+                               HttpSession session) {
+        String id = SessionUtil.getLoginMemberId(session);
+        UserDTO memberInfo = userService.getUserInfo(id);
         productService.deleteProduct(memberInfo.getAccountId(), productId);
     }
 
