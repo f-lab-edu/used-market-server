@@ -42,9 +42,9 @@ public class LoginCheckAspect {
     @Around("@annotation(com.market.server.aop.LoginCheck)")
     public Object loginCheck(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         HttpSession session = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
-        String Id = SessionUtil.getLoginMemberId(session);
-        if (Id == null) {
-            logger.debug(String.format(proceedingJoinPoint.toString() + "accountName :" + Id));
+        String id = SessionUtil.getLoginMemberId(session);
+        if (id == null) {
+            logger.debug(String.format(proceedingJoinPoint.toString() + "accountName :" + id));
             throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요.") {
             };
         }
@@ -53,9 +53,9 @@ public class LoginCheckAspect {
 
         for (Object arg : proceedingJoinPoint.getArgs()) {
             if (arg == null) // Parameter 값에 값이 없어도 Id값 맵핑
-                modifiedArgs[index] = Id;
+                modifiedArgs[index] = id;
             if (arg instanceof String) {    // accountId String타입 체크 , 추가로 파라미터에 String타입이 올시 변경 필요
-                modifiedArgs[index] = Id;
+                modifiedArgs[index] = id;
             }
             index++;
         }
