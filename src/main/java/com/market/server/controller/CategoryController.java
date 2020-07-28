@@ -24,7 +24,7 @@ public class CategoryController {
     /**
      * 중고물품 카테고리 등록 메서드.
      */
-    @PostMapping("")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @LoginCheck(type = LoginCheck.UserType.ADMIN)
     public void registerCategory(String accountId, @RequestBody CategoryDTO categoryDTO) {

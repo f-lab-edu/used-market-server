@@ -36,7 +36,7 @@ public class ProductController {
     /**
      * 중고물품 등록 메서드.
      */
-    @PostMapping("")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @LoginCheck(type = LoginCheck.UserType.USER)
     public void registerProduct(String accountId, @RequestBody ProductDTO productDTO) {
@@ -46,7 +46,7 @@ public class ProductController {
     /**
      * 본인 중고물품 검색 메서드.
      */
-    @GetMapping("myProducts")
+    @GetMapping("my-products")
     @LoginCheck(type = LoginCheck.UserType.USER)
     public ProductResponse myProductInfo(String accountId) {
         UserDTO memberInfo = userService.getUserInfo(accountId);

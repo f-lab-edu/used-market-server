@@ -60,7 +60,7 @@ class UserControllerTest {
         memberInfo.setName("testName");
         memberInfo.setPhone("010-1234-1234");
         memberInfo.setAddress("abc");
-        memberInfo.setStatus(UserDTO.Status.DEFAULT.toString());
+        memberInfo.setStatus(UserDTO.Status.DEFAULT);
 
         mockMvc
                 .perform(post("/users/signUp")

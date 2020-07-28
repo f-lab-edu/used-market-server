@@ -40,12 +40,11 @@ Login Check할때 aop의 Aspect 애노테이션을 이용하여
 */
 @Log4j2
 public class LoginCheckAspect {
-    private int idIndex = 0;
-
     @Around("@annotation(com.market.server.aop.LoginCheck) && @ annotation(loginCheck)")
     public Object adminLoginCheck(ProceedingJoinPoint proceedingJoinPoint, LoginCheck loginCheck) throws Throwable {
         HttpSession session = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
         String id = null;
+        int idIndex = 0;
 
         String userType = loginCheck.type().toString();
         switch (userType) {

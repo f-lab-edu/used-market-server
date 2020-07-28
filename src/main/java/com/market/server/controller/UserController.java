@@ -76,7 +76,7 @@ public class UserController {
             return FAIL_RESPONSE;
         } else if (userInfo != null) {
             loginResponse = LoginResponse.success(userInfo);
-            if (userInfo.getStatus() == (UserDTO.Status.ADMIN.toString()))
+            if (userInfo.getStatus() == (UserDTO.Status.ADMIN))
                 SessionUtil.setLoginAdminId(session, id);
             else
                 SessionUtil.setLoginMemberId(session, id);
@@ -145,7 +145,7 @@ public class UserController {
     /**
      * 회원 ID 삭제 메서드.
      */
-    @DeleteMapping("")
+    @DeleteMapping
     public ResponseEntity<LoginResponse> deleteId(@RequestBody UserDeleteId userDeleteId,
                                                        HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
