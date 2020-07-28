@@ -42,6 +42,11 @@
             <when test="categoryDTO.sortStatus.toString() == 'GRADE'">
             </when>
         </choose>
+        <include refid="COMMON_PAGING_TAIL"/>
     </select>
+
+    <sql id="COMMON_PAGING_TAIL">
+        LIMIT #{categoryDTO.searchCount, jdbcType=INTEGER} OFFSET #{categoryDTO.pagingStartOffset, jdbcType=INTEGER}
+    </sql>
 
 </mapper>

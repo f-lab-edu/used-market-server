@@ -6,6 +6,7 @@ import com.market.server.service.Impl.ProductSearchServiceImpl;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,13 +18,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/search")
 @Log4j2
+@RequiredArgsConstructor
 public class ProductSearchController {
 
     private final ProductSearchServiceImpl productSearchService;
-
-    public ProductSearchController(ProductSearchServiceImpl productSearchService) {
-        this.productSearchService = productSearchService;
-    }
 
     /**
      * 중고물품 검색 메서드.

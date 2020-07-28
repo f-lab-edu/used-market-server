@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class ProductDTO {
     public enum Status {
-        NEW, OLD, ECT
+        NULL, NEW, OLD, ECT
     }
     private int id;
     private long price;

@@ -38,9 +38,9 @@ public class CategoryController {
     @PatchMapping("{categoryId}/update")
     @LoginCheck(type = LoginCheck.UserType.ADMIN)
     public void updateCategories(String accountId,
-                               @PathVariable(name = "categoryId") int categoryId,
-                               @RequestBody CategoryRequest categoryRequest) {
-        CategoryDTO categoryDTO = new CategoryDTO(categoryId,categoryRequest.getName(),null);
+                                 @PathVariable(name = "categoryId") int categoryId,
+                                 @RequestBody CategoryRequest categoryRequest) {
+        CategoryDTO categoryDTO = new CategoryDTO(categoryId, categoryRequest.getName(), CategoryDTO.SortStatus.NEWEST,10,1);
         categoryService.update(categoryDTO);
     }
 
@@ -50,7 +50,7 @@ public class CategoryController {
     @DeleteMapping("{categoryId}/delete")
     @LoginCheck(type = LoginCheck.UserType.ADMIN)
     public void updateCategories(String accountId,
-                               @PathVariable(name = "categoryId") int categoryId) {
+                                 @PathVariable(name = "categoryId") int categoryId) {
         categoryService.delete(categoryId);
     }
 
