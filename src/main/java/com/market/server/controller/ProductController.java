@@ -83,7 +83,7 @@ public class ProductController {
      */
     @DeleteMapping("{productId}")
     @LoginCheck(type = LoginCheck.UserType.USER)
-    public void updateProducts(String accountId,
+    public void deleteProducts(String accountId,
                                @PathVariable(name = "productId") int productId,
                                @RequestBody ProductDeleteRequest productDeleteRequest) {
         UserDTO memberInfo = userService.getUserInfo(accountId);

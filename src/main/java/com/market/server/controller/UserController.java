@@ -125,7 +125,7 @@ public class UserController {
     /**
      * 회원 주소수정 메서드.
      */
-    @PatchMapping("address")
+    @PatchMapping("myInfo/address")
     public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserUpdateAddressRequest userUpdateAddressRequestu,
                                                        HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
@@ -146,7 +146,7 @@ public class UserController {
      * 회원 ID 삭제 메서드.
      */
     @DeleteMapping("")
-    public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserDeleteId userDeleteId,
+    public ResponseEntity<LoginResponse> deleteId(@RequestBody UserDeleteId userDeleteId,
                                                        HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String Id = SessionUtil.getLoginMemberId(session);
