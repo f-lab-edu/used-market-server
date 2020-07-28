@@ -1,5 +1,6 @@
 package com.market.server.controller;
 
+import com.market.server.aop.LoginCheck;
 import com.market.server.dto.ProductDTO;
 import com.market.server.dto.UserDTO;
 import com.market.server.service.Impl.ProductServiceImpl;
@@ -37,19 +38,18 @@ public class ProductController {
      */
     @PostMapping("insertProduct")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerProduct(@RequestBody ProductDTO productDTO,
-                                HttpSession session) {
-        String Id = SessionUtil.getLoginMemberId(session);
-        productService.register(Id, productDTO);
+    @LoginCheck(type = LoginCheck.UserType.USER)
+    public void registerProduct(@RequestBody ProductDTO productDTO, String accountId) {
+        productService.register(accountId, productDTO);
     }
 
     /**
      * 본인 중고물품 검색 메서드.
      */
     @GetMapping("MyProducts")
-    public ProductResponse myProductInfo(HttpSession session) {
-        String id = SessionUtil.getLoginMemberId(session);
-        UserDTO memberInfo = userService.getUserInfo(id);
+    @LoginCheck(type = LoginCheck.UserType.USER)
+    public ProductResponse myProductInfo(String accountId) {
+        UserDTO memberInfo = userService.getUserInfo(accountId);
         List<ProductDTO> productDTOList = productService.getMyProducts(memberInfo.getAccountId());
         return new ProductResponse(productDTOList);
     }
@@ -64,7 +64,6 @@ public class ProductController {
         String id = SessionUtil.getLoginMemberId(session);
 
         UserDTO memberInfo = userService.getUserInfo(id);
-
         ProductDTO productDTO = new ProductDTO(productId,
                 PR.getPrice(),
                 memberInfo.getAccountId(),

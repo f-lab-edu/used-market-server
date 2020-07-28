@@ -1,5 +1,6 @@
 package com.market.server.controller;
 
+import com.market.server.aop.LoginCheck;
 import com.market.server.dto.UserDTO;
 import com.market.server.service.ResponseService;
 import com.market.server.service.Impl.UserServiceImpl;
