@@ -52,3 +52,4 @@ UML Diagram
 
 ERD
 ---
+![](https://aquerytool.com:443/aquerymain/index/?rurl=325890fc-89a5-457f-9adf-d7f3c25f3787)
