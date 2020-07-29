@@ -6,40 +6,62 @@
 <mapper namespace="com.market.server.mapper.ProductSearchMapper">
 
     <select id="selectProducts" resultType="com.market.server.dto.ProductDTO">
-        SELECT `id`,
-        `price`,
-        `accountId`,
-        `title`,
-        `contents`,
-        `status`,
-        `isTrade`,
-        `createtime`,
-        `updatetime`,
-        `deliveryprice`,
-        `dibcount`,
-        `categoryId`,
-        `fileId`
-        FROM `product`
-        WHERE categoryId = #{productDTO.categoryId}
+        <if test="categoryDTO.sortStatus.toString() == 'GRADE'">
+            SELECT product.`id`,
+            product.`price`,
+            product.`accountId`,
+            product.`title`,
+            product.`contents`,
+            product.`status`,
+            product.`isTrade`,
+            product.`createtime`,
+            product.`updatetime`,
+            product.`deliveryprice`,
+            product.`dibcount`,
+            product.`categoryId`,
+            product.`fileId`
+            FROM `product`
+        </if>
+        <if test="categoryDTO.sortStatus.toString() != 'GRADE'">
+            SELECT `id`,
+            `price`,
+            `accountId`,
+            `title`,
+            `contents`,
+            `status`,
+            `isTrade`,
+            `createtime`,
+            `updatetime`,
+            `deliveryprice`,
+            `dibcount`,
+            `categoryId`,
+            `fileId`
+            FROM `product`
+            <if test="productDTO.status != null">
+                WHERE status = #{productDTO.status}
+            </if>
+        </if>
         <choose>
             <when test="categoryDTO.sortStatus.toString() == 'CATEGORIES'">
-                ORDER BY #{productDTO.categoryId}
+                ORDER BY categoryId ASC
             </when>
             <when test="categoryDTO.sortStatus.toString() == 'NEWEST'">
-                ORDER BY #{productDTO.createtime} DESC
+                ORDER BY createtime DESC
             </when>
             <when test="categoryDTO.sortStatus.toString() == 'OLDEST'">
-                ORDER BY #{productDTO.createtime} ASC
+                ORDER BY createtime ASC
             </when>
             <when test="categoryDTO.sortStatus.toString() == 'HIGHPRICE'">
-                ORDER BY #{productDTO.price} DESC
+                ORDER BY price DESC
             </when>
             <when test="categoryDTO.sortStatus.toString() == 'LOWPRICE'">
-                ORDER BY #{productDTO.price} ASC
-            </when>
-            <when test="categoryDTO.sortStatus.toString() == 'SALESCOUNTS'">
+                ORDER BY price ASC
             </when>
             <when test="categoryDTO.sortStatus.toString() == 'GRADE'">
+                LEFT JOIN user
+                ON product.accountId = user.accountId
+                GROUP BY user.accountId
+                ORDER BY user.grade DESC
             </when>
         </choose>
         <include refid="COMMON_PAGING_TAIL"/>
