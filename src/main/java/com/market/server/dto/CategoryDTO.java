@@ -11,7 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class CategoryDTO {
     public enum SortStatus {
-        CATEGORIES, SALESCOUNTS, NEWEST, OLDEST, HIGHPRICE, LOWPRICE, GRADE
+        CATEGORIES, NEWEST, OLDEST, HIGHPRICE, LOWPRICE, GRADE
     }
     private int id;
     private String name;
