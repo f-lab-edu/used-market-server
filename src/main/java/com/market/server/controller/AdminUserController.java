@@ -63,7 +63,7 @@ public class AdminUserController {
         return responseService.getSuccessResult();
     }
 
-    @DeleteMapping("SessionAll")
+    @DeleteMapping("sessionAll")
     @LoginCheck(type = LoginCheck.UserType.ADMIN)
     public void deleteSessionAll(String accountId, HttpSession session) {
         SessionUtil.clear(session);
