@@ -76,7 +76,7 @@ public class UserController {
             return FAIL_RESPONSE;
         } else if (userInfo != null) {
             loginResponse = LoginResponse.success(userInfo);
-            if (userInfo.getStatus().equals(UserDTO.Status.ADMIN.toString()))
+            if (userInfo.getStatus() == (UserDTO.Status.ADMIN))
                 SessionUtil.setLoginAdminId(session, id);
             else
                 SessionUtil.setLoginMemberId(session, id);
@@ -125,7 +125,7 @@ public class UserController {
     /**
      * 회원 주소수정 메서드.
      */
-    @PatchMapping("address")
+    @PatchMapping("myInfo/address")
     public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserUpdateAddressRequest userUpdateAddressRequestu,
                                                        HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
@@ -145,8 +145,8 @@ public class UserController {
     /**
      * 회원 ID 삭제 메서드.
      */
-    @DeleteMapping("deleteID")
-    public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserDeleteId userDeleteId,
+    @DeleteMapping
+    public ResponseEntity<LoginResponse> deleteId(@RequestBody UserDeleteId userDeleteId,
                                                        HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String Id = SessionUtil.getLoginMemberId(session);

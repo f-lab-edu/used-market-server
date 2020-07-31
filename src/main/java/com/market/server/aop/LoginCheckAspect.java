@@ -34,20 +34,31 @@ int 타입의 정수로 순서를 정할 수 있는데 값이 낮을수록 우�
 기본값은 가장 낮은 우선순위를 가지는 Ordered.LOWEST_PRECEDENCE이다.
 */
 @Order(Ordered.LOWEST_PRECEDENCE)
+/*
+Login Check할때 aop의 Aspect 애노테이션을 이용하여
+로그인 체크 중복되는 코드를 제거하기 위해 어드바이스(Advice)를 정의하는 class 입니다.
+*/
+@Log4j2
 // 어노테이션으로 로그인 여부를 검사하기 위한 클래스
 public class LoginCheckAspect {
-    private static int idIndex = 0;
-
     @Around("@annotation(com.market.server.aop.LoginCheck) && @ annotation(loginCheck)")
     public Object adminLoginCheck(ProceedingJoinPoint proceedingJoinPoint, LoginCheck loginCheck) throws Throwable {
         HttpSession session = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
         String id = null;
-        if (LoginCheck.UserType.ADMIN.equals(loginCheck.type()))
-            id = SessionUtil.getLoginAdminId(session);
+        int idIndex = 0;
 
-        if (LoginCheck.UserType.USER.equals(loginCheck.type()))
-            id = SessionUtil.getLoginMemberId(session);
 
+        String userType = loginCheck.type().toString();
+        switch (userType) {
+            case "ADMIN": {
+                id = SessionUtil.getLoginAdminId(session);
+                break;
+            }
+            case "USER": {
+                id = SessionUtil.getLoginMemberId(session);
+                break;
+            }
+        }
         if (id == null) {
             log.debug(proceedingJoinPoint.toString()+ "accountName :" + id);
             throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요.") {};

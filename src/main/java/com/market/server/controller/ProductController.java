@@ -33,7 +33,7 @@ public class ProductController {
     /**
      * 중고물품 등록 메서드.
      */
-    @PostMapping("products")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @LoginCheck(type = LoginCheck.UserType.USER)
     public void registerProduct(String accountId, @RequestBody ProductDTO productDTO) {
@@ -43,7 +43,7 @@ public class ProductController {
     /**
      * 본인 중고물품 검색 메서드.
      */
-    @GetMapping("MyProducts")
+    @GetMapping("my-products")
     @LoginCheck(type = LoginCheck.UserType.USER)
     public ProductResponse myProductInfo(String accountId) {
         UserDTO memberInfo = userService.getUserInfo(accountId);
@@ -80,7 +80,7 @@ public class ProductController {
      */
     @DeleteMapping("{productId}/delete")
     @LoginCheck(type = LoginCheck.UserType.USER)
-    public void updateProducts(String accountId,
+    public void deleteProducts(String accountId,
                                @PathVariable(name = "productId") int productId,
                                @RequestBody ProductDeleteRequest productDeleteRequest) {
         UserDTO memberInfo = userService.getUserInfo(accountId);
