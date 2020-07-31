@@ -65,7 +65,7 @@ public class UserController {
      * 회원 로그인을 진행한다. Login 요청시 id, password가 NULL일 경우 NullPointerException을 throw한다.
      */
     @PostMapping("signIn")
-    public ResponseEntity<LoginResponse> login(@RequestBody UserLoginRequest loginRequest,
+    public HttpStatus login(@RequestBody UserLoginRequest loginRequest,
                                                HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String id = loginRequest.getId();
@@ -86,7 +86,7 @@ public class UserController {
             throw new RuntimeException("Login Error! 유저 정보가 없거나 지워진 유저 정보입니다.");
         }
 
-        return responseEntity;
+        return HttpStatus.OK;
     }
 
     /**
@@ -114,9 +114,9 @@ public class UserController {
 
         try {
             userService.updatePassword(Id, beforePassword, afterPassword);
-            responseEntity = new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            log.info("updatePassword 실패");
+            ResponseEntity.ok(new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK));
+        } catch (IllegalArgumentException e) {
+            log.error("updatePassword 실패" , e);
             responseEntity = FAIL_RESPONSE;
         }
         return responseEntity;
