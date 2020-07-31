@@ -5,35 +5,44 @@
 
 <mapper namespace="com.market.server.mapper.UserProfileMapper">
 
+    <select id="getUserProfile" resultType="com.market.server.dto.UserDTO">
+        SELECT accountId, id, password, name, phone, address, status
+        FROM account
+        WHERE id=#{id}
+    </select>
+
+    <insert id="insertUserProfile" parameterType="com.market.server.dto.UserDTO">
+        INSERT INTO account (id, password, name, phone, address)
+        VALUES(#{id}, #{password}, #{name}, #{phone}, #{address})
+    </insert>
+
+    <update id="updateUserProfile" parameterType="com.market.server.dto.UserDTO">
+        UPDATE account
+        SET password=#{password},
+            name=#{name},
+            phone=#{phone},
+            address=#{address}
+        WHERE id=#{id}
+    </update>
+    
+    <delete id="deleteUserProfile">
+        DELETE FROM account
+        WHERE id=#{id}
+    </delete>
+
     <insert id="register" parameterType="com.market.server.dto.UserDTO">
-        INSERT INTO user (
-        id,
-        password,
-        name,
-        phone,
-        address,
-        status,
-        createtime
-        ) VALUES (
-        #{id},
-        #{password},
-        #{name},
-        #{phone},
-        #{address},
-        #{status},
-        #{createtime}
-        )
+        INSERT INTO account (id, password, name, phone, address, status, createtime)
+        VALUES (#{id}, #{password}, #{name}, #{phone}, #{address}, #{status}, #{createtime})
     </insert>
 
     <select id="findByIdAndPassword" resultType="com.market.server.dto.UserDTO">
-        SELECT
-        id,
-        password,
-        name,
-        phone,
-        address,
-        status
-        FROM user
+        SELECT id,
+               password,
+               name,
+               phone,
+               address,
+               status
+        FROM account
         WHERE id = #{id}
         AND password = #{password}
         AND status != 'DELETE'
@@ -56,6 +65,5 @@
         SET address = #{address}
         WHERE id= #{id}
     </update>
-
 
 </mapper>

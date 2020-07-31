@@ -39,28 +39,35 @@ Login Check할때 aop의 Aspect 애노테이션을 이용하여
 로그인 체크 중복되는 코드를 제거하기 위해 어드바이스(Advice)를 정의하는 class 입니다.
 */
 @Log4j2
+// 어노테이션으로 로그인 여부를 검사하기 위한 클래스
 public class LoginCheckAspect {
-    private static int idIndex = 0;
-
     @Around("@annotation(com.market.server.aop.LoginCheck) && @ annotation(loginCheck)")
     public Object adminLoginCheck(ProceedingJoinPoint proceedingJoinPoint, LoginCheck loginCheck) throws Throwable {
         HttpSession session = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
         String id = null;
-        if (LoginCheck.UserType.ADMIN.equals(loginCheck.type()))
-            id = SessionUtil.getLoginAdminId(session);
+        int idIndex = 0;
 
-        if (LoginCheck.UserType.USER.equals(loginCheck.type()))
-            id = SessionUtil.getLoginMemberId(session);
-
-        if (id == null) {
-            log.debug(proceedingJoinPoint.toString()+ "accountName :" + id);
-            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요.") {};
+        String userType = loginCheck.type().toString();
+        switch (userType) {
+            case "ADMIN": {
+                id = SessionUtil.getLoginAdminId(session);
+                break;
+            }
+            case "USER": {
+                id = SessionUtil.getLoginMemberId(session);
+                break;
+            }
         }
 
         Object[] modifiedArgs = proceedingJoinPoint.getArgs();
 
-        if(proceedingJoinPoint.getArgs()!=null)
+        if (id != null)
             modifiedArgs[idIndex] = id;
+        else
+        {
+            log.debug(proceedingJoinPoint.toString() + "accountName :" + id);
+            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요.") {};
+        }
 
         return proceedingJoinPoint.proceed(modifiedArgs);
     }
