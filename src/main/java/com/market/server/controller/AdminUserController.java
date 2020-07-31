@@ -26,7 +26,7 @@ public class AdminUserController {
     private final UserProfileMapper mapper;
     private final ResponseService responseService;
 
-    @ApiOperation(value = "회원 한명 언어별 조회", notes = "userId로 회원을 조회한다")
+    @ApiOperation(value = "회원 조회", notes = "userId로 회원을 조회한다")
     @GetMapping(value = "/users/{id}")
     @LoginCheck(type = LoginCheck.UserType.ADMIN)
     public SingleResult<UserDTO> findUserById(String accountId, @ApiParam(value = "회원ID", required = true) @PathVariable("id") String id, @ApiParam(value = "언어", defaultValue = "ko") @RequestParam String lang) {
