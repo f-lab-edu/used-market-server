@@ -64,17 +64,6 @@ public class ProductController {
                                @RequestBody ProductRequest productRequest) {
         UserDTO memberInfo = userService.getUserInfo(accountId);
 
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setAccountId(memberInfo.getAccountId());
-        productDTO.setId(productId);
-        productDTO.setPrice(productRequest.getPrice());
-        productDTO.setTitle(productRequest.getTitle());
-        productDTO.setContents(productRequest.getContents());
-        productDTO.setStatus(productRequest.getStatus());
-        productDTO.setIstrade(productRequest.isTrade());
-        productDTO.setUpdatetime(new Date());
-        productDTO.setDeliveryprice(productRequest.getDeliveryprice());
-        productDTO.setDibcount(productRequest.getDibcount());
         productService.updateProducts(productDTO);
     }
 
