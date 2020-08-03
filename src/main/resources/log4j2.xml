@@ -7,9 +7,15 @@
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT" follow="true">
             <PatternLayout pattern="${LOG_FORMAT}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
         </Console>
         <File name="file" fileName="./logs/file/test.log">
             <PatternLayout pattern="%d %5p [%c] %m%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
         </File>
     </Appenders>
 
