@@ -27,7 +27,4 @@ public class ProductDTO {
     private int dibcount;
     private int categoryId;
     private int fileId;
-
-    public ProductDTO() {
-    }
 }

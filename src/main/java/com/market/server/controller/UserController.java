@@ -73,7 +73,7 @@ public class UserController {
         UserDTO userInfo = userService.login(id, password);
 
         if (userInfo == null) {
-            return FAIL_RESPONSE;
+            return HttpStatus.NOT_FOUND;
         } else if (userInfo != null) {
             loginResponse = LoginResponse.success(userInfo);
             if (userInfo.getStatus() == (UserDTO.Status.ADMIN))
@@ -161,6 +161,15 @@ public class UserController {
         return responseEntity;
     }
 
+    /**
+     * 회원 로그아웃 메서드.
+     */
+    @DeleteMapping("session/clear")
+    @LoginCheck(type = LoginCheck.UserType.USER)
+    public void deleteSession(String accountId, HttpSession session) {
+        SessionUtil.clear(session);
+
+    }
 
     // -------------- response 객체 --------------
 
