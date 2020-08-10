@@ -58,7 +58,7 @@ public class ProductController {
     @LoginCheck(type = LoginCheck.UserType.USER)
     public void updateProducts(String accountId,
                                @PathVariable(name = "productId") int productId,
-                               @RequestBody ProductRequest productRequest) {
+                               @RequestBody ProductRequest PR) {
         UserDTO memberInfo = userService.getUserInfo(accountId);
         ProductDTO productDTO = new ProductDTO(productId,
                 PR.getPrice(),
@@ -70,7 +70,9 @@ public class ProductController {
                 new Date(),
                 new Date(),
                 PR.getDeliveryprice(),
-                PR.getDibcount());
+                PR.getDibcount(),
+                PR.getCategoryId(),
+                PR.getFileId());
 
         productService.updateProducts(productDTO);
     }
@@ -108,6 +110,8 @@ public class ProductController {
         private Date updatetime;
         private long deliveryprice;
         private int dibcount;
+        private int categoryId;
+        private int fileId;
     }
 
     @Setter

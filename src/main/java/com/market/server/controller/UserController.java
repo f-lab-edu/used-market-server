@@ -73,7 +73,7 @@ public class UserController {
         UserDTO userInfo = userService.login(id, password);
 
         if (userInfo == null) {
-            return FAIL_RESPONSE;
+            return HttpStatus.NOT_FOUND;
         } else if (userInfo != null) {
             loginResponse = LoginResponse.success(userInfo);
             if (userInfo.getStatus() == (UserDTO.Status.ADMIN))
