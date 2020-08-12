@@ -7,18 +7,16 @@
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT" follow="true">
             <PatternLayout pattern="${LOG_FORMAT}"/>
-                <TimeBasedTriggeringPolicy />
         </Console>
         <File name="file" fileName="./logs/file/test.log">
             <PatternLayout pattern="%d %5p [%c] %m%n" />
-                <TimeBasedTriggeringPolicy />
         </File>
     </Appenders>
 
     <Loggers>
         <Root level="info">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="File" />
+            <AppenderRef ref="file" />
         </Root>
         <logger name="com.market.server" level="trace" additivity="false" >
             <AppenderRef ref="file" />
