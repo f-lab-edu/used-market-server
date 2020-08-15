@@ -54,33 +54,32 @@ public class ProductController {
     /**
      * 본인 중고물품 수정 메서드.
      */
-    @PatchMapping("{productId}/update")
+    @PatchMapping("{productId}")
     @LoginCheck(type = LoginCheck.UserType.USER)
     public void updateProducts(String accountId,
                                @PathVariable(name = "productId") int productId,
-                               @RequestBody ProductRequest PR) {
+                               @RequestBody ProductRequest productRequest) {
         UserDTO memberInfo = userService.getUserInfo(accountId);
-        ProductDTO productDTO = new ProductDTO(productId,
-                PR.getPrice(),
-                memberInfo.getAccountId(),
-                PR.getTitle(),
-                PR.getContents(),
-                PR.getStatus(),
-                PR.isTrade(),
-                new Date(),
-                new Date(),
-                PR.getDeliveryprice(),
-                PR.getDibcount(),
-                PR.getCategoryId(),
-                PR.getFileId());
-
+        ProductDTO productDTO = ProductDTO.builder()
+                .id(productId)
+                .price(productRequest.getPrice())
+                .accountId(memberInfo.getAccountId())
+                .title(productRequest.getTitle())
+                .contents(productRequest.getContents())
+                .status(productRequest.getStatus())
+                .istrade(productRequest.isTrade())
+                .updatetime(new Date())
+                .deliveryprice(productRequest.getDeliveryprice())
+                .dibcount(productRequest.getDibcount())
+                .categoryId(productRequest.getCategoryId())
+                .build();
         productService.updateProducts(productDTO);
     }
 
     /**
      * 본인 중고물품 삭제 메서드.
      */
-    @DeleteMapping("{productId}/delete")
+    @DeleteMapping("{productId}")
     @LoginCheck(type = LoginCheck.UserType.USER)
     public void deleteProducts(String accountId,
                                @PathVariable(name = "productId") int productId,
