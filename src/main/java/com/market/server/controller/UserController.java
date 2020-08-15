@@ -92,13 +92,15 @@ public class UserController {
     /**
      * 회원 로그아웃 메서드.
      *
+     * @param accountId USER인지 체크한 후의 accountID
      * @param session 현제 접속한 세션
      * @return 로그인 하지 않았을 시 401코드를 반환하고 result:NO_LOGIN 반환 로그아웃 성공시 200 코드를 반환
-     * @author jun
+     * @author junshock5
      */
     @GetMapping("logout")
-    public void logout(HttpSession session) {
-        SessionUtil.logoutMember(session);
+    @LoginCheck(type = LoginCheck.UserType.USER)
+    public void logout(String accountId, HttpSession session) {
+        SessionUtil.clear(session);
     }
 
     /**
@@ -159,16 +161,6 @@ public class UserController {
             responseEntity = FAIL_RESPONSE;
         }
         return responseEntity;
-    }
-
-    /**
-     * 회원 로그아웃 메서드.
-     */
-    @DeleteMapping("session/clear")
-    @LoginCheck(type = LoginCheck.UserType.USER)
-    public void deleteSession(String accountId, HttpSession session) {
-        SessionUtil.clear(session);
-
     }
 
     // -------------- response 객체 --------------

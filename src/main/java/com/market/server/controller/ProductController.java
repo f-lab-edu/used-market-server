@@ -61,24 +61,21 @@ public class ProductController {
     @LoginCheck(type = LoginCheck.UserType.USER)
     public void updateProducts(String accountId,
                                @PathVariable(name = "productId") int productId,
-                               @RequestBody ProductRequest PR) {
+                               @RequestBody ProductRequest productRequest) {
         UserDTO memberInfo = userService.getUserInfo(accountId);
-
-        ProductDTO productDTO = new ProductDTO(productId,
-                PR.getPrice(),
-                memberInfo.getAccountId(),
-                PR.getTitle(),
-                PR.getContents(),
-                PR.getStatus(),
-                PR.isTrade(),
-                new Date(),
-                new Date(),
-                PR.getDeliveryprice(),
-                PR.getDibcount(),
-                PR.getCategoryId(),
-                PR.getDibcount()
-        );
-
+        ProductDTO productDTO = ProductDTO.builder()
+                .id(productId)
+                .price(productRequest.getPrice())
+                .accountId(memberInfo.getAccountId())
+                .title(productRequest.getTitle())
+                .contents(productRequest.getContents())
+                .status(productRequest.getStatus())
+                .istrade(productRequest.isTrade())
+                .updatetime(new Date())
+                .deliveryprice(productRequest.getDeliveryprice())
+                .dibcount(productRequest.getDibcount())
+                .categoryId(productRequest.getCategoryId())
+                .build();
         productService.updateProducts(productDTO);
     }
 
