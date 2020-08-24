@@ -30,7 +30,7 @@ public class RedisConfig {
     @Value("${spring.redis.password}")
     private String redisPwd;
 
-    @Value("${expire.default}")
+    @Value("${expire.defaultTime}")
     private long defaultExpireSecond;
 
     /*
@@ -63,8 +63,6 @@ public class RedisConfig {
      * 2. Lettuce - Netty 기반 redis client library
      *            - 비동기로 요청하기 때문에 Jedis에 비해 높은 성능을 가지고 있다.
      *            - TPS, 자원사용량 모두 Jedis에 비해 우수한 성능을 보인다는 테스트 사례가 있다.
-     *
-     * Jedis와 Lettuce의 성능 비교  https://jojoldu.tistory.com/418
      */
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
