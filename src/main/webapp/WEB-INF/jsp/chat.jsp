@@ -44,6 +44,16 @@
 		#yourMsg{
 			display: none;
 		}
+		.msgImg{
+			width: 200px;
+			height: 125px;
+		}
+		.clearBoth{
+			clear: both;
+		}
+		.img{
+			float: right;
+		}
 	</style>
 </head>
 
@@ -64,7 +74,8 @@
 		ws.onmessage = function(data) {
 			//메시지를 받으면 동작
 			var msg = data.data;
-			if(msg != null && msg.trim() != ''){
+			if(msg != null && msg.type != ''){
+				//파일 업로드가 아닌 경우 메시지를 뿌려준다.
 				var d = JSON.parse(msg);
 				if(d.type == "getId"){
 					var si = d.sessionId != null ? d.sessionId : "";
@@ -81,6 +92,10 @@
 				}else{
 					console.warn("unknown type!")
 				}
+			}else{
+				//파일 업로드한 경우 업로드한 파일을 채팅방에 뿌려준다.
+				var url = URL.createObjectURL(new Blob([msg]));
+				$("#chating").append("<div class='img'><img class='msgImg' src="+url+"></div><div class='clearBoth'></div>");
 			}
 		}
 
@@ -114,6 +129,26 @@
 		ws.send(JSON.stringify(option))
 		$('#chatting').val("");
 	}
+
+	function fileSend(){
+		var file = document.querySelector("#fileUpload").files[0];
+		var fileReader = new FileReader();
+		fileReader.onload = function() {
+			var param = {
+				type: "fileUpload",
+				file: file,
+				roomNumber: $("#roomNumber").val(),
+				sessionId : $("#sessionId").val(),
+				msg : $("#chatting").val(),
+				userName : $("#userName").val()
+			}
+			ws.send(JSON.stringify(param)); //파일 보내기전 메시지를 보내서 파일을 보냄을 명시한다.
+
+		    arrayBuffer = this.result;
+			ws.send(arrayBuffer); //파일 소켓 전송
+		};
+		fileReader.readAsArrayBuffer(file);
+	}
 </script>
 <body>
 	<div id="container" class="container">
@@ -139,6 +174,11 @@
 					<th>메시지</th>
 					<th><input id="chatting" placeholder="보내실 메시지를 입력하세요."></th>
 					<th><button onclick="send()" id="sendBtn">보내기</button></th>
+				</tr>
+				<tr>
+					<th>파일업로드</th>
+					<th><input type="file" id="fileUpload"></th>
+					<th><button onclick="fileSend()" id="sendFileBtn">파일올리기</button></th>
 				</tr>
 			</table>
 		</div>
