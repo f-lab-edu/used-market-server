@@ -1,6 +1,6 @@
 package com.market.server.config;
 
-import com.market.server.chatting.SocketHandler;
+import com.market.server.handler.SocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(socketHandler, "/chating");
+        registry.addHandler(socketHandler, "/chating/{roomNumber}");
     }
 
     @Bean
