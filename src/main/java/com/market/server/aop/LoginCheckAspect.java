@@ -47,6 +47,7 @@ public class LoginCheckAspect {
         String id = null;
         int idIndex = 0;
 
+
         String userType = loginCheck.type().toString();
         switch (userType) {
             case "ADMIN": {
@@ -58,16 +59,15 @@ public class LoginCheckAspect {
                 break;
             }
         }
+        if (id == null) {
+            log.debug(proceedingJoinPoint.toString()+ "accountName :" + id);
+            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요.") {};
+        }
 
         Object[] modifiedArgs = proceedingJoinPoint.getArgs();
 
-        if (id != null)
+        if(proceedingJoinPoint.getArgs()!=null)
             modifiedArgs[idIndex] = id;
-        else
-        {
-            log.debug(proceedingJoinPoint.toString() + "accountName :" + id);
-            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요.") {};
-        }
 
         return proceedingJoinPoint.proceed(modifiedArgs);
     }

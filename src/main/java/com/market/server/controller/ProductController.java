@@ -5,7 +5,6 @@ import com.market.server.dto.ProductDTO;
 import com.market.server.dto.UserDTO;
 import com.market.server.service.Impl.ProductServiceImpl;
 import com.market.server.service.Impl.UserServiceImpl;
-import com.market.server.utils.SessionUtil;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +12,6 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
@@ -57,11 +54,11 @@ public class ProductController {
     /**
      * 본인 중고물품 수정 메서드.
      */
-    @PatchMapping("{productId}")
+    @PatchMapping("{productId}/update")
     @LoginCheck(type = LoginCheck.UserType.USER)
     public void updateProducts(String accountId,
                                @PathVariable(name = "productId") int productId,
-                               @RequestBody ProductRequest productRequest) {
+                               @RequestBody ProductRequest PR) {
         UserDTO memberInfo = userService.getUserInfo(accountId);
         ProductDTO productDTO = ProductDTO.builder()
                 .id(productId)
@@ -82,7 +79,7 @@ public class ProductController {
     /**
      * 본인 중고물품 삭제 메서드.
      */
-    @DeleteMapping("{productId}")
+    @DeleteMapping("{productId}/delete")
     @LoginCheck(type = LoginCheck.UserType.USER)
     public void deleteProducts(String accountId,
                                @PathVariable(name = "productId") int productId,

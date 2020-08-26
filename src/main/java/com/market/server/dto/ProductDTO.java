@@ -11,7 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class ProductDTO {
     public enum Status {
-        NEW, OLD, ECT
+        NULL, NEW, OLD, ECT
     }
 
     private int id;
