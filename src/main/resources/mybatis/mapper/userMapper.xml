@@ -7,17 +7,17 @@
 
     <select id="getUserProfile" resultType="com.market.server.dto.UserDTO">
         SELECT accountId, id, password, name, phone, address, status
-        FROM account
+        FROM user
         WHERE id=#{id}
     </select>
 
     <insert id="insertUserProfile" parameterType="com.market.server.dto.UserDTO">
-        INSERT INTO account (id, password, name, phone, address)
+        INSERT INTO user (id, password, name, phone, address)
         VALUES(#{id}, #{password}, #{name}, #{phone}, #{address})
     </insert>
 
     <update id="updateUserProfile" parameterType="com.market.server.dto.UserDTO">
-        UPDATE account
+        UPDATE user
         SET password=#{password},
             name=#{name},
             phone=#{phone},
@@ -26,12 +26,12 @@
     </update>
     
     <delete id="deleteUserProfile">
-        DELETE FROM account
+        DELETE FROM user
         WHERE id=#{id}
     </delete>
 
     <insert id="register" parameterType="com.market.server.dto.UserDTO">
-        INSERT INTO account (id, password, name, phone, address, status, createtime)
+        INSERT INTO user (id, password, name, phone, address, status, createtime)
         VALUES (#{id}, #{password}, #{name}, #{phone}, #{address}, #{status}, #{createtime})
     </insert>
 
@@ -42,7 +42,7 @@
                phone,
                address,
                status
-        FROM account
+        FROM user
         WHERE id = #{id}
         AND password = #{password}
         AND status != 'DELETE'

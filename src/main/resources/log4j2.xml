@@ -16,7 +16,7 @@
     <Loggers>
         <Root level="info">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="File" />
+            <AppenderRef ref="file" />
         </Root>
         <logger name="com.market.server" level="trace" additivity="false" >
             <AppenderRef ref="file" />

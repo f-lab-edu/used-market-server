@@ -1,19 +1,19 @@
 package com.market.server.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
+@NoArgsConstructor
 public class ProductDTO {
     public enum Status {
         NULL, NEW, OLD, ECT
     }
+
     private int id;
     private long price;
     private int accountId;
@@ -28,6 +28,20 @@ public class ProductDTO {
     private int categoryId;
     private int fileId;
 
-    public ProductDTO() {
+    @Builder
+    public ProductDTO(@NonNull int id, long price, int accountId, String title, String contents, Status status, boolean istrade, Date updatetime, long deliveryprice, int dibcount, int categoryId, int fileId) {
+        this.id = id;
+        this.price = price;
+        this.accountId = accountId;
+        this.title = title;
+        this.contents = contents;
+        this.status = status;
+        this.istrade = istrade;
+        this.createtime = new Date();
+        this.updatetime = updatetime;
+        this.deliveryprice = deliveryprice;
+        this.dibcount = dibcount;
+        this.categoryId = categoryId;
+        this.fileId = fileId;
     }
 }

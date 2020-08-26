@@ -40,6 +40,7 @@ public class UserController {
     @GetMapping("myInfo")
     public UserInfoResponse memberInfo(HttpSession session) {
         String id = SessionUtil.getLoginMemberId(session);
+        if (id == null) id = SessionUtil.getLoginAdminId(session);
         UserDTO memberInfo = userService.getUserInfo(id);
         return new UserInfoResponse(memberInfo);
     }
@@ -66,7 +67,7 @@ public class UserController {
      */
     @PostMapping("signIn")
     public HttpStatus login(@RequestBody UserLoginRequest loginRequest,
-                                               HttpSession session) {
+                            HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String id = loginRequest.getId();
         String password = loginRequest.getPassword();
@@ -92,13 +93,14 @@ public class UserController {
     /**
      * 회원 로그아웃 메서드.
      *
-     * @param session 현제 접속한 세션
+     * @param accountId USER인지 체크한 후의 accountID
+     * @param session   현제 접속한 세션
      * @return 로그인 하지 않았을 시 401코드를 반환하고 result:NO_LOGIN 반환 로그아웃 성공시 200 코드를 반환
-     * @author jun
+     * @author junshock5
      */
-    @GetMapping("logout")
-    public void logout(HttpSession session) {
-        SessionUtil.logoutMember(session);
+    @PutMapping("logout")
+    public void logout(String accountId, HttpSession session) {
+        SessionUtil.clear(session);
     }
 
     /**
@@ -116,7 +118,7 @@ public class UserController {
             userService.updatePassword(Id, beforePassword, afterPassword);
             ResponseEntity.ok(new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK));
         } catch (IllegalArgumentException e) {
-            log.error("updatePassword 실패" , e);
+            log.error("updatePassword 실패", e);
             responseEntity = FAIL_RESPONSE;
         }
         return responseEntity;
@@ -147,7 +149,7 @@ public class UserController {
      */
     @DeleteMapping
     public ResponseEntity<LoginResponse> deleteId(@RequestBody UserDeleteId userDeleteId,
-                                                       HttpSession session) {
+                                                  HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String Id = SessionUtil.getLoginMemberId(session);
 
@@ -160,7 +162,6 @@ public class UserController {
         }
         return responseEntity;
     }
-
 
     // -------------- response 객체 --------------
 
