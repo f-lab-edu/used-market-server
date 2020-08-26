@@ -1,5 +1,6 @@
 package com.market.server.controller;
 
+import com.market.server.aop.LoginCheck;
 import com.market.server.dto.UserDTO;
 import com.market.server.service.ResponseService;
 import com.market.server.service.Impl.UserServiceImpl;
@@ -64,7 +65,7 @@ public class UserController {
      * 회원 로그인을 진행한다. Login 요청시 id, password가 NULL일 경우 NullPointerException을 throw한다.
      */
     @PostMapping("signIn")
-    public ResponseEntity<LoginResponse> login(@RequestBody UserLoginRequest loginRequest,
+    public HttpStatus login(@RequestBody UserLoginRequest loginRequest,
                                                HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String id = loginRequest.getId();
