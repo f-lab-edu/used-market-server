@@ -58,7 +58,7 @@ public class ProductController {
     @LoginCheck(type = LoginCheck.UserType.USER)
     public void updateProducts(String accountId,
                                @PathVariable(name = "productId") int productId,
-                               @RequestBody ProductRequest PR) {
+                               @RequestBody ProductRequest productRequest) {
         UserDTO memberInfo = userService.getUserInfo(accountId);
         ProductDTO productDTO = ProductDTO.builder()
                 .id(productId)
