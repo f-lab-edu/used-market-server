@@ -12,7 +12,7 @@ import java.util.Date;
 @RedisHash("accounts")
 public class UserDTO {
     public enum Status {
-        DEFAULT, ADMIN, DELETED
+        DEFAULT, DELETED
     }
 
     private int accountId;

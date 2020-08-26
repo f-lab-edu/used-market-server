@@ -5,7 +5,7 @@ import javax.servlet.http.HttpSession;
 public class SessionUtil {
 
     private static final String LOGIN_MEMBER_ID = "LOGIN_MEMBER_ID";
-    private static final String LOGIN_ADMIN_ID = "LOGIN_ADMIN_ID";
+    private static final String LOGIN_OWNER_ID = "LOGIN_OWNER_ID";
 
     // 인스턴스화 방지
     private SessionUtil() {
@@ -42,8 +42,8 @@ public class SessionUtil {
      * @return 로그인한 사장님 id 또는 null
      * @author topojs8
      */
-    public static String getLoginAdminId(HttpSession session) {
-        return (String) session.getAttribute(LOGIN_ADMIN_ID);
+    public static String getLoginOwnerId(HttpSession session) {
+        return (String) session.getAttribute(LOGIN_OWNER_ID);
     }
 
     /**
@@ -53,8 +53,8 @@ public class SessionUtil {
      * @param id      로그인한 사장님 id
      * @author topojs8
      */
-    public static void setLoginAdminId(HttpSession session, String id) {
-        session.setAttribute(LOGIN_ADMIN_ID, id);
+    public static void setLoginOwnerId(HttpSession session, String id) {
+        session.setAttribute(LOGIN_OWNER_ID, id);
     }
 
 
@@ -84,7 +84,7 @@ public class SessionUtil {
      * @param session 사용자의 세션
      * @author topojs8
      */
-    public static void logoutAdmin(HttpSession session) {
-        session.removeAttribute(LOGIN_ADMIN_ID);
+    public static void logoutOwner(HttpSession session) {
+        session.removeAttribute(LOGIN_OWNER_ID);
     }
 }

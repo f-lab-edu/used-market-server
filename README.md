@@ -33,6 +33,9 @@
 - 객체지향의 기본 원리와 spring의 IOC/DI , AOP, ASP 활용과  의미 있는 코드 작성
 - 라이브러리 및 기능 추가 시 이유있는 선택과 사용 목적 고려
 
+기술적인 문제 해결 과정
+---
+
 USECASE
 ---
 - 판매자
@@ -44,6 +47,8 @@ USECASE
 - 관리자
   - 관리자는 회원관리를 위해 구매자/판매자의 상태를 관리 할 수있다.
   
+UML Diagram
+---
+
 ERD
 ---
-![UsedMarket_24_20200730_39_51](https://user-images.githubusercontent.com/61732452/88840524-98ed7100-d217-11ea-9b76-8043edc17326.png)

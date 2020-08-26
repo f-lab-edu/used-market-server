@@ -40,7 +40,6 @@ public class UserController {
     @GetMapping("myInfo")
     public UserInfoResponse memberInfo(HttpSession session) {
         String id = SessionUtil.getLoginMemberId(session);
-        if (id == null) id = SessionUtil.getLoginAdminId(session);
         UserDTO memberInfo = userService.getUserInfo(id);
         return new UserInfoResponse(memberInfo);
     }
@@ -67,23 +66,22 @@ public class UserController {
      */
     @PostMapping("signIn")
     public HttpStatus login(@RequestBody UserLoginRequest loginRequest,
-                            HttpSession session) {
+                                               HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String id = loginRequest.getId();
         String password = loginRequest.getPassword();
         UserDTO userInfo = userService.login(id, password);
 
         if (userInfo == null) {
+            // ID, Password에 맞는 정보가 없을 때
             return HttpStatus.NOT_FOUND;
-        } else if (userInfo != null) {
+        } else if (UserDTO.Status.DEFAULT == userInfo.getStatus()) {
+            // 성공시 세션에 ID를 저장
             loginResponse = LoginResponse.success(userInfo);
-            if (userInfo.getStatus() == (UserDTO.Status.ADMIN))
-                SessionUtil.setLoginAdminId(session, id);
-            else
-                SessionUtil.setLoginMemberId(session, id);
-
+            SessionUtil.setLoginMemberId(session, id);
             responseEntity = new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
         } else {
+            // 예상하지 못한 오류일 경우
             throw new RuntimeException("Login Error! 유저 정보가 없거나 지워진 유저 정보입니다.");
         }
 
@@ -93,20 +91,19 @@ public class UserController {
     /**
      * 회원 로그아웃 메서드.
      *
-     * @param accountId USER인지 체크한 후의 accountID
-     * @param session   현제 접속한 세션
+     * @param session 현제 접속한 세션
      * @return 로그인 하지 않았을 시 401코드를 반환하고 result:NO_LOGIN 반환 로그아웃 성공시 200 코드를 반환
-     * @author junshock5
+     * @author jun
      */
-    @PutMapping("logout")
-    public void logout(String accountId, HttpSession session) {
-        SessionUtil.clear(session);
+    @GetMapping("logout")
+    public void logout(HttpSession session) {
+        SessionUtil.logoutMember(session);
     }
 
     /**
      * 회원 비밀번호 수정 메서드.
      */
-    @PatchMapping("password")
+    @PatchMapping("updatePassword")
     public ResponseEntity<LoginResponse> updateUserPassword(@RequestBody UserUpdatePasswordRequest userUpdatePasswordRequest,
                                                             HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
@@ -118,7 +115,7 @@ public class UserController {
             userService.updatePassword(Id, beforePassword, afterPassword);
             ResponseEntity.ok(new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK));
         } catch (IllegalArgumentException e) {
-            log.error("updatePassword 실패", e);
+            log.error("updatePassword 실패" , e);
             responseEntity = FAIL_RESPONSE;
         }
         return responseEntity;
@@ -127,9 +124,9 @@ public class UserController {
     /**
      * 회원 주소수정 메서드.
      */
-    @PatchMapping("myInfo/address")
+    @PatchMapping("updateAddress")
     public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserUpdateAddressRequest userUpdateAddressRequestu,
-                                                       HttpSession session) {
+                                                            HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String Id = SessionUtil.getLoginMemberId(session);
         String newAddress = userUpdateAddressRequestu.getNewAddress();
@@ -147,9 +144,9 @@ public class UserController {
     /**
      * 회원 ID 삭제 메서드.
      */
-    @DeleteMapping
-    public ResponseEntity<LoginResponse> deleteId(@RequestBody UserDeleteId userDeleteId,
-                                                  HttpSession session) {
+    @DeleteMapping("deleteID")
+    public ResponseEntity<LoginResponse> updateAddress(@RequestBody UserDeleteId userDeleteId,
+                                                       HttpSession session) {
         ResponseEntity<LoginResponse> responseEntity = null;
         String Id = SessionUtil.getLoginMemberId(session);
 
@@ -162,6 +159,7 @@ public class UserController {
         }
         return responseEntity;
     }
+
 
     // -------------- response 객체 --------------
 

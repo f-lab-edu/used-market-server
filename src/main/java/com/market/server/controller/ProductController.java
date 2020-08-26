@@ -36,17 +36,17 @@ public class ProductController {
     /**
      * 중고물품 등록 메서드.
      */
-    @PostMapping
+    @PostMapping("insertProduct")
     @ResponseStatus(HttpStatus.CREATED)
     @LoginCheck(type = LoginCheck.UserType.USER)
-    public void registerProduct(String accountId, @RequestBody ProductDTO productDTO) {
+    public void registerProduct(@RequestBody ProductDTO productDTO, String accountId) {
         productService.register(accountId, productDTO);
     }
 
     /**
      * 본인 중고물품 검색 메서드.
      */
-    @GetMapping("my-products")
+    @GetMapping("MyProducts")
     @LoginCheck(type = LoginCheck.UserType.USER)
     public ProductResponse myProductInfo(String accountId) {
         UserDTO memberInfo = userService.getUserInfo(accountId);
@@ -58,24 +58,24 @@ public class ProductController {
      * 본인 중고물품 수정 메서드.
      */
     @PatchMapping("{productId}")
-    @LoginCheck(type = LoginCheck.UserType.USER)
-    public void updateProducts(String accountId,
-                               @PathVariable(name = "productId") int productId,
-                               @RequestBody ProductRequest productRequest) {
-        UserDTO memberInfo = userService.getUserInfo(accountId);
-        ProductDTO productDTO = ProductDTO.builder()
-                .id(productId)
-                .price(productRequest.getPrice())
-                .accountId(memberInfo.getAccountId())
-                .title(productRequest.getTitle())
-                .contents(productRequest.getContents())
-                .status(productRequest.getStatus())
-                .istrade(productRequest.isTrade())
-                .updatetime(new Date())
-                .deliveryprice(productRequest.getDeliveryprice())
-                .dibcount(productRequest.getDibcount())
-                .categoryId(productRequest.getCategoryId())
-                .build();
+    public void updateProducts(@PathVariable(name = "productId") int productId,
+                               @RequestBody ProductRequest PR,
+                               HttpSession session) {
+        String id = SessionUtil.getLoginMemberId(session);
+
+        UserDTO memberInfo = userService.getUserInfo(id);
+        ProductDTO productDTO = new ProductDTO(productId,
+                PR.getPrice(),
+                memberInfo.getAccountId(),
+                PR.getTitle(),
+                PR.getContents(),
+                PR.getStatus(),
+                PR.isTrade(),
+                new Date(),
+                new Date(),
+                PR.getDeliveryprice(),
+                PR.getDibcount());
+
         productService.updateProducts(productDTO);
     }
 
@@ -83,11 +83,11 @@ public class ProductController {
      * 본인 중고물품 삭제 메서드.
      */
     @DeleteMapping("{productId}")
-    @LoginCheck(type = LoginCheck.UserType.USER)
-    public void deleteProducts(String accountId,
-                               @PathVariable(name = "productId") int productId,
-                               @RequestBody ProductDeleteRequest productDeleteRequest) {
-        UserDTO memberInfo = userService.getUserInfo(accountId);
+    public void updateProducts(@PathVariable(name = "productId") int productId,
+                               @RequestBody ProductDeleteRequest productDeleteRequest,
+                               HttpSession session) {
+        String id = SessionUtil.getLoginMemberId(session);
+        UserDTO memberInfo = userService.getUserInfo(id);
         productService.deleteProduct(memberInfo.getAccountId(), productId);
     }
 
@@ -112,8 +112,6 @@ public class ProductController {
         private Date updatetime;
         private long deliveryprice;
         private int dibcount;
-        private int categoryId;
-        private int fileId;
     }
 
     @Setter
