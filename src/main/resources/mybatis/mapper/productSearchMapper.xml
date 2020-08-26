@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.market.server.mapper.ProductSearchMapper">
+
+    <select id="selectProducts" resultType="com.market.server.dto.ProductDTO">
+        <if test="categoryDTO.sortStatus.toString() == 'GRADE'">
+            SELECT product.`id`,
+            product.`price`,
+            product.`accountId`,
+            product.`title`,
+            product.`contents`,
+            product.`status`,
+            product.`isTrade`,
+            product.`createtime`,
+            product.`updatetime`,
+            product.`deliveryprice`,
+            product.`dibcount`,
+            product.`categoryId`,
+            product.`fileId`
+            FROM `product`
+        </if>
+        <if test="categoryDTO.sortStatus.toString() != 'GRADE'">
+            SELECT `id`,
+            `price`,
+            `accountId`,
+            `title`,
+            `contents`,
+            `status`,
+            `isTrade`,
+            `createtime`,
+            `updatetime`,
+            `deliveryprice`,
+            `dibcount`,
+            `categoryId`,
+            `fileId`
+            FROM `product`
+            <if test="productDTO.status != null">
+                WHERE status = #{productDTO.status}
+            </if>
+        </if>
+        <choose>
+            <when test="categoryDTO.sortStatus.toString() == 'CATEGORIES'">
+                ORDER BY categoryId ASC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'NEWEST'">
+                ORDER BY createtime DESC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'OLDEST'">
+                ORDER BY createtime ASC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'HIGHPRICE'">
+                ORDER BY price DESC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'LOWPRICE'">
+                ORDER BY price ASC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'GRADE'">
+                LEFT JOIN user
+                ON product.accountId = user.accountId
+                GROUP BY user.accountId
+                ORDER BY user.grade DESC
+            </when>
+        </choose>
+        <include refid="COMMON_PAGING_TAIL"/>
+    </select>
+
+    <sql id="COMMON_PAGING_TAIL">
+        LIMIT #{categoryDTO.searchCount, jdbcType=INTEGER} OFFSET #{categoryDTO.pagingStartOffset, jdbcType=INTEGER}
+    </sql>
+
+</mapper>
