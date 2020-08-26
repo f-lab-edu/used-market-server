@@ -10,4 +10,15 @@
         VALUES (#{id}, #{name})
     </insert>
 
+    <update id="updateCategory" parameterType="com.market.server.dto.CategoryDTO">
+        UPDATE category
+        SET name = #{name}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteCategory">
+        DELETE FROM category
+        WHERE id = #{id}
+    </delete>
+
 </mapper>
