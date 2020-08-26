@@ -1,8 +1,7 @@
 package com.market.server.aop;
 
 import com.market.server.utils.SessionUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.springframework.core.Ordered;
@@ -35,30 +34,42 @@ int 타입의 정수로 순서를 정할 수 있는데 값이 낮을수록 우�
 기본값은 가장 낮은 우선순위를 가지는 Ordered.LOWEST_PRECEDENCE이다.
 */
 @Order(Ordered.LOWEST_PRECEDENCE)
+/*
+Login Check할때 aop의 Aspect 애노테이션을 이용하여
+로그인 체크 중복되는 코드를 제거하기 위해 어드바이스(Advice)를 정의하는 class 입니다.
+*/
+@Log4j2
 // 어노테이션으로 로그인 여부를 검사하기 위한 클래스
 public class LoginCheckAspect {
-    private static Logger logger = LogManager.getLogger(LoginCheckAspect.class);
-
-    @Around("@annotation(com.market.server.aop.LoginCheck)")
-    public Object loginCheck(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    @Around("@annotation(com.market.server.aop.LoginCheck) && @ annotation(loginCheck)")
+    public Object adminLoginCheck(ProceedingJoinPoint proceedingJoinPoint, LoginCheck loginCheck) throws Throwable {
         HttpSession session = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
-        String id = SessionUtil.getLoginMemberId(session);
-        if (id == null) {
-            logger.debug(String.format(proceedingJoinPoint.toString() + "accountName :" + id));
-            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요.") {
-            };
+        String id = null;
+        int idIndex = 0;
+
+        String userType = loginCheck.type().toString();
+        switch (userType) {
+            case "ADMIN": {
+                id = SessionUtil.getLoginAdminId(session);
+                break;
+            }
+            case "USER": {
+                id = SessionUtil.getLoginMemberId(session);
+                break;
+            }
         }
-        int index = 0;
+
         Object[] modifiedArgs = proceedingJoinPoint.getArgs();
 
-        for (Object arg : proceedingJoinPoint.getArgs()) {
-            if (arg == null) // Parameter 값에 값이 없어도 Id값 맵핑
-                modifiedArgs[index] = id;
-            if (arg instanceof String) {    // accountId String타입 체크 , 추가로 파라미터에 String타입이 올시 변경 필요
-                modifiedArgs[index] = id;
-            }
-            index++;
+        if (id != null)
+            modifiedArgs[idIndex] = id;
+        else
+        {
+            log.debug(proceedingJoinPoint.toString() + "accountName :" + id);
+            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "로그인한 id값을 확인해주세요.") {};
         }
+
         return proceedingJoinPoint.proceed(modifiedArgs);
     }
+
 }
