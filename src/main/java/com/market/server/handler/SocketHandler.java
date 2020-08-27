@@ -24,9 +24,7 @@ import java.util.List;
 public class SocketHandler extends TextWebSocketHandler {
 
     private List<HashMap<String, Object>> rls = new ArrayList<>(); //웹소켓 세션을 담아둘 리스트 ---roomListSessions
-    private static final String FILE_UPLOAD_PATH = "C:/test/websocket/";
-    static int fileUploadIdx = 0;
-    static String fileUploadSession = "";
+    private static final String FILE_UPLOAD_PATH = "C:/usedMarketServer/attachFile/";
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
@@ -65,6 +63,7 @@ public class SocketHandler extends TextWebSocketHandler {
 
     @Override
     public void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
+        int fileUploadIdx = 0;
         //바이너리 메시지 발송
         ByteBuffer byteBuffer = message.getPayload();
         String fileName = "temp.jpg";

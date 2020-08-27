@@ -81,7 +81,7 @@
 	}
 
 	function getRoom(){
-		commonAjax('/getRoom', "", 'post', function(result){
+		commonAjax('/rooms', "", 'post', function(result){
 			createChatingRoom(result);
 		});
 	}
@@ -90,7 +90,7 @@
 		$("#createRoom").click(function(){
 			var msg = {	roomName : $('#roomName').val()	};
 
-			commonAjax('/createRoom', msg, 'post', function(result){
+			commonAjax('/rooms', msg, 'post', function(result){
 				createChatingRoom(result);
 			});
 
@@ -99,7 +99,7 @@
 	}
 
 	function goRoom(number, name){
-		location.href="/moveChating?roomName="+name+"&"+"roomNumber="+number;
+		location.href="/moving/rooms?roomName="+name+"&"+"roomNumber="+number;
 	}
 
 	function createChatingRoom(res){

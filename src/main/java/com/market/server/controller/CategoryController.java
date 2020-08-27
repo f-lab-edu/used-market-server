@@ -35,7 +35,7 @@ public class CategoryController {
     /**
      * 중고물품 카테고리 수정 메서드.
      */
-    @PatchMapping("{categoryId}")
+    @PatchMapping("/{categoryId}")
     @LoginCheck(type = LoginCheck.UserType.ADMIN)
     public void updateCategories(String accountId,
                                  @PathVariable(name = "categoryId") int categoryId,
@@ -47,7 +47,7 @@ public class CategoryController {
     /**
      * 본인 중고물품 카테고리 삭제 메서드.
      */
-    @DeleteMapping("{categoryId}")
+    @DeleteMapping("/{categoryId}")
     @LoginCheck(type = LoginCheck.UserType.ADMIN)
     public void updateCategories(String accountId,
                                  @PathVariable(name = "categoryId") int categoryId) {

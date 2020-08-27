@@ -1,10 +1,7 @@
 package com.market.server.controller;
 import com.market.server.dto.RoomDTO;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -19,17 +16,11 @@ public class ChattingController {
     List<RoomDTO> roomDTOList = new ArrayList<RoomDTO>();
     static int roomNumber = 0;
 
-    @RequestMapping("/chat")
-    public ModelAndView chat() {
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("chat");
-        return mv;
-    }
     /**
-     * 방 페이지
+     * 대기방 페이지
      * @return
      */
-    @RequestMapping("/room")
+    @GetMapping("/waiting-rooms")
     public ModelAndView room() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("room");
@@ -37,11 +28,11 @@ public class ChattingController {
     }
 
     /**
-     * 방 생성하기
+     * 채팅방 생성하기
      * @param params
      * @return
      */
-    @RequestMapping("/createRoom")
+    @PostMapping("/rooms")
     public @ResponseBody
     List<RoomDTO> createRoom(@RequestParam HashMap<Object, Object> params){
         String roomName = (String) params.get("roomName");
@@ -55,21 +46,21 @@ public class ChattingController {
     }
 
     /**
-     * 방 정보가져오기
+     * 채팅방 정보가져오기
      * @param params
      * @return
      */
-    @RequestMapping("/getRoom")
+    @GetMapping("/rooms")
     public @ResponseBody List<RoomDTO> getRoom(@RequestParam HashMap<Object, Object> params){
         return roomDTOList;
     }
 
     /**
-     * 채팅방
+     * 채팅방 이동
      * @return
      */
-    @RequestMapping("/moveChating")
-    public ModelAndView chating(@RequestParam HashMap<Object, Object> params) {
+    @GetMapping("/moving/rooms")
+    public ModelAndView moveRoom(@RequestParam HashMap<Object, Object> params) {
         ModelAndView mv = new ModelAndView();
         int roomNumber = Integer.parseInt((String) params.get("roomNumber"));
 
