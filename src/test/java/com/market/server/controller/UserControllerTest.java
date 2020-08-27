@@ -34,7 +34,6 @@ import static org.hamcrest.CoreMatchers.is;
  * @AutoConfigureMockMvc - Mock 테스트시 필요한 의존성을 제공. Service에서 호출하는 Bean을 주입해준다. 간단히 컨트롤러 클래스만 테스트 하고
  * 싶다면 Mockup Test를 사용할 수 있는데 service 객체에 @MockBean 어노테이션을 적용하는 것으로 이 어노테이션을 대체할 수 있다.
  */
-@SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @Log4j2
