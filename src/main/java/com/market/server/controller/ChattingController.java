@@ -1,26 +1,34 @@
 package com.market.server.controller;
 import com.market.server.dto.RoomDTO;
 import io.swagger.annotations.Api;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Api(tags = {"6. chatting"})
 @RestController
+@Log4j2
 public class ChattingController {
 
-    List<RoomDTO> roomDTOList = new ArrayList<RoomDTO>();
     static int roomNumber = 0;
+    private ChattingResponse chattingResponse;
+    List<RoomDTO> roomDTOList = new ArrayList<RoomDTO>();
 
     /**
      * 대기방 페이지
+     *
      * @return
      */
-    @GetMapping("/waiting-rooms")
+    @GetMapping("/waiting-room")
     public ModelAndView room() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("room");
@@ -29,24 +37,28 @@ public class ChattingController {
 
     /**
      * 채팅방 생성하기
+     *
      * @param params
      * @return
      */
     @PostMapping("/rooms")
-    public @ResponseBody
-    List<RoomDTO> createRoom(@RequestParam HashMap<Object, Object> params){
+    public @ResponseBody List<RoomDTO> createRoom(@RequestParam HashMap<Object, Object> params, ChattingRequest chattingRequest) {
         String roomName = (String) params.get("roomName");
-        if(roomName != null && !roomName.trim().equals("")) {
-            RoomDTO roomDTO = new RoomDTO();
-            roomDTO.setRoomNumber(++roomNumber);
-            roomDTO.setRoomName(roomName);
+
+        if (roomName != null && !roomName.trim().equals("")) {
+            RoomDTO roomDTO = RoomDTO.builder()
+                    .roomNumber(++roomNumber)
+                    .roomName(roomName)
+                    .build();
             roomDTOList.add(roomDTO);
+            //chattingService.register(roomDTO);
         }
         return roomDTOList;
     }
 
     /**
      * 채팅방 정보가져오기
+     *
      * @param params
      * @return
      */
@@ -57,9 +69,10 @@ public class ChattingController {
 
     /**
      * 채팅방 이동
+     *
      * @return
      */
-    @GetMapping("/moving/rooms")
+    @GetMapping("/chatting")
     public ModelAndView moveRoom(@RequestParam HashMap<Object, Object> params) {
         ModelAndView mv = new ModelAndView();
         int roomNumber = Integer.parseInt((String) params.get("roomNumber"));
@@ -73,5 +86,24 @@ public class ChattingController {
             mv.setViewName("room");
         }
         return mv;
+    }
+
+    // -------------- response 객체 --------------
+
+    @Getter
+    @AllArgsConstructor
+    private static class ChattingResponse {
+        private List<RoomDTO> roomDTOList;
+    }
+
+    // -------------- request 객체 --------------
+
+    @Setter
+    @Getter
+    private static class ChattingRequest {
+        private int roomNumber;
+        private String roomName;
+        private RoomDTO.Status status;
+        private Date updatetime;
     }
 }

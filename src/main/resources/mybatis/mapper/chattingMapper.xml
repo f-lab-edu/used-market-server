@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.market.server.mapper.ChattingMapper">
+
+    <insert id="register" parameterType="com.market.server.dto.RoomDTO">
+        INSERT INTO room (id, title)
+        VALUES (#{id}, #{title})
+    </insert>
+
+    <select id="selectRooms" resultType="com.market.server.dto.RoomDTO">
+            SELECT `id`,
+            `title`,
+            `type`,
+            FROM `room`
+        <choose>
+            <when test="sortStatus.toString() == 'NEWEST'">
+                ORDER BY createtime DESC
+            </when>
+            <when test="sortStatus.toString() == 'OLDEST'">
+                ORDER BY createtime ASC
+            </when>
+            <when test="sortStatus.toString() == 'GRADE'">
+                LEFT JOIN user
+                ON product.accountId = user.accountId
+                GROUP BY user.accountId
+                ORDER BY user.grade DESC
+            </when>
+        </choose>
+        LIMIT #{searchCount, jdbcType=INTEGER} OFFSET #{pagingStartOffset, jdbcType=INTEGER}
+    </select>
+
+</mapper>

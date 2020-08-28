@@ -1,5 +1,5 @@
 package com.market.server.handler;
-
+import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -9,8 +9,6 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Component
+@Log4j2
 public class SocketHandler extends TextWebSocketHandler {
 
     private List<HashMap<String, Object>> rls = new ArrayList<>(); //웹소켓 세션을 담아둘 리스트 ---roomListSessions
@@ -166,7 +165,7 @@ public class SocketHandler extends TextWebSocketHandler {
         try {
             obj = (JSONObject) parser.parse(jsonStr);
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error("jsonToObjectParser 실패" , e);
         }
         return obj;
     }

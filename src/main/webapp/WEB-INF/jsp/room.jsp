@@ -99,7 +99,7 @@
 	}
 
 	function goRoom(number, name){
-		location.href="/moving/rooms?roomName="+name+"&"+"roomNumber="+number;
+		location.href="/chatting?roomName="+name+"&"+"roomNumber="+number;
 	}
 
 	function createChatingRoom(res){
