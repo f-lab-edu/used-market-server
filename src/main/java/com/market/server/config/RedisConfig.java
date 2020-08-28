@@ -21,13 +21,13 @@ import java.time.Duration;
 
 @Configuration
 public class RedisConfig {
-    @Value("${spring.redis.host}")
+    @Value("${market.server.redis.host}")
     private String redisHost;
 
-    @Value("${spring.redis.port}")
+    @Value("${market.server.redis.port}")
     private int redisPort;
 
-    @Value("${spring.redis.password}")
+    @Value("${market.server.redis.password}")
     private String redisPwd;
 
     @Value("${expire.defaultTime}")
