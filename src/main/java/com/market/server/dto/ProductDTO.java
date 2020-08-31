@@ -1,7 +1,6 @@
 package com.market.server.dto;
 
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -11,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class ProductDTO {
     public enum Status {
-        NULL, NEW, OLD, ECT
+        NEW, OLD, ECT
     }
 
     private int id;

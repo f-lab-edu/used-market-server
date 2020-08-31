@@ -7,6 +7,7 @@ import com.market.server.mapper.UserProfileMapper;
 import com.market.server.service.ProductService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,13 +22,14 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private UserProfileMapper userProfileMapper;
 
+    @CacheEvict(value="getProducts", allEntries = true)
     @Override
     public void register(String id, ProductDTO productDTO) {
         UserDTO memberInfo = userProfileMapper.getUserProfile(id);
         productDTO.setAccountId(memberInfo.getAccountId());
         productDTO.setCreatetime(new Date());
 
-        if (productDTO.getStatus().ordinal() == 0 || productDTO.getStatus() == null)
+        if (productDTO.getStatus() == null)
             throw new RuntimeException("register ERROR! 상품 categoryId를 확인해주세요\n" + "categoryId : " + productDTO.getStatus().ordinal());
         else
             productDTO.setCategoryId(productDTO.getStatus().ordinal());
@@ -69,6 +71,4 @@ public class ProductServiceImpl implements ProductService {
             throw new RuntimeException("updateProducts ERROR! 물품 삭제 메서드를 확인해주세요\n" + "Params : " + productId);
         }
     }
-
-
 }
