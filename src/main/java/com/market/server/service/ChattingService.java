@@ -1,9 +1,11 @@
 package com.market.server.service;
+
 import com.market.server.dto.RoomDTO;
 import com.market.server.mapper.ChattingMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -21,11 +23,19 @@ public class ChattingService {
             throw new RuntimeException("register ERROR! 채팅방 등록 메서드를 확인해주세요\n" + "Params : " + roomDTO);
         }
     }
-    
+
     // 채팅방 목록 찾기
     public List<RoomDTO> getRooms(RoomDTO roomDTO) {
-        List<RoomDTO> roomDTOList = chattingMapper.selectRooms(roomDTO);
+        List<RoomDTO> roomDTOList = null;
+        if (roomDTO == null)
+            roomDTOList = chattingMapper.selectRooms("NEWEST", 20, 0);
+        else
+            roomDTOList = chattingMapper.selectRooms(roomDTO.getSortStatus().toString(), roomDTO.getSearchCount(), roomDTO.getPagingStartOffset());
         return roomDTOList;
+    }
+
+    public int getLastRoomNumber() {
+        return chattingMapper.getLastRoomNumber();
     }
 
 }

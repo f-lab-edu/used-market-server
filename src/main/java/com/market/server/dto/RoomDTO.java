@@ -21,7 +21,6 @@ public class RoomDTO {
     private Status status;
     private Date createtime;
     private Date updatetime;
-    private List<RoomDTO> roomDTOList;
     private SortStatus sortStatus;
     private int searchCount;
     private int pagingStartOffset;
@@ -36,7 +35,6 @@ public class RoomDTO {
         this.roomNumber = roomNumber;
         this.roomName = roomName;
         this.createtime = new Date();
-        roomDTOList = new ArrayList<RoomDTO>();
         SortStatus sortStatus = SortStatus.NEWEST;
         searchCount = 10;
         pagingStartOffset = 0;

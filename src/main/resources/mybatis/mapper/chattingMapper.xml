@@ -15,29 +15,22 @@
         `roomName`,
         `type`
         FROM `room`
-        LIMIT 100 OFFSET 0
+        <choose>
+            <when test="sortStatus == 'NEWEST'">
+                ORDER BY createtime DESC
+            </when>
+            <when test="sortStatus == 'OLDEST'">
+                ORDER BY createtime ASC
+            </when>
+        </choose>
+        LIMIT #{searchCount, jdbcType=INTEGER} OFFSET #{pagingStartOffset, jdbcType=INTEGER}
     </select>
 
-<!--    <select id="selectRooms" resultType="com.market.server.dto.RoomDTO">-->
-<!--            SELECT `id`,-->
-<!--            `title`,-->
-<!--            `type`,-->
-<!--            FROM `room`-->
-<!--        <choose>-->
-<!--            <when test="sortStatus.toString() == 'NEWEST'">-->
-<!--                ORDER BY createtime DESC-->
-<!--            </when>-->
-<!--            <when test="sortStatus.toString() == 'OLDEST'">-->
-<!--                ORDER BY createtime ASC-->
-<!--            </when>-->
-<!--            <when test="sortStatus.toString() == 'GRADE'">-->
-<!--                LEFT JOIN user-->
-<!--                ON product.accountId = user.accountId-->
-<!--                GROUP BY user.accountId-->
-<!--                ORDER BY user.grade DESC-->
-<!--            </when>-->
-<!--        </choose>-->
-<!--        LIMIT #{searchCount, jdbcType=INTEGER} OFFSET #{pagingStartOffset, jdbcType=INTEGER}-->
-<!--    </select>-->
+    <select id="getLastRoomNumber" resultType="int">
+        SELECT roomNumber
+        FROM room
+        ORDER BY roomNumber
+        DESC LIMIT 1;
+    </select>
 
 </mapper>
