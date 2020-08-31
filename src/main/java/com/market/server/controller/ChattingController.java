@@ -1,10 +1,13 @@
 package com.market.server.controller;
+
 import com.market.server.dto.RoomDTO;
+import com.market.server.service.ChattingService;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,7 +24,12 @@ public class ChattingController {
 
     static int roomNumber = 0;
     private ChattingResponse chattingResponse;
-    List<RoomDTO> roomDTOList = new ArrayList<RoomDTO>();
+    private final ChattingService chattingService;
+
+    @Autowired
+    public ChattingController(ChattingService chattingService) {
+        this.chattingService = chattingService;
+    }
 
     /**
      * 대기방 페이지
@@ -42,18 +50,19 @@ public class ChattingController {
      * @return
      */
     @PostMapping("/rooms")
-    public @ResponseBody List<RoomDTO> createRoom(@RequestParam HashMap<Object, Object> params, ChattingRequest chattingRequest) {
+    public @ResponseBody
+    List<RoomDTO> createRoom(@RequestParam HashMap<Object, Object> params, ChattingRequest chattingRequest) {
         String roomName = (String) params.get("roomName");
-
+        RoomDTO roomDTO = null;
         if (roomName != null && !roomName.trim().equals("")) {
-            RoomDTO roomDTO = RoomDTO.builder()
+            roomDTO = RoomDTO.builder()
                     .roomNumber(++roomNumber)
                     .roomName(roomName)
                     .build();
-            roomDTOList.add(roomDTO);
-            //chattingService.register(roomDTO);
+            chattingService.register(roomDTO);
         }
-        return roomDTOList;
+
+        return chattingService.getRooms(roomDTO);
     }
 
     /**
@@ -63,8 +72,9 @@ public class ChattingController {
      * @return
      */
     @GetMapping("/rooms")
-    public @ResponseBody List<RoomDTO> getRoom(@RequestParam HashMap<Object, Object> params){
-        return roomDTOList;
+    public @ResponseBody
+    List<RoomDTO> getRoom(@RequestParam HashMap<Object, Object> params, @RequestBody RoomDTO roomDTO) {
+        return chattingService.getRooms(roomDTO);
     }
 
     /**
@@ -77,7 +87,7 @@ public class ChattingController {
         ModelAndView mv = new ModelAndView();
         int roomNumber = Integer.parseInt((String) params.get("roomNumber"));
 
-        List<RoomDTO> new_list = roomDTOList.stream().filter(o->o.getRoomNumber()==roomNumber).collect(Collectors.toList());
+        List<RoomDTO> new_list = chattingService.getRooms(null).stream().filter(o->o.getRoomNumber()==roomNumber).collect(Collectors.toList());
         if(new_list != null && new_list.size() > 0) {
             mv.addObject("roomName", params.get("roomName"));
             mv.addObject("roomNumber", params.get("roomNumber"));

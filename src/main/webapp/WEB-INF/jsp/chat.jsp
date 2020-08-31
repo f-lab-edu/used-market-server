@@ -149,10 +149,14 @@
 		};
 		fileReader.readAsArrayBuffer(file);
 	}
+    function goWatingRoom(){
+    	location.href="/waiting-room/";
+    }
 </script>
 <body>
 	<div id="container" class="container">
 		<h1>${roomName}의 채팅방</h1>
+		<button type='button' onclick='goWatingRoom()'>대기방</button>
 		<input type="hidden" id="sessionId" value="">
 		<input type="hidden" id="roomNumber" value="${roomNumber}">
 
