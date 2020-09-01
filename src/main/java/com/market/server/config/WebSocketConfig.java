@@ -35,6 +35,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
     ThreadPoolTaskScheduler 는 ScheduledExecutorService에 작업을 위임 하고
     TaskExecutor 인터페이스를 구현하므로 내부 스레드 관리에 매우 적합하다.
     따라서 단일 인스턴스가 @Scheduled 주석 뿐 아니라 비동기식 잠재적 실행을 처리 할 수 있다.
+    작업 스케쥴러를 구현하려면 해당 스케쥴을 관리할 org.springframework.scheduling.TaskScheduler 빈이 등록되어 있어야 한다.
+    쓰레드 풀이 필요하다면 ThreadPoolTaskScheduler 빈을 등록하고 단일 쓰레드로 충분하다면 ConcurrentTaskScheduler 빈을 등록한다.
     */
     @Bean
     public TaskScheduler taskScheduler() {

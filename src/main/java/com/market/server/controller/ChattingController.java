@@ -3,7 +3,6 @@ import com.market.server.dto.RoomDTO;
 import com.market.server.service.ChattingService;
 import io.swagger.annotations.Api;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.HashMap;
@@ -17,7 +16,6 @@ public class ChattingController {
 
     private final ChattingService chattingService;
 
-    @Autowired
     public ChattingController(ChattingService chattingService) {
         this.chattingService = chattingService;
     }
@@ -41,8 +39,8 @@ public class ChattingController {
      * @return
      */
     @PostMapping("/rooms")
-    public @ResponseBody
-    List<RoomDTO> createRoom(@RequestParam HashMap<String, String> params) {
+    @ResponseBody
+    public List<RoomDTO> createRoom(@RequestParam HashMap<String, String> params) {
         String roomName = (String) params.get("roomName");
         RoomDTO roomDTO = null;
         if (roomName != null && !roomName.trim().equals("")) {
@@ -54,7 +52,7 @@ public class ChattingController {
             chattingService.register(roomDTO);
         }
 
-        return chattingService.getRooms(roomDTO);
+        return chattingService.getAllRooms(roomDTO);
     }
 
     /**
@@ -64,9 +62,9 @@ public class ChattingController {
      * @return
      */
     @GetMapping("/rooms")
-    public @ResponseBody
-    List<RoomDTO> getRoom(@RequestBody RoomDTO roomDTO) {
-        return chattingService.getRooms(roomDTO);
+    @ResponseBody
+    public List<RoomDTO> getRoom(@RequestBody RoomDTO roomDTO) {
+        return chattingService.getAllRooms(roomDTO);
     }
 
     /**
@@ -79,7 +77,7 @@ public class ChattingController {
         ModelAndView mv = new ModelAndView();
         int roomNumber = Integer.parseInt((String) params.get("roomNumber"));
 
-        List<RoomDTO> new_list = chattingService.getRooms(null).stream().filter(o -> o.getRoomNumber() == roomNumber).collect(Collectors.toList());
+        List<RoomDTO> new_list = chattingService.getAllRooms(null).stream().filter(o -> o.getRoomNumber() == roomNumber).collect(Collectors.toList());
         if (new_list != null && new_list.size() > 0) {
             mv.addObject("roomName", params.get("roomName"));
             mv.addObject("roomNumber", params.get("roomNumber"));

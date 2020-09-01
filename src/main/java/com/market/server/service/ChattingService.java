@@ -25,7 +25,7 @@ public class ChattingService {
     }
 
     // 채팅방 목록 찾기
-    public List<RoomDTO> getRooms(RoomDTO roomDTO) {
+    public List<RoomDTO> getAllRooms(RoomDTO roomDTO) {
         List<RoomDTO> roomDTOList = null;
         if (roomDTO == null)
             roomDTOList = chattingMapper.selectRooms("NEWEST", 20, 0);

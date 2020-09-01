@@ -1,4 +1,5 @@
 package com.market.server.handler;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -14,7 +15,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,7 +26,6 @@ import java.util.List;
 public class SocketHandler extends TextWebSocketHandler {
 
     private List<HashMap<String, Object>> rls = new ArrayList<>(); //웹소켓 세션을 담아둘 리스트 ---roomListSessions
-    private static final String FILE_UPLOAD_PATH = "C:/usedMarketServer/attachFile/";
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
@@ -53,25 +55,30 @@ public class SocketHandler extends TextWebSocketHandler {
                     try {
                         wss.sendMessage(new TextMessage(obj.toJSONString()));
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        log.error("sendMessage 실패" , e);
                     }
                 }
             }
         }
     }
 
+    @SneakyThrows
     @Override
     public void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
         int fileUploadIdx = 0;
         //바이너리 메시지 발송
         ByteBuffer byteBuffer = message.getPayload();
-        String fileName = "temp.jpg";
-        File dir = new File(FILE_UPLOAD_PATH);
+
+        String fileName = new SimpleDateFormat("yyyyMMddHHmm'.jpg'").format(new Date());
+        File file = new File("");
+        String fileDirectoryName = file.getAbsolutePath()+"\\usedMarketServer\\attachFile\\";
+
+        File dir = new File(fileDirectoryName);
         if(!dir.exists()) {
             dir.mkdirs();
         }
 
-        File file = new File(FILE_UPLOAD_PATH, fileName);
+        file = new File(fileDirectoryName, fileName);
         FileOutputStream out = null;
         FileChannel outChannel = null;
         try {
@@ -81,7 +88,7 @@ public class SocketHandler extends TextWebSocketHandler {
             byteBuffer.compact(); //파일을 복사한다.
             outChannel.write(byteBuffer); //파일을 쓴다.
         }catch(Exception e) {
-            e.printStackTrace();
+            log.error("파일 write 실패" , e);
         }finally {
             try {
                 if(out != null) {
@@ -91,7 +98,7 @@ public class SocketHandler extends TextWebSocketHandler {
                     outChannel.close();
                 }
             }catch (IOException e) {
-                e.printStackTrace();
+                log.error("파일 전송 실패" , e);
             }
         }
 
@@ -106,7 +113,7 @@ public class SocketHandler extends TextWebSocketHandler {
             try {
                 wss.sendMessage(new BinaryMessage(byteBuffer)); //초기화된 버퍼를 발송한다.
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("sendMessage 실패" , e);
             }
         }
     }
