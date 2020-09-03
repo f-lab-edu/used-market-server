@@ -35,27 +35,27 @@ public class SocketHandler extends TextWebSocketHandler {
         String rN = (String) obj.get("roomNumber");
         HashMap<String, Object> temp = new HashMap<String, Object>();
 
-        if(rls.size() > 0) {
-            for(int i=0; i<rls.size(); i++) {
+        if (rls.size() > 0) {
+            for (int i = 0; i < rls.size(); i++) {
                 String roomNumber = (String) rls.get(i).get("roomNumber"); //세션리스트의 저장된 방번호를 가져와서
-                if(roomNumber.equals(rN)) { //같은값의 방이 존재한다면
+                if (roomNumber.equals(rN)) { //같은값의 방이 존재한다면
                     temp = rls.get(i); //해당 방번호의 세션리스트의 존재하는 모든 object값을 가져온다.
                     break;
                 }
             }
 
             //해당 방의 세션들만 찾아서 메시지를 발송해준다.
-            for(String k : temp.keySet()) {
-                if(k.equals("roomNumber")) { //다만 방번호일 경우에는 건너뛴다.
+            for (String k : temp.keySet()) {
+                if (k.equals("roomNumber")) { //다만 방번호일 경우에는 건너뛴다.
                     continue;
                 }
 
                 WebSocketSession wss = (WebSocketSession) temp.get(k);
-                if(wss != null) {
+                if (wss != null) {
                     try {
                         wss.sendMessage(new TextMessage(obj.toJSONString()));
                     } catch (IOException e) {
-                        log.error("sendMessage 실패" , e);
+                        log.error("sendMessage 실패", e);
                     }
                 }
             }
@@ -70,15 +70,14 @@ public class SocketHandler extends TextWebSocketHandler {
         ByteBuffer byteBuffer = message.getPayload();
 
         String fileName = new SimpleDateFormat("yyyyMMddHHmm'.jpg'").format(new Date());
-        File file = new File("");
-        String fileDirectoryName = file.getAbsolutePath()+"\\usedMarketServer\\attachFile\\";
+        String fileDirectoryName = System.getProperty("user.dir") + File.separator + "attachFile" + File.separator;
 
         File dir = new File(fileDirectoryName);
-        if(!dir.exists()) {
+        if (!dir.exists()) {
             dir.mkdirs();
         }
 
-        file = new File(fileDirectoryName, fileName);
+        File file = new File(fileDirectoryName, fileName);
         FileOutputStream out = null;
         FileChannel outChannel = null;
         try {
@@ -87,33 +86,33 @@ public class SocketHandler extends TextWebSocketHandler {
             outChannel = out.getChannel(); //채널을 열고
             byteBuffer.compact(); //파일을 복사한다.
             outChannel.write(byteBuffer); //파일을 쓴다.
-        }catch(Exception e) {
-            log.error("파일 write 실패" , e);
-        }finally {
+        } catch (Exception e) {
+            log.error("파일 write 실패", e);
+        } finally {
             try {
-                if(out != null) {
+                if (out != null) {
                     out.close();
                 }
-                if(outChannel != null) {
+                if (outChannel != null) {
                     outChannel.close();
                 }
-            }catch (IOException e) {
-                log.error("파일 전송 실패" , e);
+            } catch (IOException e) {
+                log.error("파일 전송 실패", e);
             }
         }
 
         byteBuffer.position(0); //파일을 저장하면서 position값이 변경되었으므로 0으로 초기화한다.
         //파일쓰기가 끝나면 이미지를 발송한다.
         HashMap<String, Object> temp = rls.get(fileUploadIdx);
-        for(String k : temp.keySet()) {
-            if(k.equals("roomNumber")) {
+        for (String k : temp.keySet()) {
+            if (k.equals("roomNumber")) {
                 continue;
             }
             WebSocketSession wss = (WebSocketSession) temp.get(k);
             try {
                 wss.sendMessage(new BinaryMessage(byteBuffer)); //초기화된 버퍼를 발송한다.
             } catch (IOException e) {
-                log.error("sendMessage 실패" , e);
+                log.error("sendMessage 실패", e);
             }
         }
     }
@@ -127,10 +126,10 @@ public class SocketHandler extends TextWebSocketHandler {
         System.out.println(url);
         String roomNumber = url.split("/chating/")[1];
         int idx = rls.size(); //방의 사이즈를 조사한다.
-        if(rls.size() > 0) {
-            for(int i=0; i<rls.size(); i++) {
+        if (rls.size() > 0) {
+            for (int i = 0; i < rls.size(); i++) {
                 String rN = (String) rls.get(i).get("roomNumber");
-                if(rN.equals(roomNumber)) {
+                if (rN.equals(roomNumber)) {
                     flag = true;
                     idx = i;
                     break;
@@ -138,10 +137,10 @@ public class SocketHandler extends TextWebSocketHandler {
             }
         }
 
-        if(flag) { //존재하는 방이라면 세션만 추가한다.
+        if (flag) { //존재하는 방이라면 세션만 추가한다.
             HashMap<String, Object> map = rls.get(idx);
             map.put(session.getId(), session);
-        }else { //최초 생성하는 방이라면 방번호와 세션을 추가한다.
+        } else { //최초 생성하는 방이라면 방번호와 세션을 추가한다.
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("roomNumber", roomNumber);
             map.put(session.getId(), session);
@@ -158,8 +157,8 @@ public class SocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         //소켓 종료
-        if(rls.size() > 0) { //소켓이 종료되면 해당 세션값들을 찾아서 지운다.
-            for(int i=0; i<rls.size(); i++) {
+        if (rls.size() > 0) { //소켓이 종료되면 해당 세션값들을 찾아서 지운다.
+            for (int i = 0; i < rls.size(); i++) {
                 rls.get(i).remove(session.getId());
             }
         }
@@ -172,7 +171,7 @@ public class SocketHandler extends TextWebSocketHandler {
         try {
             obj = (JSONObject) parser.parse(jsonStr);
         } catch (ParseException e) {
-            log.error("jsonToObjectParser 실패" , e);
+            log.error("jsonToObjectParser 실패", e);
         }
         return obj;
     }
