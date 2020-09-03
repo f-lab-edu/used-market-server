@@ -1,4 +1,5 @@
 package com.market.server.handler;
+import com.market.server.utils.DateUtil;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONObject;
@@ -15,7 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -68,37 +68,23 @@ public class SocketHandler extends TextWebSocketHandler {
         int fileUploadIdx = 0;
         //바이너리 메시지 발송
         ByteBuffer byteBuffer = message.getPayload();
-
-        String fileName = new SimpleDateFormat("yyyyMMddHHmm'.jpg'").format(new Date());
+        String fileName = DateUtil.getNowTimeToyyyyMMddHHmm(new Date(), ".jpg");
         String fileDirectoryName = System.getProperty("user.dir") + File.separator + "attachFile" + File.separator;
+        File file = new File(fileDirectoryName, fileName);
 
         File dir = new File(fileDirectoryName);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
-        File file = new File(fileDirectoryName, fileName);
-        FileOutputStream out = null;
-        FileChannel outChannel = null;
-        try {
+        try (FileOutputStream out = new FileOutputStream(file, true); //생성을 위해 OutputStream을 연다.
+             FileChannel outChannel = out.getChannel(); //채널을 열고)
+        ) {
             byteBuffer.flip(); //byteBuffer를 읽기 위해 세팅
-            out = new FileOutputStream(file, true); //생성을 위해 OutputStream을 연다.
-            outChannel = out.getChannel(); //채널을 열고
             byteBuffer.compact(); //파일을 복사한다.
             outChannel.write(byteBuffer); //파일을 쓴다.
         } catch (Exception e) {
-            log.error("파일 write 실패", e);
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-                if (outChannel != null) {
-                    outChannel.close();
-                }
-            } catch (IOException e) {
-                log.error("파일 전송 실패", e);
-            }
+            log.error("파일 전송 실패", e);
         }
 
         byteBuffer.position(0); //파일을 저장하면서 position값이 변경되었으므로 0으로 초기화한다.
