@@ -9,5 +9,5 @@ import java.util.List;
 public interface ChattingMapper {
     public int register(RoomDTO roomDTO);
     public List<RoomDTO> selectRooms(String sortStatus, int searchCount, int pagingStartOffset);
-    public int getLastRoomNumber();
+    public Integer getLastRoomNumber();
 }

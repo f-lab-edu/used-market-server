@@ -28,14 +28,18 @@ public class ChattingService {
     public List<RoomDTO> getAllRooms(RoomDTO roomDTO) {
         List<RoomDTO> roomDTOList = null;
         if (roomDTO == null)
-            roomDTOList = chattingMapper.selectRooms("NEWEST", 20, 0);
+            roomDTOList = chattingMapper.selectRooms("NEWEST", 30, 0);
         else
             roomDTOList = chattingMapper.selectRooms(roomDTO.getSortStatus().toString(), roomDTO.getSearchCount(), roomDTO.getPagingStartOffset());
         return roomDTOList;
     }
 
-    public int getLastRoomNumber() {
-        return chattingMapper.getLastRoomNumber();
+    public Integer getLastRoomNumber() {
+        Integer result = -2;
+        result = chattingMapper.getLastRoomNumber();
+        if (result == null)
+            result = 0;
+        return result;
     }
 
 }

@@ -3,9 +3,9 @@ import com.market.server.dto.RoomDTO;
 import com.market.server.service.ChattingService;
 import io.swagger.annotations.Api;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,19 +40,22 @@ public class ChattingController {
      */
     @PostMapping("/rooms")
     @ResponseBody
-    public List<RoomDTO> createRoom(@RequestParam HashMap<String, String> params) {
-        String roomName = (String) params.get("roomName");
-        RoomDTO roomDTO = null;
+    public List<RoomDTO> createRoom(RoomDTO roomDTO, Model model) {
+        model.addAttribute("roomDTO", roomDTO);
+        String roomName = roomDTO.getRoomName();
+
+        RoomDTO room = null;
         if (roomName != null && !roomName.trim().equals("")) {
-            int roomNumber = chattingService.getLastRoomNumber();
-            roomDTO = RoomDTO.builder()
+            int roomNumber = 0;
+            roomNumber = chattingService.getLastRoomNumber();
+            room = RoomDTO.builder()
                     .roomNumber(++roomNumber)
                     .roomName(roomName)
                     .build();
-            chattingService.register(roomDTO);
+            chattingService.register(room);
         }
 
-        return chattingService.getAllRooms(roomDTO);
+        return chattingService.getAllRooms(room);
     }
 
     /**
@@ -73,19 +76,19 @@ public class ChattingController {
      * @return
      */
     @GetMapping("/chatting")
-    public ModelAndView moveRoom(@RequestParam HashMap<String, String> params) {
+    public ModelAndView moveRoom(RoomDTO roomDTO, Model model) {
+        model.addAttribute("roomDTO", roomDTO);
         ModelAndView mv = new ModelAndView();
-        int roomNumber = Integer.parseInt((String) params.get("roomNumber"));
+        int roomNumber = roomDTO.getRoomNumber();
 
         List<RoomDTO> new_list = chattingService.getAllRooms(null).stream().filter(o -> o.getRoomNumber() == roomNumber).collect(Collectors.toList());
         if (new_list != null && new_list.size() > 0) {
-            mv.addObject("roomName", params.get("roomName"));
-            mv.addObject("roomNumber", params.get("roomNumber"));
+            mv.addObject("roomName", roomDTO.getRoomName());
+            mv.addObject("roomNumber", roomDTO.getRoomNumber());
             mv.setViewName("chat");
         } else {
             mv.setViewName("room");
         }
         return mv;
     }
-
 }
