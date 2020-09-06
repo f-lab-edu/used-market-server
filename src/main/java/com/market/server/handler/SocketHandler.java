@@ -26,6 +26,8 @@ import java.util.List;
 public class SocketHandler extends TextWebSocketHandler {
 
     private List<HashMap<String, Object>> rls = new ArrayList<>(); //웹소켓 세션을 담아둘 리스트 ---roomListSessions
+    private static final int DEFAULT_FILE_UPLOAD_INDEX = 0;
+    private static final String FILE_DIRECTORY_NAME = System.getProperty("user.dir") + File.separator + "attachFile" + File.separator;
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
@@ -65,31 +67,31 @@ public class SocketHandler extends TextWebSocketHandler {
     @SneakyThrows
     @Override
     public void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
-        int fileUploadIdx = 0;
         //바이너리 메시지 발송
         ByteBuffer byteBuffer = message.getPayload();
         String fileName = DateUtil.getNowTimeToyyyyMMddHHmm(new Date(), ".jpg");
-        String fileDirectoryName = System.getProperty("user.dir") + File.separator + "attachFile" + File.separator;
-        File file = new File(fileDirectoryName, fileName);
+        File file = new File(FILE_DIRECTORY_NAME, fileName);
+        File dir = new File(FILE_DIRECTORY_NAME);
 
-        File dir = new File(fileDirectoryName);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
-        try (FileOutputStream out = new FileOutputStream(file, true); //생성을 위해 OutputStream을 연다.
-             FileChannel outChannel = out.getChannel(); //채널을 열고)
+        try (
+                FileOutputStream out = new FileOutputStream(file, true); //생성을 위해 OutputStream을 연다.
+                FileChannel outChannel = out.getChannel(); //채널을 열고
         ) {
             byteBuffer.flip(); //byteBuffer를 읽기 위해 세팅
             byteBuffer.compact(); //파일을 복사한다.
             outChannel.write(byteBuffer); //파일을 쓴다.
-        } catch (Exception e) {
+        } catch (IOException  e) {
+            e.printStackTrace();
             log.error("파일 전송 실패", e);
         }
 
         byteBuffer.position(0); //파일을 저장하면서 position값이 변경되었으므로 0으로 초기화한다.
         //파일쓰기가 끝나면 이미지를 발송한다.
-        HashMap<String, Object> temp = rls.get(fileUploadIdx);
+        HashMap<String, Object> temp = rls.get(DEFAULT_FILE_UPLOAD_INDEX);
         for (String k : temp.keySet()) {
             if (k.equals("roomNumber")) {
                 continue;
@@ -98,6 +100,7 @@ public class SocketHandler extends TextWebSocketHandler {
             try {
                 wss.sendMessage(new BinaryMessage(byteBuffer)); //초기화된 버퍼를 발송한다.
             } catch (IOException e) {
+                e.printStackTrace();
                 log.error("sendMessage 실패", e);
             }
         }

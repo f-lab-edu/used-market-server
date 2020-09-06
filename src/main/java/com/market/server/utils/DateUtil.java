@@ -1,9 +1,12 @@
 package com.market.server.utils;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.text.ParseException;
 
+@Log4j2
 public class DateUtil {
 
     /**
@@ -13,8 +16,14 @@ public class DateUtil {
      * @return 처리 시간의 문자열 202009040159.jpg
      * @author topojs8
      */
-    public static String getNowTimeToyyyyMMddHHmm(Date date, String fileType) {
-        return new SimpleDateFormat("yyyyMMddHHmm").format(date) + fileType;
+    private static final ThreadLocal<SimpleDateFormat> tl = new ThreadLocal<SimpleDateFormat>();
+    public static final String getNowTimeToyyyyMMddHHmm(Date date, String fileType) {
+        SimpleDateFormat sdf = tl.get();
+        if(sdf == null) {
+            sdf = new SimpleDateFormat("yyyyMMddHHmm");
+            tl.set(sdf);
+        }
+        return sdf.format(date) + fileType;
     }
 
     /**
@@ -28,9 +37,10 @@ public class DateUtil {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmm");
             Date date = simpleDateFormat.parse(dateStr);
+            log.info("Successfully Parsed Date " + date);
             System.out.println("Successfully Parsed Date " + date);
         } catch (ParseException e) {
-            System.out.println("ParseError " + e.getMessage());
+            log.error("ParseError", e);
         } catch (Exception e) {
             e.printStackTrace();
         }

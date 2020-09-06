@@ -12,12 +12,16 @@ import java.util.List;
 @Log4j2
 public class ChattingService {
     @Autowired
-    private ChattingMapper chattingMapper;
+    private ChattingMapper chattingRoomMapper;
+
+    private static final String DEFAULT_ROOMS_SORT_STATUS = "NEWEST";
+    private static final int DEFAULT_SEARCH_COUNT = 30;
+    private static final int DEFAULT_PAGING_OFFSET = 0;
 
     // 채팅방 등록
     public void register(RoomDTO roomDTO) {
         if (roomDTO != null) {
-            chattingMapper.register(roomDTO);
+            chattingRoomMapper.register(roomDTO);
         } else {
             log.error("register ERROR! {}", roomDTO);
             throw new RuntimeException("register ERROR! 채팅방 등록 메서드를 확인해주세요\n" + "Params : " + roomDTO);
@@ -28,15 +32,14 @@ public class ChattingService {
     public List<RoomDTO> getAllRooms(RoomDTO roomDTO) {
         List<RoomDTO> roomDTOList = null;
         if (roomDTO == null)
-            roomDTOList = chattingMapper.selectRooms("NEWEST", 30, 0);
+            roomDTOList = chattingRoomMapper.selectRooms(DEFAULT_ROOMS_SORT_STATUS, DEFAULT_SEARCH_COUNT, DEFAULT_PAGING_OFFSET);
         else
-            roomDTOList = chattingMapper.selectRooms(roomDTO.getSortStatus().toString(), roomDTO.getSearchCount(), roomDTO.getPagingStartOffset());
+            roomDTOList = chattingRoomMapper.selectRooms(roomDTO.getSortStatus().toString(), roomDTO.getSearchCount(), roomDTO.getPagingStartOffset());
         return roomDTOList;
     }
 
     public Integer getLastRoomNumber() {
-        Integer result = -2;
-        result = chattingMapper.getLastRoomNumber();
+        Integer result = chattingRoomMapper.getLastRoomNumber();
         if (result == null)
             result = 0;
         return result;

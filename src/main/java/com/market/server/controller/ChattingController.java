@@ -3,9 +3,9 @@ import com.market.server.dto.RoomDTO;
 import com.market.server.service.ChattingService;
 import io.swagger.annotations.Api;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,14 +40,12 @@ public class ChattingController {
      */
     @PostMapping("/rooms")
     @ResponseBody
-    public List<RoomDTO> createRoom(RoomDTO roomDTO, Model model) {
-        model.addAttribute("roomDTO", roomDTO);
+    public List<RoomDTO> createRoom(RoomDTO roomDTO) {
         String roomName = roomDTO.getRoomName();
-
         RoomDTO room = null;
+
         if (roomName != null && !roomName.trim().equals("")) {
-            int roomNumber = 0;
-            roomNumber = chattingService.getLastRoomNumber();
+            int roomNumber = chattingService.getLastRoomNumber();
             room = RoomDTO.builder()
                     .roomNumber(++roomNumber)
                     .roomName(roomName)
@@ -76,8 +74,7 @@ public class ChattingController {
      * @return
      */
     @GetMapping("/chatting")
-    public ModelAndView moveRoom(RoomDTO roomDTO, Model model) {
-        model.addAttribute("roomDTO", roomDTO);
+    public ModelAndView moveRoom(RoomDTO roomDTO) {
         ModelAndView mv = new ModelAndView();
         int roomNumber = roomDTO.getRoomNumber();
 
