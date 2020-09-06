@@ -41,7 +41,7 @@ public class ProductSearchController {
      *
      * @author topojs8
      */
-    @GetMapping("")
+    @GetMapping
     public ProductSearchResponse search(ProductDTO productDTO,CategoryDTO categoryDTO) {
         List<ProductDTO> productDTOList = productSearchService.getProducts(productDTO,categoryDTO);
         return new ProductSearchResponse(productDTOList);

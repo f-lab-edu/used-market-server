@@ -54,7 +54,7 @@ public class ProductController {
     /**
      * 본인 중고물품 수정 메서드.
      */
-    @PatchMapping("{productId}/update")
+    @PatchMapping("{productId}")
     @LoginCheck(type = LoginCheck.UserType.USER)
     public void updateProducts(String accountId,
                                @PathVariable(name = "productId") int productId,
@@ -79,7 +79,7 @@ public class ProductController {
     /**
      * 본인 중고물품 삭제 메서드.
      */
-    @DeleteMapping("{productId}/delete")
+    @DeleteMapping("{productId}")
     @LoginCheck(type = LoginCheck.UserType.USER)
     public void deleteProducts(String accountId,
                                @PathVariable(name = "productId") int productId,
