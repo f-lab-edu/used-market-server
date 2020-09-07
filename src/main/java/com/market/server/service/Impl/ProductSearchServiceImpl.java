@@ -62,7 +62,7 @@ public class ProductSearchServiceImpl implements ProductSearchService {
             redisTemplate.watch(key); // 해당 키를 감시한다. 변경되면 로직 취소.
 
             try {
-                if (redisTemplate.opsForList().size(key) >= 2000) {
+                if (redisTemplate.opsForList().size(key) > 2000) {
                     throw new IndexOutOfBoundsException("최상단 중고물품 2O00개 이상 담을 수 없습니다.");
                 }
 
