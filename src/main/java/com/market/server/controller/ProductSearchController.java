@@ -43,7 +43,7 @@ public class ProductSearchController {
      */
     @GetMapping
     public ProductSearchResponse search(ProductDTO productDTO,CategoryDTO categoryDTO) {
-        String accountId = productSearchService.DEFAULT_PRODUCT_CACHE_KEY;
+        String accountId = ProductDTO.DEFAULT_PRODUCT_SEARCH_CACHE_KEY;
         List<ProductDTO> productDTOList = productSearchService.findAllProductsByCacheId(accountId);
 
         if(productDTOList.size() == 0)
