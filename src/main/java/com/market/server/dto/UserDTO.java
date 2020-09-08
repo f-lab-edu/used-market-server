@@ -1,15 +1,12 @@
 package com.market.server.dto;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.redis.core.RedisHash;
 import java.util.Date;
 
 @Getter
 @Setter
 @ToString
-@RedisHash("accounts")
 public class UserDTO {
     public enum Status {
         DEFAULT, ADMIN, DELETED

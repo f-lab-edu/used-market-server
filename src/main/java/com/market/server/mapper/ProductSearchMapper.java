@@ -7,5 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface ProductSearchMapper {
-    public List<ProductDTO> selectProducts(ProductDTO productDTO, CategoryDTO categoryDTO);
+    public List<ProductDTO> selectProducts(String productStatus, CategoryDTO categoryDTO);
 }

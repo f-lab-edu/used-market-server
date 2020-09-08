@@ -1,5 +1,4 @@
 package com.market.server.controller;
-
 import com.market.server.aop.LoginCheck;
 import com.market.server.dto.CategoryDTO;
 import com.market.server.service.Impl.CategoryServiceImpl;
@@ -40,7 +39,13 @@ public class CategoryController {
     public void updateCategories(String accountId,
                                  @PathVariable(name = "categoryId") int categoryId,
                                  @RequestBody CategoryRequest categoryRequest) {
-        CategoryDTO categoryDTO = new CategoryDTO(categoryId, categoryRequest.getName(), CategoryDTO.SortStatus.NEWEST,10,1);
+        CategoryDTO categoryDTO = CategoryDTO.builder()
+                .id(categoryId)
+                .name(categoryRequest.getName())
+                .sortStatus(CategoryDTO.SortStatus.NEWEST)
+                .searchCount(CategoryDTO.SEARCH_COUNT)
+                .pagingStartOffset(CategoryDTO.PAGING_OFFSET)
+                .build();
         categoryService.update(categoryDTO);
     }
 
