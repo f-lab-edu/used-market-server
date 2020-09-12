@@ -16,14 +16,14 @@ public class DateUtil {
      * @return 처리 시간의 문자열 202009040159.jpg
      * @author topojs8
      */
-    private static final ThreadLocal<SimpleDateFormat> tl = new ThreadLocal<SimpleDateFormat>();
-    public static final String getNowTimeToyyyyMMddHHmm(Date date, String fileType) {
-        SimpleDateFormat sdf = tl.get();
-        if(sdf == null) {
-            sdf = new SimpleDateFormat("yyyyMMddHHmm");
-            tl.set(sdf);
+    private static ThreadLocal<SimpleDateFormat> getNowTimeToyyyyMMddHHmm = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("yyyyMMddHHmm");
         }
-        return sdf.format(date) + fileType;
+    };
+    public static String getNowTimeToyyyyMMddHHmm(Date date, String fileType) throws ParseException {
+        return getNowTimeToyyyyMMddHHmm.get().format(date) + fileType;
     }
 
     /**
@@ -37,12 +37,9 @@ public class DateUtil {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmm");
             Date date = simpleDateFormat.parse(dateStr);
-            log.info("Successfully Parsed Date " + date);
-            System.out.println("Successfully Parsed Date " + date);
+            log.info("Successfully Parsed Date " , date);
         } catch (ParseException e) {
             log.error("ParseError", e);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
