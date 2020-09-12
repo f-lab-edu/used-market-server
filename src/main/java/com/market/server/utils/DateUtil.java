@@ -37,7 +37,6 @@ public class DateUtil {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmm");
             Date date = simpleDateFormat.parse(dateStr);
-            log.info("Successfully Parsed Date " , date);
         } catch (ParseException e) {
             log.error("ParseError", e);
         }
