@@ -43,9 +43,7 @@ public class ProductSearchController {
      */
     @GetMapping
     public ProductSearchResponse search(ProductDTO productDTO,CategoryDTO categoryDTO) {
-        String accountId = ProductDTO.DEFAULT_PRODUCT_SEARCH_CACHE_KEY;
-        List<ProductDTO> productDTOList = productSearchService.findAllProductsByCacheId(accountId);
-
+        List<ProductDTO> productDTOList = productSearchService.findAllProductsByCacheId(ProductDTO.DEFAULT_PRODUCT_SEARCH_CACHE_KEY);
         if(productDTOList.size() == 0)
             productDTOList = productSearchService.getProducts(productDTO,categoryDTO);
 
