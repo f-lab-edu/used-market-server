@@ -74,6 +74,26 @@ public class RedisConfig {
         return lettuceConnectionFactory;
     }
 
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate(ObjectMapper objectMapper) {
+        GenericJackson2JsonRedisSerializer serializer =
+                new GenericJackson2JsonRedisSerializer(objectMapper);
+
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        // json 형식으로 데이터를 받을 때
+        // 값이 깨지지 않도록 직렬화한다.
+        // 저장할 클래스가 여러개일 경우 범용 JacksonSerializer인 GenericJackson2JsonRedisSerializer를 이용한다
+        // 참고 https://somoly.tistory.com/134
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(serializer);
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(serializer);
+        redisTemplate.setEnableTransactionSupport(true); // transaction 허용
+
+        return redisTemplate;
+    }
+
     /**
      * Redis Cache를 사용하기 위한 cache manager 등록.<br>
      * 커스텀 설정을 적용하기 위해 RedisCacheConfiguration을 먼저 생성한다.<br>

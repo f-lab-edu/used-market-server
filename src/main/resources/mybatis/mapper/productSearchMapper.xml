@@ -37,8 +37,8 @@
             `categoryId`,
             `fileId`
             FROM `product`
-            <if test="productDTO.status != null">
-                WHERE status = #{productDTO.status}
+            <if test="productStatus != null">
+                WHERE status = #{productStatus}
             </if>
         </if>
         <choose>

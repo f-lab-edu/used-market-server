@@ -1,5 +1,4 @@
 package com.market.server.controller;
-
 import com.market.server.dto.CategoryDTO;
 import com.market.server.dto.ProductDTO;
 import com.market.server.service.Impl.ProductSearchServiceImpl;
@@ -25,6 +24,7 @@ public class ProductSearchController {
 
     /**
      * 중고물품 검색 메서드.
+     * 초기 bean 등록시 2000개의 최신 중고물품 캐싱해온 데이터를 검색
      * @params date 물품 생성 날짜,
      *         price 물품 가격,
      *         accountId 계정 번호,
@@ -43,7 +43,12 @@ public class ProductSearchController {
      */
     @GetMapping
     public ProductSearchResponse search(ProductDTO productDTO,CategoryDTO categoryDTO) {
-        List<ProductDTO> productDTOList = productSearchService.getProducts(productDTO,categoryDTO);
+        String accountId = ProductDTO.DEFAULT_PRODUCT_SEARCH_CACHE_KEY;
+        List<ProductDTO> productDTOList = productSearchService.findAllProductsByCacheId(accountId);
+
+        if(productDTOList.size() == 0)
+            productDTOList = productSearchService.getProducts(productDTO,categoryDTO);
+
         return new ProductSearchResponse(productDTOList);
     }
 
