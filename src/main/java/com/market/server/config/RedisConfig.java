@@ -74,20 +74,40 @@ public class RedisConfig {
         return lettuceConnectionFactory;
     }
 
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate(ObjectMapper objectMapper) {
+        GenericJackson2JsonRedisSerializer serializer =
+                new GenericJackson2JsonRedisSerializer(objectMapper);
+
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        // json 형식으로 데이터를 받을 때
+        // 값이 깨지지 않도록 직렬화한다.
+        // 저장할 클래스가 여러개일 경우 범용 JacksonSerializer인 GenericJackson2JsonRedisSerializer를 이용한다
+        // 참고 https://somoly.tistory.com/134
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(serializer);
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(serializer);
+        redisTemplate.setEnableTransactionSupport(true); // transaction 허용
+
+        return redisTemplate;
+    }
+
     /**
-     * Redis Cache를 사용하기 위한 cache manager 등록.<br>
-     * 커스텀 설정을 적용하기 위해 RedisCacheConfiguration을 먼저 생성한다.<br>
-     * 이후 RadisCacheManager를 생성할 때 cacheDefaults의 인자로 configuration을 주면 해당 설정이 적용된다.<br>
-     * RedisCacheConfiguration 설정<br>
-     * disableCachingNullValues - null값이 캐싱될 수 없도록 설정한다. null값 캐싱이 시도될 경우 에러를 발생시킨다.<br>
-     * entryTtl - 캐시의 TTL(Time To Live)를 설정한다. Duraction class로 설정할 수 있다.<br>
-     * serializeKeysWith - 캐시 Key를 직렬화-역직렬화 하는데 사용하는 Pair를 지정한다.<br>
+     * Redis Cache를 사용하기 위한 cache manager 등록.
+     * 커스텀 설정을 적용하기 위해 RedisCacheConfiguration을 먼저 생성한다.
+     * 이후 RadisCacheManager를 생성할 때 cacheDefaults의 인자로 configuration을 주면 해당 설정이 적용된다.
+     * RedisCacheConfiguration 설정
+     * disableCachingNullValues - null값이 캐싱될 수 없도록 설정한다. null값 캐싱이 시도될 경우 에러를 발생시킨다.
+     * entryTtl - 캐시의 TTL(Time To Live)를 설정한다. Duraction class로 설정할 수 있다.
+     * serializeKeysWith - 캐시 Key를 직렬화-역직렬화 하는데 사용하는 Pair를 지정한다.
      * serializeValuesWith - 캐시 Value를 직렬화-역직렬화 하는데 사용하는 Pair를 지정한다.
      * Value는 다양한 자료구조가 올 수 있기 때문에 GenericJackson2JsonRedisSerializer를 사용한다.
      *
+     * @author junshock5
      * @param redisConnectionFactory Redis와의 연결을 담당한다.
      * @return
-     * @author junshock5
      */
     @Bean
     public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory,

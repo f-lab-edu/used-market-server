@@ -45,4 +45,9 @@
         AND id = #{productId}
     </delete>
 
+    <select id="getLastProductId" resultType="int">
+        SELECT MAX(id)
+        FROM product
+    </select>
+
 </mapper>

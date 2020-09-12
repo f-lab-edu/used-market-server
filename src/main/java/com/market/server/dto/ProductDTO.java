@@ -1,7 +1,6 @@
 package com.market.server.dto;
 
 import lombok.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -9,6 +8,11 @@ import java.util.Date;
 @ToString
 @NoArgsConstructor
 public class ProductDTO {
+    public static final int DEFAULT_SEARCH_CATEGORY_ID = 1;
+    public static final int DEFAULT_PRODUCT_CACHE_COUNT = 2000;
+    public static final String DEFAULT_SEARCH_CATEGORY_NAME = CategoryDTO.SortStatus.CATEGORIES.toString();
+    public static final String DEFAULT_PRODUCT_SEARCH_CACHE_KEY = "default-search-key";
+
     public enum Status {
         NEW, OLD, ECT
     }
