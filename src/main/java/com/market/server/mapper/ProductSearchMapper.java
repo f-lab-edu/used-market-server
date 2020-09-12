@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface ProductSearchMapper {
     public List<ProductDTO> selectProducts(String productStatus, CategoryDTO categoryDTO);
+
+    public int getProductsIndex(String productStatus, CategoryDTO categoryDTO, int productId);
 }

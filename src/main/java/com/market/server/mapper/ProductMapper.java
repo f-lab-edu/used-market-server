@@ -14,4 +14,6 @@ public interface ProductMapper {
     public void updateProducts(ProductDTO productDTO);
 
     public void deleteProduct(int accountId, int productId);
+
+    public int getLastProductId();
 }
