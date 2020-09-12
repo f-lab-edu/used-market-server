@@ -80,15 +80,15 @@ public class ProductDao {
     }
 
     /**
-     * 최상단 중고물품들을 캐싱된 레디스에서 조회한다.
+     * 최상단 중고 물품들을 캐싱된 레디스 에서 조회 한다.
      *
-     * @param useId 고객 아이디
+     * @param productId 물품 아이디
      * @return
      * @author topojs8
      */
-    public List<ProductDTO> findAllProductsByCacheId(String useId) {
+    public List<ProductDTO> findAllProductsByCacheId(String productId) {
         List<ProductDTO> items = redisTemplate.opsForList()
-                .range(RedisKeyFactory.generateProductKey(useId), 0, -1)
+                .range(RedisKeyFactory.generateProductKey(productId), 0, -1)
                 .stream()
                 .map(item -> objectMapper.convertValue(item, ProductDTO.class))
                 .collect(Collectors.toList());
@@ -96,11 +96,11 @@ public class ProductDao {
     }
 
     /**
-     * redis list에 해당 메뉴를 추가한다.
-     * RedisKeyFactory로 고객의 아이디, 내부 키를 이용해 키를 생산한 후 메뉴를 저장시킨다.
+     * redis list에 해당 물품을 추가한다.
+     * RedisKeyFactory로 물품 아이디, 내부 키를 이용해 키를 생산한 후 물품을 저장시킨다.
      *
      * @param productDTO 레디스 리스트에 추가할 중고 물품
-     * @param useId      고객 아이디
+     * @param productId      물품 아이디
      * @return
      * @author topojs8
      */
@@ -111,7 +111,7 @@ public class ProductDao {
 
         try {
             if (redisTemplate.opsForList().size(key) > 2000) {
-                throw new IndexOutOfBoundsException("최상단 중고물품 2O00개 이상 담을 수 없습니다.");
+                throw new IndexOutOfBoundsException("최상단 중고 물품 2O00개 이상 담을 수 없습니다.");
             }
             redisTemplate.multi();
             redisTemplate.opsForList().rightPush(key, productDTO);
@@ -124,7 +124,7 @@ public class ProductDao {
     }
 
     /**
-     * 물품 레디스 리스트 에서 해당 인덱스에 해당하는 메뉴를 삭제한다.
+     * 물품 레디스 리스트 에서 해당 인덱스에 해당하는 물품을 삭제한다.
      *
      * @param productId 물품 아이디
      * @param index 삭제할 메뉴 인덱스
@@ -145,7 +145,6 @@ public class ProductDao {
          * 그 후 count에 1 값을 주면 head부터 순차적으로 조회하며 index에 해당하는 값을 제거할것이다.
          * return값이 1이면 1개를 삭제한 것이니 성공, 1이 아니라면 잘 삭제된것이 아니니 실패이다.
          */
-       // 문제상황: 레디스 템플릿의 key value 형식에서 특정 value의 id값이 같은걸 삭제해야 한다. 인덱스로 접근할께 아니라(중간 삭제 index가 있음) value값이 같은지 확인.
         Long remove = redisTemplate.opsForList().remove(RedisKeyFactory.generateProductKey(productId), 1,
                 redisTemplate.opsForList().index(RedisKeyFactory.generateProductKey(productId), index));
         return remove == 1;
