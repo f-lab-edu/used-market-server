@@ -71,4 +71,46 @@
         LIMIT #{categoryDTO.searchCount, jdbcType=INTEGER} OFFSET #{categoryDTO.pagingStartOffset, jdbcType=INTEGER}
     </sql>
 
+    <select id="getProductsIndex" resultType="int">
+        <if test="categoryDTO.sortStatus.toString() == 'GRADE'">
+            SELECT MAX(@rownum := @rownum + 1) AS rank
+            FROM product t,
+               (SELECT @rownum := 0) r
+            WHERE t.id <![CDATA[ <= ]]> #{productId}
+        </if>
+        <if test="categoryDTO.sortStatus.toString() != 'GRADE'">
+            SELECT MAX(@rownum := @rownum + 1) AS rank
+            FROM product t,
+            (SELECT @rownum := 0) r
+            <if test="productStatus != null">
+                WHERE status = #{productStatus} AND
+                t.id <![CDATA[ <= ]]> #{productId}
+            </if>
+        </if>
+        <choose>
+            <when test="categoryDTO.sortStatus.toString() == 'CATEGORIES'">
+                ORDER BY categoryId ASC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'NEWEST'">
+                ORDER BY createtime DESC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'OLDEST'">
+                ORDER BY createtime ASC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'HIGHPRICE'">
+                ORDER BY price DESC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'LOWPRICE'">
+                ORDER BY price ASC
+            </when>
+            <when test="categoryDTO.sortStatus.toString() == 'GRADE'">
+                LEFT JOIN user
+                ON product.accountId = user.accountId
+                GROUP BY user.accountId
+                ORDER BY user.grade DESC
+            </when>
+        </choose>
+        <include refid="COMMON_PAGING_TAIL"/>
+    </select>
+
 </mapper>
