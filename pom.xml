@@ -17,7 +17,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<start-class>com.market.server.ServerApplication</start-class>
+		<start-class>com.market.server.UsedMarketServerApplication</start-class>
 	</properties>
 
 	<dependencies>
