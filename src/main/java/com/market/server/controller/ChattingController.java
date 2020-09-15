@@ -44,13 +44,16 @@ public class ChattingController {
         String roomName = roomDTO.getRoomName();
         RoomDTO room = null;
 
-        if (roomName != null && !roomName.trim().equals("")) {
+        if (roomName != null) {
             int roomNumber = chattingService.getLastRoomNumber();
             room = RoomDTO.builder()
                     .roomNumber(++roomNumber)
                     .roomName(roomName)
                     .build();
             chattingService.register(room);
+        }
+        else{
+            throw new NullPointerException("채팅방이 존재 하는지 확인 부탁 드립니다.");
         }
 
         return chattingService.getAllRooms(room);
@@ -74,18 +77,18 @@ public class ChattingController {
      * @return
      */
     @GetMapping("/chatting")
-    public ModelAndView moveRoom(RoomDTO roomDTO) {
-        ModelAndView mv = new ModelAndView();
+    public ModelAndView C(RoomDTO roomDTO) {
+        ModelAndView modelAndView = new ModelAndView();
         int roomNumber = roomDTO.getRoomNumber();
 
-        List<RoomDTO> new_list = chattingService.getAllRooms(null).stream().filter(o -> o.getRoomNumber() == roomNumber).collect(Collectors.toList());
-        if (new_list != null && new_list.size() > 0) {
-            mv.addObject("roomName", roomDTO.getRoomName());
-            mv.addObject("roomNumber", roomDTO.getRoomNumber());
-            mv.setViewName("chat");
+        List<RoomDTO> roomsDTOList = chattingService.getAllRooms(null).stream().filter(o -> o.getRoomNumber() == roomNumber).collect(Collectors.toList());
+        if (roomsDTOList != null && roomsDTOList.size() > 0) {
+            modelAndView.addObject("roomName", roomDTO.getRoomName());
+            modelAndView.addObject("roomNumber", roomDTO.getRoomNumber());
+            modelAndView.setViewName("chat");
         } else {
-            mv.setViewName("room");
+            modelAndView.setViewName("room");
         }
-        return mv;
+        return modelAndView;
     }
 }
