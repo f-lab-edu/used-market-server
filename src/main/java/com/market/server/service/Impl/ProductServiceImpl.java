@@ -69,9 +69,10 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(int accountId, int productId) {
         if (accountId != 0 && productId != 0) {
             productMapper.deleteProduct(accountId, productId);
+            if(productDao.selectProductsIndex(productId)!=0)
             productId = productDao.selectProductsIndex(productId);
             if (productDao.deleteByProductIdAndIndex(ProductDTO.DEFAULT_PRODUCT_SEARCH_CACHE_KEY, productId) == false) {
-                throw new RuntimeException("물품 레디스 리스트에서 삭제 실패!");
+                log.error("물품 레디스 리스트에서 삭제 실패! {}", productId);
             }
 
         } else {
