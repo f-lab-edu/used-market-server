@@ -119,11 +119,13 @@ class ProductServiceImplTest {
     @Test
     void updateProducts() {
         ProductDTO productDTO = generateProduct();
-        productDTO.setContents("testProductContents");
+        productDTO.setContents("testProductContentsMapper");
         productMapper.updateProducts(productDTO);
-        assertTrue(productDTO.getContents().equals("testProductContents"));
+        assertTrue(productDTO.getContents().equals("testProductContentsMapper"));
 
+        productDTO.setContents("testProductContentService");
         productService.updateProducts(productDTO);
+        assertTrue(productDTO.getContents().equals("testProductContentService"));
     }
 
     @Test
