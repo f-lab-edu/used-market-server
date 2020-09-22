@@ -1,4 +1,5 @@
 package com.market.server.service.Impl;
+
 import com.market.server.dao.ProductDao;
 import com.market.server.dto.ProductDTO;
 import com.market.server.dto.UserDTO;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.redis.core.RedisTemplate;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -78,7 +80,7 @@ class ProductServiceImplTest {
 
     public UserDTO generateUser() {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId("textUserId");
+        userDTO.setId("testUserId");
         userDTO.setPassword(SHA256Util.encryptSHA256("testPassword"));
         userDTO.setName("testUserName");
         userDTO.setPhone("010-1111-2222");
@@ -94,14 +96,14 @@ class ProductServiceImplTest {
     @Test
     void register() {
         ProductDTO productDTO = generateProduct();
-        given(productMapper.register(productDTO)).willReturn(productDTO.getId());
+        given(productMapper.register(productDTO)).
+                willReturn(productDTO.getId());
 
-        String userID = "textUserId";
         UserDTO userDTO = generateUser();
         given(userProfileMapper.getUserProfile(userDTO.getId()))
                 .willReturn(userDTO);
 
-        productService.register(userID, productDTO);
+        productService.register(userDTO.getId(), productDTO);
     }
 
     @Test
@@ -136,7 +138,7 @@ class ProductServiceImplTest {
                 .willReturn(userDTO);
 
         productMapper.deleteProduct(1, 1);
-        productService.deleteProduct(userDTO.getAccountId(),productDTO.getId());
+        productService.deleteProduct(userDTO.getAccountId(), productDTO.getId());
 
     }
 }
