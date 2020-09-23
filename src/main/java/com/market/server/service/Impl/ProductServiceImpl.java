@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
             if(productDao.selectProductsIndex(productId)!=0)
             productId = productDao.selectProductsIndex(productId);
             if (productDao.deleteByProductIdAndIndex(ProductDTO.DEFAULT_PRODUCT_SEARCH_CACHE_KEY, productId) == false) {
-                log.error("물품 레디스 리스트에서 삭제 실패! {}", productId);
+                throw new RuntimeException("물품 레디스 리스트에서 삭제 실패!");
             }
 
         } else {

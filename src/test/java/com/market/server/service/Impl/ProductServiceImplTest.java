@@ -4,15 +4,15 @@ import com.market.server.dao.ProductDao;
 import com.market.server.dto.ProductDTO;
 import com.market.server.dto.UserDTO;
 import com.market.server.mapper.ProductMapper;
+import com.market.server.mapper.ProductSearchMapper;
 import com.market.server.mapper.UserProfileMapper;
 import com.market.server.utils.SHA256Util;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +35,18 @@ class ProductServiceImplTest {
 
     @Mock
     ProductDao productDao;
+
+    @InjectMocks
+    ProductDao productDaoCache;
+
+    @Mock
+    ProductSearchMapper productSearchMapper;
+
+    @Mock
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Mock
+    private ValueOperations valueOperations;
 
     // 새로운 물품 객체를 생성하여 반환한다.
     public ProductDTO generateProduct() {
@@ -138,7 +150,9 @@ class ProductServiceImplTest {
                 .willReturn(userDTO);
 
         productMapper.deleteProduct(1, 1);
-        productService.deleteProduct(userDTO.getAccountId(), productDTO.getId());
 
+        // Mock redisTemplate 테스트
+        //redisTemplate.opsForList().rightPush(ProductDTO.DEFAULT_PRODUCT_SEARCH_CACHE_KEY, productDTO);
+        //productService.deleteProduct(userDTO.getAccountId(), productDTO.getId());
     }
 }
