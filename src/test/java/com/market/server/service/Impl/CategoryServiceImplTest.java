@@ -52,7 +52,7 @@ class CategoryServiceImplTest {
         CategoryDTO categoryDTO = generateCategory();
         categoryDTO.setName("testName2");
         categoryMapper.updateCategory(categoryDTO);
-        assertTrue(categoryDTO.getName().equals("testName2"));
+        assertEquals(categoryDTO.getName(),("testName2"));
     }
 
     @Test
