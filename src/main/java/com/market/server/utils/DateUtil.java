@@ -16,7 +16,7 @@ public class DateUtil {
      * @return 처리 시간의 문자열 202009040159.jpg
      * @author topojs8
      */
-    private static ThreadLocal<SimpleDateFormat> getNowTimeToyyyyMMddHHmm = new ThreadLocal<SimpleDateFormat>() {
+    private static final ThreadLocal<SimpleDateFormat> getNowTimeToyyyyMMddHHmm = new ThreadLocal<SimpleDateFormat>() {
         @Override
         protected SimpleDateFormat initialValue() {
             return new SimpleDateFormat("yyyyMMddHHmm");
